@@ -1,113 +1,144 @@
-import Image from 'next/image'
+import { calculateAverageCryptoDolarPrices } from '@/lib/utils'
 
-export default function Home() {
+export const revalidate = 60
+
+async function getDolarBNA() {
+  const res = await fetch('https://criptoya.com/api/bna')
+
+  // test this in prod
+  if (!res.ok) {
+    throw new Error('Failed to fetch data')
+  }
+  return res.json()
+}
+
+async function getDolarCocos() {
+  const res = await fetch('https://api.cocos.capital/api/v1/public/dolar-mep')
+
+  // test this in prod
+  if (!res.ok) {
+    throw new Error('Failed to fetch data')
+  }
+  return res.json()
+}
+
+async function getDolarCrypto() {
+  const res = await fetch('https://criptoya.com/api/usdc/ars/0.1')
+
+  // test this in prod
+  if (!res.ok) {
+    throw new Error('Failed to fetch data')
+  }
+  const data = res.json()
+
+  return calculateAverageCryptoDolarPrices(await data)
+}
+
+async function getOtherDolars() {
+  const res = await fetch('https://criptoya.com/api/dolar')
+
+  // test this in prod
+  if (!res.ok) {
+    throw new Error('Failed to fetch data')
+  }
+  return res.json()
+}
+
+async function endpointsTestUsage() {
+  const res = await fetch('https://www.pretzeldiary.com/api/counter-endpoint')
+  if (!res.ok) {
+    throw new Error('Failed to fetch data')
+  }
+  return
+}
+
+export default async function Home() {
+  const dolarBNA = await getDolarBNA()
+  const otherDolars = await getOtherDolars()
+  const dolarCocos = await getDolarCocos()
+  const dolarCrypto = await getDolarCrypto()
+  const test = await endpointsTestUsage()
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <div className="flex w-full items-center justify-center gap-4">
+      {/* Dólar Oficial */}
+      <div className="flex w-fit min-w-[10rem] flex-col items-center justify-center rounded-2xl bg-black p-4 text-white">
+        <h2>Dólar Oficial</h2>
+        <div className="flex w-full items-center justify-between">
+          <div className="flex flex-col items-center justify-center gap-2">
+            <h3>Compra</h3>
+            <p>{dolarBNA.bid}</p>
+          </div>
+          <div className="flex flex-col items-center justify-center gap-2">
+            <h3>Venta</h3>
+            <p>{dolarBNA.ask}</p>
+          </div>
         </div>
       </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
+      {/* Dólar tarjeta/turista/solidario/ahorro */}
+      <div className="flex w-fit min-w-[10rem] flex-col items-center justify-center rounded-2xl bg-black p-4 text-white">
+        <h2>Dólar Tarjeta/Turista/Solidario/Ahorro</h2>
+        <div className="flex w-full items-center justify-between">
+          <div className="flex flex-col items-center justify-center gap-2">
+            <h3>Compra</h3>
+            <p>{otherDolars.solidario}</p>
+          </div>
+          <div className="flex flex-col items-center justify-center gap-2">
+            <h3>Venta</h3>
+            <p>{otherDolars.solidario}</p>
+          </div>
+        </div>
       </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      {/* Dólar Blue */}
+      <div className="flex w-fit min-w-[10rem] flex-col items-center justify-center rounded-2xl bg-black p-4 text-white">
+        <h2>Dólar Blue</h2>
+        <div className="flex w-full items-center justify-between">
+          <div className="flex flex-col items-center justify-center gap-2">
+            <h3>Compra</h3>
+            <p>{otherDolars.blue_bid}</p>
+          </div>
+          <div className="flex flex-col items-center justify-center gap-2">
+            <h3>Venta</h3>
+            <p>{otherDolars.blue}</p>
+          </div>
+        </div>
       </div>
-    </main>
+      {/* Dólar MEP */}
+      <div className="flex w-fit min-w-[10rem] flex-col items-center justify-center rounded-2xl bg-black p-4 text-white">
+        <h2>Dólar MEP</h2>
+        <div className="flex flex-col items-center justify-center gap-2">
+          <h3>Compra</h3>
+          <p>{otherDolars.mep}</p>
+        </div>
+      </div>
+      {/* Dólar MEP 24/7 */}
+      <div className="flex w-fit min-w-[10rem] flex-col items-center justify-center rounded-2xl bg-black p-4 text-white">
+        <h2>Dólar MEP 24/7</h2>
+        <div className="flex w-full items-center justify-between">
+          <div className="flex flex-col items-center justify-center gap-2">
+            <h3>Compra</h3>
+            <p>{dolarCocos.bid}</p>
+          </div>
+          <div className="flex flex-col items-center justify-center gap-2">
+            <h3>Venta</h3>
+            <p>{dolarCocos.ask}</p>
+          </div>
+        </div>
+      </div>
+      {/* Dólar Cripto */}
+      <div className="flex w-fit min-w-[10rem] flex-col items-center justify-center rounded-2xl bg-black p-4 text-white">
+        <h2>Dólar Cripto</h2>
+        <div className="flex w-full items-center justify-between">
+          <div className="flex flex-col items-center justify-center gap-2">
+            <h3>Compra</h3>
+            <p>{dolarCrypto.bid}</p>
+          </div>
+          <div className="flex flex-col items-center justify-center gap-2">
+            <h3>Venta</h3>
+            <p>{dolarCrypto.ask}</p>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
