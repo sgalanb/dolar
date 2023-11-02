@@ -12,12 +12,12 @@ export default function Footer() {
       border-gray-500/10 bg-white backdrop-blur-md transition-colors duration-200`}
     >
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-3 py-7">
-        <div className="flex w-full flex-col items-center justify-center gap-9 lg:flex-row lg:items-start lg:justify-between lg:gap-0">
-          <div className="flex flex-col items-center gap-9 lg:h-36 lg:justify-between lg:gap-0">
-            <div className="flex w-full flex-col items-center justify-center gap-1 lg:items-start">
+        <div className="flex w-full flex-col items-center justify-center gap-9 lg:flex-row lg:items-center lg:justify-center lg:gap-0">
+          <div className="flex w-full flex-col items-center gap-9 lg:h-36 lg:justify-between lg:gap-0">
+            <div className="flex flex-col items-center justify-center gap-1">
               <p className="text-lg">Seguí las cotizaciones en redes</p>
               <div className="flex items-center justify-center gap-6">
-                <Link href="https://www.instagram.com/cocoscap/">
+                <Link href="/">
                   <Image
                     src="/social-icons/instagram-icon.svg"
                     alt="icono de instagram"
@@ -26,7 +26,7 @@ export default function Footer() {
                     className="fill-zinc-600 hover:opacity-70"
                   />
                 </Link>
-                <Link href="https://x.com/cocoscap">
+                <Link href="/">
                   <Image
                     src="/social-icons/x-icon.svg"
                     alt="icono de x/twitter"
@@ -38,13 +38,10 @@ export default function Footer() {
               </div>
             </div>
 
-            <div className="flex w-full flex-col items-center justify-center gap-1 lg:items-start">
-              <p className="text-lg">Bajate la app</p>
+            <div className="flex flex-col items-center justify-center gap-1">
+              <p className="text-lg">Bajate la app y widgets</p>
               <div className="flex items-center justify-center gap-6">
-                <Link
-                  href="https://apps.apple.com/ar/app/cocos-capital/id1634675415"
-                  className="flex h-8 items-center justify-center"
-                >
+                <Link href="/" className="flex h-8 items-center justify-center">
                   <Image
                     src="/social-icons/apple-icon.svg"
                     alt="descárgalo en google play"
@@ -53,10 +50,7 @@ export default function Footer() {
                     className="fill-zinc-600 hover:opacity-70"
                   />
                 </Link>
-                <Link
-                  href="https://play.google.com/store/apps/details?id=capital.cocos.app.twa"
-                  className="flex h-8 items-center justify-center"
-                >
+                <Link href="/" className="flex h-8 items-center justify-center">
                   <Image
                     src="/social-icons/android-icon.svg"
                     alt="descárgalo en el app store"
@@ -81,9 +75,8 @@ export default function Footer() {
           </p>
           <p className="w-full text-center text-sm text-zinc-600">
             <Balancer>
-              No garantizamos que nuestros servicios cumplan con tus
-              requerimientos, sean seguros, ininterrumpidos, rápidos, precisos o
-              libres de errores.
+              No garantizamos que el servicios sean ininterrumpidos, rápidos,
+              precisos o libres de errores.
             </Balancer>
           </p>
         </div>

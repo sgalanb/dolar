@@ -1,12 +1,5 @@
 'use client'
 
-import { MenuToggle } from '@/components/MenuToggle'
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion'
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -14,7 +7,6 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
-import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
@@ -131,124 +123,28 @@ export default function Header() {
       }`}
     >
       <nav className="mx-auto w-full max-w-7xl">
-        <div className="flex h-20 w-full items-center justify-between py-3 pl-3 lg:hidden">
+        <div className="flex h-20 w-full items-center justify-between p-3 lg:hidden">
           <Link href="/" onClick={() => setIsOpenMobileHeader(false)}>
-            <Image
-              src={'/bills.png'}
-              alt="cocos capital logo"
-              width={78}
-              height={55.11}
-            />
+            <p className="text-2xl font-bold">DolarYa</p>
           </Link>
-
-          <div className="flex items-center justify-center gap-3">
-            <MenuToggle
-              toggle={() => setIsOpenMobileHeader(!isOpenMobileHeader)}
-              isOpen={isOpenMobileHeader}
-            />
-          </div>
-          {isOpenMobileHeader && (
-            <div className="absolute left-0 top-20 z-50 w-full flex-col bg-white p-3 lg:hidden">
-              <Accordion type="single" collapsible className="w-full">
-                <Link href="/" className="w-full xxs:hidden">
-                  <div
-                    className="border-b border-gray-200 py-4 text-sm font-medium"
-                    onClick={() => setIsOpenMobileHeader(false)}
-                  >
-                    Inicio
-                  </div>
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <Link href="/" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Cotizaciones
+                  </NavigationMenuLink>
                 </Link>
-                <AccordionItem value="item-1">
-                  <AccordionTrigger>Productos</AccordionTrigger>
-                  <AccordionContent>
-                    <ul className="flex flex-col gap-3 pl-2">
-                      {productos.map((component) => (
-                        <Link
-                          href={component.href}
-                          key={component.title}
-                          className=""
-                          onClick={() => setIsOpenMobileHeader(false)}
-                        >
-                          {component.title}
-                        </Link>
-                      ))}
-                    </ul>
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="item-2">
-                  <AccordionTrigger>Ayuda</AccordionTrigger>
-                  <AccordionContent>
-                    <ul className="flex flex-col gap-3 pl-2">
-                      {ayuda.map((component) => (
-                        <Link
-                          href={component.href}
-                          key={component.title}
-                          className=""
-                          onClick={() => setIsOpenMobileHeader(false)}
-                        >
-                          {component.title}
-                        </Link>
-                      ))}
-                    </ul>
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="item-3">
-                  <AccordionTrigger>Empresa</AccordionTrigger>
-                  <AccordionContent>
-                    <ul className="flex flex-col gap-3 pl-2">
-                      {empresa.map((component) => (
-                        <>
-                          {component.href ===
-                          'https://cocoscapital.recruitee.com' ? (
-                            <Link
-                              href={component.href}
-                              key={component.title}
-                              className=""
-                              rel="noopener"
-                              target="_blank"
-                            >
-                              {component.title}
-                            </Link>
-                          ) : (
-                            <Link
-                              href={component.href}
-                              key={component.title}
-                              className=""
-                              onClick={() => setIsOpenMobileHeader(false)}
-                            >
-                              {component.title}
-                            </Link>
-                          )}
-                        </>
-                      ))}
-                    </ul>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <Link
-                  href="https://university.cocos.capital/"
-                  className="w-full"
-                  rel="noopener"
-                  target="_blank"
-                >
-                  <div
-                    className="border-b border-gray-200 py-4 text-sm font-medium"
-                    onClick={() => setIsOpenMobileHeader(false)}
-                  >
-                    Cocos University
-                  </div>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link href="/calculadora" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Calculadora
+                  </NavigationMenuLink>
                 </Link>
-                <Link href="/gold">
-                  <div
-                    className=" py-4 text-sm font-medium"
-                    onClick={() => setIsOpenMobileHeader(false)}
-                  >
-                    Cocos Gold
-                  </div>
-                </Link>
-              </Accordion>
-            </div>
-          )}
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
         </div>
 
         <div className="hidden h-20 w-full items-center justify-center p-3 lg:flex">
