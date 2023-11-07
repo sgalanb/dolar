@@ -1,4 +1,4 @@
-import { serviceAccount } from '@/lib/firebaseServiceAccount'
+import { serviceAccount } from '@/lib/firebase-setup/firebaseServiceAccount'
 import admin from 'firebase-admin'
 
 if (!admin.apps.length) {

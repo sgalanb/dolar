@@ -1,4 +1,4 @@
-import admin from '@/lib/firebaseAdmin'
+import admin from '@/lib/firebase-setup/firebaseAdmin'
 import { calculateAverageCryptoDolarPrices } from '@/lib/utils'
 import { NextRequest } from 'next/server'
 
