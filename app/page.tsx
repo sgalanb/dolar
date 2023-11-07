@@ -1,4 +1,3 @@
-import { dolar } from '@/app/api/update-prices/route'
 import {
   Accordion,
   AccordionContent,
@@ -12,7 +11,7 @@ import { Grid2X2, Rows } from 'lucide-react'
 import Link from 'next/link'
 
 export default async function Home() {
-  const dolar: dolar | null = await kv.get('dolar')
+  const dolar: any = await kv.get('dolar')
 
   const rates = [
     {
