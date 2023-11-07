@@ -322,7 +322,7 @@ export default async function Home() {
               <div className="flex flex-col gap-3">
                 <p>
                   Esta cotización representa los siguientes tipos de cambio, que
-                  desde el 10 de Octubre tienen el mismo valor:
+                  desde el 10 de Octubre del 2023 tienen el mismo valor:
                   <br />
                   - Dólar Ahorro
                   <br />
