@@ -1,3 +1,4 @@
+import { Providers } from '@/app/providers'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 import { Analytics } from '@vercel/analytics/react'
@@ -6,7 +7,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'DolarYa',
+  title: 'DólarYa',
   description: '',
 }
 
@@ -17,14 +18,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" suppressHydrationWarning>
-      <body className={`${GeistSans.className} bg-zinc-50 text-cocos-950`}>
-        <div className="flex min-h-screen flex-col">
-          <Header />
-          <main className="mx-auto w-full max-w-7xl px-3 pb-20 pt-7">
-            {children}
-          </main>
-          <Footer />
-        </div>
+      <body className={`${GeistSans.className}`}>
+        <Providers attribute="class" defaultTheme="system" enableSystem>
+          <div className="flex min-h-screen flex-col justify-between bg-zinc-100 text-black dark:bg-zinc-950 dark:text-white">
+            <div className="flex flex-col justify-start">
+              <Header />
+              <main className="mx-auto w-full max-w-3xl px-3 py-6">
+                {children}
+              </main>
+            </div>
+            <Footer />
+          </div>
+        </Providers>
         <Analytics />
       </body>
     </html>
