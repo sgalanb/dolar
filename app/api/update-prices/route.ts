@@ -1,9 +1,17 @@
 import admin from '@/lib/firebaseAdmin'
 import { calculateAverageCryptoDolarPrices } from '@/lib/utils'
+import { NextRequest } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const authHeader = request.headers.get('authorization')
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return new Response(`Not authorized.`, {
+      status: 500,
+    })
+  }
+
   let newPrices: any = {
     dolarBNA: null,
     otherDolars: null,
@@ -308,6 +316,7 @@ export async function GET() {
   }
 }
 
+// Fetch functions
 async function getDolarBNA() {
   const res = await fetch('https://criptoya.com/api/bna')
   if (!res.ok) {
