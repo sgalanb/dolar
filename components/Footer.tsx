@@ -16,10 +16,10 @@ export default function Footer() {
       className={`sticky top-0 z-40 border-t
       border-zinc-200 bg-white backdrop-blur-md transition-colors duration-200 dark:border-zinc-800 dark:bg-zinc-950`}
     >
-      <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-center gap-6 px-3 py-7">
-        <div className="flex w-full flex-col items-center justify-center gap-9 md:flex-row md:gap-0">
-          <div className="flex w-full flex-col items-center gap-9 md:h-36 md:justify-between md:gap-0">
-            <div className="flex flex-col items-center justify-center gap-2">
+      <div className="mx-auto flex w-full max-w-3xl flex-col items-center justify-center gap-6 px-3 py-7">
+        <div className="flex w-full flex-col items-center justify-center gap-6 md:flex-row md:justify-between">
+          <div className="flex flex-col items-center justify-center gap-9 md:flex-row md:gap-0">
+            <div className="flex flex-col items-center justify-center gap-2 md:items-start">
               <p className="text-lg">Seguí las cotizaciones en redes</p>
               <div className="flex items-center justify-center gap-6">
                 <Link href="/">
@@ -67,9 +67,9 @@ export default function Footer() {
               </div>
             </div> */}
           </div>
-        </div>
 
-        <ThemeToggle />
+          <ThemeToggle />
+        </div>
 
         <Separator className="my-0" />
 
