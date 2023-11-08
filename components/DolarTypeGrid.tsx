@@ -50,7 +50,7 @@ export default function DolarTypeGrid({ dolarType }: { dolarType: DolarType }) {
               miniLineChartPrices[miniLineChartPrices.length - 1] >
                 miniLineChartPrices[miniLineChartPrices.length - 2]
             ? '#65C567'
-            : '#EB4E3D',
+            : 'red',
         borderWidth: 3,
         tension: 0.4,
         pointRadius: 0, // No points
