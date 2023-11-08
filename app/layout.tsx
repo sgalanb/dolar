@@ -7,8 +7,9 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'DólarYa',
-  description: '',
+  title: 'DólarYa | Precio del dólar hoy en Argentina',
+  description:
+    'La forma más fácil de seguir las cotizaciones del dólar en Argentina y ver valores históricos.',
 }
 
 export default function RootLayout({
