@@ -24,7 +24,7 @@ export default function RootLayout({
           <div className="flex min-h-screen flex-col justify-between bg-zinc-100 text-black dark:bg-zinc-950 dark:text-white">
             <div className="flex flex-col justify-start">
               <Header />
-              <main className="mx-auto w-full max-w-3xl px-3 py-6">
+              <main className="mx-auto w-full max-w-3xl px-3 py-3 md:py-6">
                 {children}
               </main>
             </div>

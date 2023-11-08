@@ -55,14 +55,15 @@ export default function Header() {
       } transition-colors duration-200 dark:bg-zinc-950`}
     >
       <nav className="mx-auto w-full max-w-3xl">
-        <div className="flex h-fit items-center justify-between py-3 pl-3 pr-0 lg:hidden">
+        <div className="flex h-fit items-center justify-between py-3 pl-3 pr-0 md:hidden">
           <div className="flex w-full flex-col items-start justify-between">
             <Link href="/">
-              <p className="text-3xl font-bold tracking-tighter">DólarYa</p>
+              <p className="text-2xl font-bold tracking-tighter">DólarYa</p>
+
+              <p className="text-2xl font-bold tracking-tighter text-zinc-500">
+                {dayjs().format('D MMMM')}
+              </p>
             </Link>
-            <p className="hidden text-3xl font-bold tracking-tighter text-zinc-500 xxs:flex">
-              {dayjs().format('D MMMM')}
-            </p>
           </div>
           <MenuToggle
             toggle={() => setIsOpenMobileHeader(!isOpenMobileHeader)}
@@ -70,7 +71,7 @@ export default function Header() {
           />
         </div>
 
-        <div className="hidden h-20 w-full items-center justify-between p-3 lg:flex">
+        <div className="hidden h-20 w-full items-center justify-between p-3 md:flex">
           <Link href="/" className="">
             <p className="text-3xl font-bold tracking-tighter">DólarYa</p>
           </Link>

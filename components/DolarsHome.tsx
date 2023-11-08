@@ -5,13 +5,14 @@ import DolarTypeList from '@/components/DolarTypeList'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { getLastPricesSnapshot } from '@/lib/firebaseSDK'
 import { DocumentData } from 'firebase/firestore'
-import { Grid2X2, Rows } from 'lucide-react'
+import { AlignJustify, Grid2X2, Rows } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 export interface DolarType {
   name: string
   bid?: string
   ask: string
+  timestamp: number
 }
 
 export default function DolarsHome({
@@ -48,6 +49,7 @@ export default function DolarsHome({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
+      timestamp: prices?.oficial.timestamp,
     },
     {
       name: 'Blue',
@@ -59,6 +61,7 @@ export default function DolarsHome({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
+      timestamp: prices?.blue.timestamp,
     },
     {
       name: 'MEP',
@@ -70,6 +73,7 @@ export default function DolarsHome({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
+      timestamp: prices?.mep.timestamp,
     },
     {
       name: 'Cocos',
@@ -81,6 +85,7 @@ export default function DolarsHome({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
+      timestamp: prices?.cocos.timestamp,
     },
     {
       name: 'Tarjeta',
@@ -88,6 +93,7 @@ export default function DolarsHome({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
+      timestamp: prices?.tarjeta.timestamp,
     },
     {
       name: 'Mayorista',
@@ -99,6 +105,7 @@ export default function DolarsHome({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
+      timestamp: prices?.mayorista.timestamp,
     },
     {
       name: 'CCL',
@@ -110,6 +117,7 @@ export default function DolarsHome({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
+      timestamp: prices?.ccl.timestamp,
     },
     {
       name: 'Cripto',
@@ -121,6 +129,7 @@ export default function DolarsHome({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
+      timestamp: prices?.cripto.timestamp,
     },
   ]
 
@@ -136,7 +145,8 @@ export default function DolarsHome({
               <Grid2X2 className="h-4 w-4" />
             </TabsTrigger>
             <TabsTrigger value="list">
-              <Rows className="h-4 w-4" />
+              <Rows className="h-4 w-4 md:hidden" />
+              <AlignJustify className="hidden h-4 w-4 md:flex" />
             </TabsTrigger>
           </TabsList>
         </div>
@@ -149,7 +159,7 @@ export default function DolarsHome({
         </div>
       </TabsContent>
       <TabsContent value="list">
-        <div className="flex w-full grid-cols-1 flex-col items-center justify-center gap-3">
+        <div className="grid w-full grid-cols-1 flex-col items-center justify-center gap-3 md:grid-cols-2">
           {dolars.map((dolarType, index) => (
             <DolarTypeList dolarType={dolarType} key={index} />
           ))}

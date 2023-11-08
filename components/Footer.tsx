@@ -17,8 +17,8 @@ export default function Footer() {
       border-zinc-200 bg-white backdrop-blur-md transition-colors duration-200 dark:border-zinc-800 dark:bg-zinc-950`}
     >
       <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-center gap-6 px-3 py-7">
-        <div className="flex w-full flex-col items-center justify-center gap-9 lg:flex-row lg:gap-0">
-          <div className="flex w-full flex-col items-center gap-9 lg:h-36 lg:justify-between lg:gap-0">
+        <div className="flex w-full flex-col items-center justify-center gap-9 md:flex-row md:gap-0">
+          <div className="flex w-full flex-col items-center gap-9 md:h-36 md:justify-between md:gap-0">
             <div className="flex flex-col items-center justify-center gap-2">
               <p className="text-lg">Seguí las cotizaciones en redes</p>
               <div className="flex items-center justify-center gap-6">
@@ -43,7 +43,7 @@ export default function Footer() {
               </div>
             </div>
 
-            <div className="flex flex-col items-center justify-center gap-2">
+            {/* <div className="flex flex-col items-center justify-center gap-2">
               <p className="text-lg">Bajate la app con widgets</p>
               <div className="flex items-center justify-center gap-6">
                 <Link href="/" className="flex h-8 items-center justify-center">
@@ -65,7 +65,7 @@ export default function Footer() {
                   />
                 </Link>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 

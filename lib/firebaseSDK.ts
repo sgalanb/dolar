@@ -1,5 +1,15 @@
 import { db } from '@/lib/firebase-setup/firebase'
-import { Timestamp, doc, getDoc, onSnapshot } from 'firebase/firestore'
+import {
+  Timestamp,
+  collection,
+  doc,
+  getDoc,
+  limit,
+  onSnapshot,
+  orderBy,
+  query,
+  where,
+} from 'firebase/firestore'
 
 interface PriceData {
   [key: string]: {
@@ -41,6 +51,27 @@ export async function getLastPrices() {
 export async function getLastPricesSnapshot(callback: (data: any) => void) {
   const unsub = onSnapshot(doc(db, 'prices', 'last-prices'), (doc) => {
     callback(doc.data())
+  })
+
+  return unsub
+}
+
+export async function getMiniLineChartPrices(
+  type: string,
+  callback: (data: any) => void
+) {
+  const historicalPricesRef = collection(db, 'historical-prices')
+
+  const blueTypeQuery = query(
+    historicalPricesRef,
+    where('type', '==', type),
+    orderBy('timestamp', 'desc'),
+    limit(7)
+  )
+
+  const unsub = onSnapshot(blueTypeQuery, (snapshot) => {
+    const prices = snapshot.docs.map((doc) => doc.data().ask)
+    callback(prices.reverse())
   })
 
   return unsub
