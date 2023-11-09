@@ -62,7 +62,7 @@ export default function LineChart({ lineData }: any) {
             },
             ticks: {
               maxTicksLimit: 10,
-              minRotation: 0,
+              minRotation: 45,
               maxRotation: 0,
               color: '#a1a1aa',
             },

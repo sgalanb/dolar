@@ -100,9 +100,9 @@ export default function DolarTypePage({ type }: { type: string }) {
             className={`flex w-full items-center justify-between gap-3 rounded-2xl`}
           >
             <div className="flex w-fit flex-col items-start justify-center gap-3">
-              <h2 className={`w-full text-xl font-semibold leading-5`}>
+              <h1 className={`w-full text-xl font-semibold leading-5`}>
                 {`Dólar ${type}`}
-              </h2>
+              </h1>
               <p className="text-sm font-normal tracking-wider text-zinc-500 dark:text-zinc-400">
                 {dayjs
                   .unix(dolarType.timestamp.seconds)

@@ -1,5 +1,7 @@
 import DolarTypePage from '@/components/DolarTypePage'
+import { Button } from '@/components/ui/button'
 import { Metadata } from 'next'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Dólar Cocos | DólarYa',
@@ -9,8 +11,17 @@ export const metadata: Metadata = {
 
 export default function Cocos() {
   return (
-    <div className="flex w-full items-center justify-center">
+    <div className="flex w-full flex-col items-center justify-center gap-9">
       <DolarTypePage type="Cocos" />
+      <Button asChild>
+        <Link
+          href="https://app.cocos.capital?ref=dolarya.info"
+          target="_blank"
+          className="bg-cocos-600 hover:bg-cocos-500 dark:bg-cocos-500 dark:hover:bg-cocos-600"
+        >
+          Operá en Cocos
+        </Link>
+      </Button>
     </div>
   )
 }
