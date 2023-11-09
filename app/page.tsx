@@ -1,6 +1,8 @@
 import DolarsHome from '@/components/DolarsHome'
 import { getLastPrices } from '@/lib/firebaseSDK'
 
+export const dynamic = 'force-dynamic'
+
 export default async function Home() {
   const lastPrices = await getLastPrices()
 
