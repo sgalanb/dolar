@@ -62,16 +62,42 @@ export async function getMiniLineChartPrices(
 ) {
   const historicalPricesRef = collection(db, 'historical-prices')
 
-  const blueTypeQuery = query(
+  const typeQuery = query(
     historicalPricesRef,
     where('type', '==', type),
     orderBy('timestamp', 'desc'),
     limit(7)
   )
 
-  const unsub = onSnapshot(blueTypeQuery, (snapshot) => {
+  const unsub = onSnapshot(typeQuery, (snapshot) => {
     const prices = snapshot.docs.map((doc) => doc.data().ask)
     callback(prices.reverse())
+  })
+
+  return unsub
+}
+
+export async function getHistoricalYearPrices(
+  type: string,
+  callback: (data: any) => void
+) {
+  const historicalPricesRef = collection(db, 'historical-prices')
+
+  let currentDate = new Date()
+  let pastYearDate = new Date(
+    currentDate.setFullYear(currentDate.getFullYear() - 1)
+  )
+
+  const typeQuery = query(
+    historicalPricesRef,
+    where('type', '==', type),
+    where('timestamp', '>=', Timestamp.fromDate(pastYearDate)),
+    orderBy('timestamp', 'asc')
+  )
+
+  const unsub = onSnapshot(typeQuery, (snapshot) => {
+    const prices = snapshot.docs.map((doc) => doc.data())
+    callback(prices)
   })
 
   return unsub

@@ -49,7 +49,7 @@ export default function DolarTypeList({ dolarType }: { dolarType: DolarType }) {
             : miniLineChartPrices?.length > 1 &&
               miniLineChartPrices[miniLineChartPrices.length - 1] >
                 miniLineChartPrices[miniLineChartPrices.length - 2]
-            ? '#65C567'
+            ? '#49ca4b'
             : '#D83141',
         borderWidth: 3,
         tension: 0.4,
