@@ -1,13 +1,5 @@
 import DolarsHome from '@/components/DolarsHome'
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion'
-import { Button } from '@/components/ui/button'
 import { getLastPrices } from '@/lib/firebaseSDK'
-import Link from 'next/link'
 
 export default async function Home() {
   const lastPrices = await getLastPrices()
@@ -15,7 +7,7 @@ export default async function Home() {
   return (
     <div className="flex flex-col items-center justify-center gap-9">
       <DolarsHome lastPrices={lastPrices} />
-      <div className="flex w-full flex-col gap-3">
+      {/* <div className="flex w-full flex-col gap-3">
         <h2 className="w-full text-xl font-semibold tracking-tighter">
           Preguntas Frecuentes
         </h2>
@@ -170,7 +162,7 @@ export default async function Home() {
             </AccordionContent>
           </AccordionItem>
         </Accordion>
-      </div>
+      </div> */}
     </div>
   )
 }
