@@ -67,7 +67,7 @@ export default function DolarTypeList({ dolarType }: { dolarType: DolarType }) {
         dolarType.name == 'Cocos'
           ? 'border-2 border-cocos-600 dark:border-cocos-500'
           : ''
-      } grid h-20 w-full grid-cols-[104px,1fr,100px] grid-rows-1 items-center gap-3 rounded-2xl bg-white p-3 dark:bg-zinc-800 md:h-[5.15625rem]`}
+      } grid h-20 w-full grid-cols-[104px,1fr,100px] grid-rows-1 items-center gap-3 rounded-2xl bg-white p-3 shadow dark:bg-zinc-800 dark:shadow-none md:h-[5.15625rem]`}
     >
       <div className="flex h-full flex-col justify-between">
         <h2

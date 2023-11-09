@@ -67,7 +67,7 @@ export default function DolarTypeGrid({ dolarType }: { dolarType: DolarType }) {
         dolarType.name == 'Cocos'
           ? 'border-2 border-cocos-600 dark:border-cocos-500'
           : ''
-      } grid aspect-square h-full w-full grid-cols-1 grid-rows-[22px,1fr,1fr] flex-col items-center justify-between gap-3 rounded-2xl bg-white p-3 hover:opacity-80 dark:bg-zinc-800`}
+      } grid aspect-square h-full w-full grid-cols-1 grid-rows-[22px,1fr,1fr] flex-col items-center justify-between gap-3 rounded-2xl bg-white p-3 shadow hover:opacity-80 dark:bg-zinc-800 dark:shadow-none`}
     >
       <div className="flex h-full w-full items-center justify-between">
         <h2
