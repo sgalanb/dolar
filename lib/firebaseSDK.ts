@@ -96,8 +96,18 @@ export async function getHistoricalYearPrices(
   )
 
   const unsub = onSnapshot(typeQuery, (snapshot) => {
-    const prices = snapshot.docs.map((doc) => doc.data())
-    callback(prices)
+    const allPrices = snapshot.docs.map((doc) => doc.data())
+
+    // Group by date and get the last price of each day
+    const lastPricePerDay = allPrices.reduce((acc, price) => {
+      const date = price.timestamp.toDate().toDateString()
+      if (!acc[date] || acc[date].timestamp < price.timestamp) {
+        acc[date] = price
+      }
+      return acc
+    }, {})
+
+    callback(Object.values(lastPricePerDay))
   })
 
   return unsub
