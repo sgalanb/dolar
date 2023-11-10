@@ -25,23 +25,14 @@ export const MenuToggle = ({
     <svg width="24" height="24" viewBox="0 0 24 24">
       <Path
         variants={{
-          closed: { d: 'M 2 3 L 22 3' },
+          closed: { d: 'M 2 8 L 22 8' },
           open: { d: 'M 3 21 L 21 3' },
         }}
         className="stroke-black dark:stroke-white"
       />
       <Path
-        d="M 2 12 L 22 12"
         variants={{
-          closed: { opacity: 1 },
-          open: { opacity: 0 },
-        }}
-        transition={{ duration: 0.1 }}
-        className="stroke-black dark:stroke-white"
-      />
-      <Path
-        variants={{
-          closed: { d: 'M 2 21 L 22 21' },
+          closed: { d: 'M 2 18 L 22 18' },
           open: { d: 'M 3 3 L 21 21' },
         }}
         className="stroke-black dark:stroke-white"
