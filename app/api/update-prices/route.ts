@@ -336,11 +336,13 @@ async function getDolarMEP() {
 }
 
 async function getDolarCocos() {
-  const res = await fetch('https://api.cocos.capital/api/v1/public/dolar-mep')
+  const res = await fetch('https://api.cocos.capital/api/v1/public/mep-prices')
   if (!res.ok) {
     throw new Error('Failed to fetch data')
   }
-  return res.json()
+  const data = await res.json()
+
+  return data?.overnight
 }
 
 async function getDolarCrypto() {
