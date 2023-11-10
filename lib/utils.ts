@@ -26,11 +26,28 @@ export function calculateAverageCryptoDolarPrices(
   let totalBid = 0
   let count = 0
 
+  const whitelistedExchanges = [
+    'belo',
+    'lemoncash',
+    'ripio',
+    'buenbit',
+    'letsbit',
+    'fiwind',
+  ]
+
+  // Filter out non whitelisted exchanges
+  const filteredExchangeRates = Object.keys(exchangeRates)
+    .filter((key) => whitelistedExchanges.includes(key))
+    .reduce((obj, key) => {
+      obj[key] = exchangeRates[key]
+      return obj
+    }, {} as ExchangeRates)
+
   // Loop through each exchange to sum asks and bids
-  for (const key in exchangeRates) {
-    if (exchangeRates.hasOwnProperty(key)) {
-      totalAsk += exchangeRates[key].ask
-      totalBid += exchangeRates[key].bid
+  for (const key in filteredExchangeRates) {
+    if (filteredExchangeRates.hasOwnProperty(key)) {
+      totalAsk += filteredExchangeRates[key].ask
+      totalBid += filteredExchangeRates[key].bid
       count++
     }
   }
