@@ -17,7 +17,7 @@ export default function Cocos() {
         <Link
           href="https://app.cocos.capital?ref=dolarya.info"
           target="_blank"
-          className="bg-cocos-600 hover:bg-cocos-500 dark:bg-cocos-500 dark:hover:bg-cocos-600"
+          className="!bg-cocos-600 hover:!bg-cocos-500 dark:!bg-cocos-500 dark:hover:!bg-cocos-600"
         >
           Operá en Cocos
         </Link>
