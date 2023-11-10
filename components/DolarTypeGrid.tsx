@@ -75,7 +75,7 @@ export default function DolarTypeGrid({ dolarType }: { dolarType: DolarType }) {
             dolarType.name == 'Cocos'
               ? 'text-cocos-600 dark:text-cocos-500'
               : ''
-          } flex h-full w-full items-center justify-start text-xl font-semibold leading-5`}
+          } flex h-full w-full items-center justify-start text-xl font-semibold leading-5 tracking-tight`}
         >
           {dolarType.name}
         </h2>

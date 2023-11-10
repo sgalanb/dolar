@@ -136,7 +136,7 @@ export default function DolarsHome({
   return (
     <Tabs defaultValue="grid" className="flex w-full flex-col gap-3">
       <div className="flex w-full items-center justify-between">
-        <h1 className="text-xl font-semibold tracking-tighter">
+        <h1 className="text-xl font-semibold tracking-tight">
           Cotización del dólar hoy
         </h1>
         <div className="flex h-full">

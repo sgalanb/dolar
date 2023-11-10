@@ -1,6 +1,16 @@
 'use client'
 
 import { MenuToggle } from '@/components/MenuToggle'
+import {
+  NavigationListItem,
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from '@/components/ui/navigation-menu'
 import dayjs from 'dayjs'
 import 'dayjs/locale/es'
 import updateLocale from 'dayjs/plugin/updateLocale'
@@ -24,6 +34,41 @@ dayjs.updateLocale('es', {
     'Diciembre',
   ],
 })
+
+const cotizaciones = [
+  {
+    title: 'Dólar Oficial',
+    href: '/oficial',
+  },
+  {
+    title: 'Dólar Blue',
+    href: '/blue',
+  },
+  {
+    title: 'Dólar MEP',
+    href: '/mep',
+  },
+  {
+    title: 'Dólar Cocos',
+    href: '/cocos',
+  },
+  {
+    title: 'Dólar Tarjeta',
+    href: '/tarjeta',
+  },
+  {
+    title: 'Dólar Mayorista',
+    href: '/mayorista',
+  },
+  {
+    title: 'Dólar CCL',
+    href: '/ccl',
+  },
+  {
+    title: 'Dólar Cripto',
+    href: '/cripto',
+  },
+]
 
 export default function Header() {
   const [isOpenMobileHeader, setIsOpenMobileHeader] = useState<boolean>(false)
@@ -147,13 +192,40 @@ export default function Header() {
           </div>
         )}
 
-        <div className="hidden h-20 w-full items-center justify-between p-3 md:flex">
-          <Link href="/" className="">
-            <p className="text-3xl font-bold tracking-tighter">DólarYa</p>
-          </Link>
-          <p className="text-3xl font-bold tracking-tighter text-zinc-500">
-            {dayjs().format('D MMMM')}
-          </p>
+        <div className="hidden h-24 w-full items-center justify-between p-3 md:flex">
+          <div className="flex w-full flex-col items-start justify-between">
+            <Link href="/" className="">
+              <p className="text-2xl font-bold tracking-tighter">DólarYa</p>
+              <p className="text-2xl font-bold tracking-tighter text-zinc-500">
+                {dayjs().format('D MMMM')}
+              </p>
+            </Link>
+          </div>
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <Link href="/" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Inicio
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>Cotizaciones</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-52 gap-3 p-3">
+                    {cotizaciones.map((component) => (
+                      <NavigationListItem
+                        key={component.title}
+                        title={component.title}
+                        href={component.href}
+                      />
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
         </div>
       </nav>
     </header>
