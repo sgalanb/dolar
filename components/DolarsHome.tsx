@@ -49,7 +49,7 @@ export default function DolarsHome({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
-      timestamp: prices?.oficial.timestamp,
+      timestamp: prices?.oficial.timestamp.seconds,
     },
     {
       name: 'Blue',
@@ -61,7 +61,7 @@ export default function DolarsHome({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
-      timestamp: prices?.blue.timestamp,
+      timestamp: prices?.blue.timestamp.seconds,
     },
     {
       name: 'MEP',
@@ -73,7 +73,7 @@ export default function DolarsHome({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
-      timestamp: prices?.mep.timestamp,
+      timestamp: prices?.mep.timestamp.seconds,
     },
     {
       name: 'Cocos',
@@ -85,7 +85,7 @@ export default function DolarsHome({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
-      timestamp: prices?.cocos.timestamp,
+      timestamp: prices?.cocos.timestamp.seconds,
     },
     {
       name: 'Tarjeta',
@@ -93,7 +93,7 @@ export default function DolarsHome({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
-      timestamp: prices?.tarjeta.timestamp,
+      timestamp: prices?.tarjeta.timestamp.seconds,
     },
     {
       name: 'Mayorista',
@@ -105,7 +105,7 @@ export default function DolarsHome({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
-      timestamp: prices?.mayorista.timestamp,
+      timestamp: prices?.mayorista.timestamp.seconds,
     },
     {
       name: 'CCL',
@@ -117,7 +117,7 @@ export default function DolarsHome({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
-      timestamp: prices?.ccl.timestamp,
+      timestamp: prices?.ccl.timestamp.seconds,
     },
     {
       name: 'Cripto',
@@ -129,7 +129,7 @@ export default function DolarsHome({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
-      timestamp: prices?.cripto.timestamp,
+      timestamp: prices?.cripto.timestamp.seconds,
     },
   ]
 

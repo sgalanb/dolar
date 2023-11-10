@@ -4,9 +4,32 @@ import { DolarType } from '@/components/DolarsHome'
 import MiniLineChart from '@/components/charts/MiniLineChart'
 import { getMiniLineChartPrices } from '@/lib/firebaseSDK'
 import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import updateLocale from 'dayjs/plugin/updateLocale'
 import { useTheme } from 'next-themes'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+
+dayjs.extend(relativeTime)
+dayjs.extend(updateLocale)
+
+dayjs.updateLocale('es', {
+  relativeTime: {
+    future: 'en %s',
+    past: '%s',
+    s: 'unos segundos',
+    m: 'un minuto',
+    mm: '%d minutos',
+    h: 'una hora',
+    hh: '%d horas',
+    d: 'un día',
+    dd: '%d días',
+    M: 'un mes',
+    MM: '%d meses',
+    y: 'un año',
+    yy: '%d años',
+  },
+})
 
 export default function DolarTypeList({ dolarType }: { dolarType: DolarType }) {
   const { resolvedTheme } = useTheme()
@@ -60,6 +83,11 @@ export default function DolarTypeList({ dolarType }: { dolarType: DolarType }) {
     ],
   }
 
+  const date = dayjs.unix(dolarType.timestamp)
+  const displayDate = dayjs().isSame(date, 'day')
+    ? date.format('HH:mm')
+    : date.fromNow()
+
   return (
     <Link
       href={`/${dolarType.name.toLowerCase()}`}
@@ -75,12 +103,12 @@ export default function DolarTypeList({ dolarType }: { dolarType: DolarType }) {
             dolarType.name == 'Cocos'
               ? 'text-cocos-600 dark:text-cocos-500'
               : ''
-          } w-full text-xl font-semibold leading-5`}
+          } w-full text-xl font-semibold leading-5 tracking-tight`}
         >
           {dolarType.name}
         </h2>
         <p className="text-sm font-normal text-zinc-500 dark:text-zinc-400">
-          {dayjs.unix(dolarType.timestamp).format('HH:mm')}
+          {displayDate}
         </p>
       </div>
       <div className="h-full w-full">
