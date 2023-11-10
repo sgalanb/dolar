@@ -17,8 +17,9 @@ export default function ThemeToggle() {
       onValueChange={(value) => {
         setTheme(value as string)
       }}
+      defaultValue={theme}
     >
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className="w-52">
         <SelectValue
           placeholder={`${
             theme == 'dark' ? 'Oscuro' : theme == 'light' ? 'Claro' : 'Sistema'

@@ -202,7 +202,7 @@ export default function Header() {
             </Link>
           </div>
           <NavigationMenu>
-            <NavigationMenuList>
+            <NavigationMenuList className="w-52">
               <NavigationMenuItem>
                 <Link href="/" legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
@@ -213,7 +213,7 @@ export default function Header() {
               <NavigationMenuItem>
                 <NavigationMenuTrigger>Cotizaciones</NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul className="grid w-52 gap-3 p-3">
+                  <ul className="grid w-52 p-1 pb-1.5 pr-1.5">
                     {cotizaciones.map((component) => (
                       <NavigationListItem
                         key={component.title}
