@@ -114,11 +114,16 @@ export async function GET(request: NextRequest) {
     const newCriptoAsk = newPrices?.dolarCrypto?.ask
     const newCriptoBid = newPrices?.dolarCrypto?.bid
 
-    // Oficial
+    // Update today arrays
     if (
       !!newOficialAsk &&
-      !!newOficialBid &&
-      (newOficialAsk !== lastOficialAsk || newOficialBid !== lastOficialBid)
+      !!newBlueAsk &&
+      !!newMepAsk &&
+      !!newCocosAsk &&
+      !!newTarjeta &&
+      !!newMayoristaAsk &&
+      !!newCclAsk &&
+      !!newCriptoAsk
     ) {
       let shouldUpdateOficial = true
       if (todayOficial.length > 0) {
@@ -130,22 +135,173 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      const updateDataOficial: any = {
-        oficial: {
-          ask: newOficialAsk,
-          bid: newOficialBid,
-          timestamp: admin.firestore.FieldValue.serverTimestamp(),
-        },
+      let shouldUpdateBlue = true
+      if (todayBlue.length > 0) {
+        const lastTimestamp = todayBlue[todayBlue.length - 1].timestamp.seconds
+
+        if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
+          shouldUpdateBlue = false
+        }
       }
 
+      let shouldUpdateMep = true
+      if (todayMep.length > 0) {
+        const lastTimestamp = todayMep[todayMep.length - 1].timestamp.seconds
+
+        if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
+          shouldUpdateMep = false
+        }
+      }
+
+      let shouldUpdateCocos = true
+      if (todayCocos.length > 0) {
+        const lastTimestamp =
+          todayCocos[todayCocos.length - 1].timestamp.seconds
+
+        if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
+          shouldUpdateCocos = false
+        }
+      }
+
+      let shouldUpdateTarjeta = true
+      if (todayTarjeta.length > 0) {
+        const lastTimestamp =
+          todayTarjeta[todayTarjeta.length - 1].timestamp.seconds
+
+        if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
+          shouldUpdateTarjeta = false
+        }
+      }
+
+      let shouldUpdateMayorista = true
+      if (todayMayorista.length > 0) {
+        const lastTimestamp =
+          todayMayorista[todayMayorista.length - 1].timestamp.seconds
+
+        if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
+          shouldUpdateMayorista = false
+        }
+      }
+
+      let shouldUpdateCcl = true
+      if (todayCcl.length > 0) {
+        const lastTimestamp = todayCcl[todayCcl.length - 1].timestamp.seconds
+
+        if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
+          shouldUpdateCcl = false
+        }
+      }
+
+      let shouldUpdateCripto = true
+      if (todayCripto.length > 0) {
+        const lastTimestamp =
+          todayCripto[todayCripto.length - 1].timestamp.seconds
+
+        if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
+          shouldUpdateCripto = false
+        }
+      }
+
+      const generalUpdateObject: any = {}
+
       if (shouldUpdateOficial) {
-        updateDataOficial.oficial.today = [
+        generalUpdateObject.oficial.today = [
           ...todayOficial,
           {
             ask: newOficialAsk,
             timestamp: admin.firestore.FieldValue.serverTimestamp(),
           },
         ]
+      }
+
+      if (shouldUpdateBlue) {
+        generalUpdateObject.blue.today = [
+          ...todayBlue,
+          {
+            ask: newBlueAsk,
+            timestamp: admin.firestore.FieldValue.serverTimestamp(),
+          },
+        ]
+      }
+
+      if (shouldUpdateMep) {
+        generalUpdateObject.mep.today = [
+          ...todayMep,
+          {
+            ask: newMepAsk,
+            timestamp: admin.firestore.FieldValue.serverTimestamp(),
+          },
+        ]
+      }
+
+      if (shouldUpdateCocos) {
+        generalUpdateObject.cocos.today = [
+          ...todayCocos,
+          {
+            ask: newCocosAsk,
+            timestamp: admin.firestore.FieldValue.serverTimestamp(),
+          },
+        ]
+      }
+
+      if (shouldUpdateTarjeta) {
+        generalUpdateObject.tarjeta.today = [
+          ...todayTarjeta,
+          {
+            ask: newTarjeta,
+            timestamp: admin.firestore.FieldValue.serverTimestamp(),
+          },
+        ]
+      }
+
+      if (shouldUpdateMayorista) {
+        generalUpdateObject.mayorista.today = [
+          ...todayMayorista,
+          {
+            ask: newMayoristaAsk,
+            timestamp: admin.firestore.FieldValue.serverTimestamp(),
+          },
+        ]
+      }
+
+      if (shouldUpdateCcl) {
+        generalUpdateObject.ccl.today = [
+          ...todayCcl,
+          {
+            ask: newCclAsk,
+            timestamp: admin.firestore.FieldValue.serverTimestamp(),
+          },
+        ]
+      }
+
+      if (shouldUpdateCripto) {
+        generalUpdateObject.cripto.today = [
+          ...todayCripto,
+          {
+            ask: newCriptoAsk,
+            timestamp: admin.firestore.FieldValue.serverTimestamp(),
+          },
+        ]
+      }
+
+      await db
+        .collection('prices')
+        .doc('last-prices')
+        .set(generalUpdateObject, { merge: true })
+    }
+
+    // Oficial
+    if (
+      !!newOficialAsk &&
+      !!newOficialBid &&
+      (newOficialAsk !== lastOficialAsk || newOficialBid !== lastOficialBid)
+    ) {
+      const updateDataOficial: any = {
+        oficial: {
+          ask: newOficialAsk,
+          bid: newOficialBid,
+          timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        },
       }
 
       await db
@@ -166,31 +322,12 @@ export async function GET(request: NextRequest) {
       !!newBlueBid &&
       (newBlueAsk !== lastBlueAsk || newBlueBid !== lastBlueBid)
     ) {
-      let shouldUpdateBlue = true
-      if (todayBlue.length > 0) {
-        const lastTimestamp = todayBlue[todayBlue.length - 1].timestamp.seconds
-
-        if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
-          shouldUpdateBlue = false
-        }
-      }
-
       const updateDataBlue: any = {
         blue: {
           ask: newBlueAsk,
           bid: newBlueBid,
           timestamp: admin.firestore.FieldValue.serverTimestamp(),
         },
-      }
-
-      if (shouldUpdateBlue) {
-        updateDataBlue.blue.today = [
-          ...todayBlue,
-          {
-            ask: newBlueAsk,
-            timestamp: admin.firestore.FieldValue.serverTimestamp(),
-          },
-        ]
       }
 
       await db
@@ -211,31 +348,12 @@ export async function GET(request: NextRequest) {
       !!newMepBid &&
       (newMepAsk !== lastMepAsk || newMepBid !== lastMepBid)
     ) {
-      let shouldUpdateMep = true
-      if (todayMep.length > 0) {
-        const lastTimestamp = todayMep[todayMep.length - 1].timestamp.seconds
-
-        if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
-          shouldUpdateMep = false
-        }
-      }
-
       const updateDataMep: any = {
         mep: {
           ask: newMepAsk,
           bid: newMepBid,
           timestamp: admin.firestore.FieldValue.serverTimestamp(),
         },
-      }
-
-      if (shouldUpdateMep) {
-        updateDataMep.mep.today = [
-          ...todayMep,
-          {
-            ask: newMepAsk,
-            timestamp: admin.firestore.FieldValue.serverTimestamp(),
-          },
-        ]
       }
 
       await db
@@ -255,32 +373,12 @@ export async function GET(request: NextRequest) {
       !!newCocosBid &&
       (newCocosAsk !== lastCocosAsk || newCocosBid !== lastCocosBid)
     ) {
-      let shouldUpdateCocos = true
-      if (todayCocos.length > 0) {
-        const lastTimestamp =
-          todayCocos[todayCocos.length - 1].timestamp.seconds
-
-        if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
-          shouldUpdateCocos = false
-        }
-      }
-
       const updateDataCocos: any = {
         cocos: {
           ask: newCocosAsk,
           bid: newCocosBid,
           timestamp: admin.firestore.FieldValue.serverTimestamp(),
         },
-      }
-
-      if (shouldUpdateCocos) {
-        updateDataCocos.cocos.today = [
-          ...todayCocos,
-          {
-            ask: newCocosAsk,
-            timestamp: admin.firestore.FieldValue.serverTimestamp(),
-          },
-        ]
       }
 
       await db
@@ -296,31 +394,11 @@ export async function GET(request: NextRequest) {
     }
     // Tarjeta
     if (!!newTarjeta && newTarjeta !== lastTarjeta) {
-      let shouldUpdateTarjeta = true
-      if (todayTarjeta.length > 0) {
-        const lastTimestamp =
-          todayTarjeta[todayTarjeta.length - 1].timestamp.seconds
-
-        if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
-          shouldUpdateTarjeta = false
-        }
-      }
-
       const updateDataTarjeta: any = {
         tarjeta: {
           ask: newTarjeta,
           timestamp: admin.firestore.FieldValue.serverTimestamp(),
         },
-      }
-
-      if (shouldUpdateTarjeta) {
-        updateDataTarjeta.tarjeta.today = [
-          ...todayTarjeta,
-          {
-            ask: newTarjeta,
-            timestamp: admin.firestore.FieldValue.serverTimestamp(),
-          },
-        ]
       }
 
       await db
@@ -340,32 +418,12 @@ export async function GET(request: NextRequest) {
       (newMayoristaAsk !== lastMayoristaAsk ||
         newMayoristaBid !== lastMayoristaBid)
     ) {
-      let shouldUpdateMayorista = true
-      if (todayMayorista.length > 0) {
-        const lastTimestamp =
-          todayMayorista[todayMayorista.length - 1].timestamp.seconds
-
-        if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
-          shouldUpdateMayorista = false
-        }
-      }
-
       const updateDataMayorista: any = {
         mayorista: {
           ask: newMayoristaAsk,
           bid: newMayoristaBid,
           timestamp: admin.firestore.FieldValue.serverTimestamp(),
         },
-      }
-
-      if (shouldUpdateMayorista) {
-        updateDataMayorista.mayorista.today = [
-          ...todayMayorista,
-          {
-            ask: newMayoristaAsk,
-            timestamp: admin.firestore.FieldValue.serverTimestamp(),
-          },
-        ]
       }
 
       await db
@@ -385,31 +443,12 @@ export async function GET(request: NextRequest) {
       !!newCclBid &&
       (newCclAsk !== lastCclAsk || newCclBid !== lastCclBid)
     ) {
-      let shouldUpdateCcl = true
-      if (todayCcl.length > 0) {
-        const lastTimestamp = todayCcl[todayCcl.length - 1].timestamp.seconds
-
-        if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
-          shouldUpdateCcl = false
-        }
-      }
-
       const updateDataCcl: any = {
         ccl: {
           ask: newCclAsk,
           bid: newCclBid,
           timestamp: admin.firestore.FieldValue.serverTimestamp(),
         },
-      }
-
-      if (shouldUpdateCcl) {
-        updateDataCcl.ccl.today = [
-          ...todayCcl,
-          {
-            ask: newCclAsk,
-            timestamp: admin.firestore.FieldValue.serverTimestamp(),
-          },
-        ]
       }
 
       await db
@@ -429,32 +468,12 @@ export async function GET(request: NextRequest) {
       !!newCriptoBid &&
       (newCriptoAsk !== lastCriptoAsk || newCriptoBid !== lastCriptoBid)
     ) {
-      let shouldUpdateCripto = true
-      if (todayCripto.length > 0) {
-        const lastTimestamp =
-          todayCripto[todayCripto.length - 1].timestamp.seconds
-
-        if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
-          shouldUpdateCripto = false
-        }
-      }
-
       const updateDataCripto: any = {
         cripto: {
           ask: newCriptoAsk,
           bid: newCriptoBid,
           timestamp: admin.firestore.FieldValue.serverTimestamp(),
         },
-      }
-
-      if (shouldUpdateCripto) {
-        updateDataCripto.cripto.today = [
-          ...todayCripto,
-          {
-            ask: newCriptoAsk,
-            timestamp: admin.firestore.FieldValue.serverTimestamp(),
-          },
-        ]
       }
 
       await db
