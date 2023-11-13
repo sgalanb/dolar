@@ -45,7 +45,7 @@ export default function DolarTypeGrid({ dolarType }: { dolarType: DolarType }) {
             ? '#49ca4b'
             : '#D83141',
         borderWidth: 3,
-        tension: 0.4,
+        tension: 0.2,
         pointRadius: 0, // No points
         //pointBorderColor: 'white',
         borderCapStyle: 'round',
