@@ -6,12 +6,12 @@ import { NextRequest } from 'next/server'
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
-  const authHeader = request.headers.get('authorization')
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return new Response(`Not authorized.`, {
-      status: 500,
-    })
-  }
+  // const authHeader = request.headers.get('authorization')
+  // if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  //   return new Response(`Not authorized.`, {
+  //     status: 500,
+  //   })
+  // }
 
   let newPrices: any = {
     dolarBNA: null,
@@ -123,7 +123,15 @@ export async function GET(request: NextRequest) {
       !!newTarjeta &&
       !!newMayoristaAsk &&
       !!newCclAsk &&
-      !!newCriptoAsk
+      !!newCriptoAsk &&
+      !!todayOficial &&
+      !!todayBlue &&
+      !!todayMep &&
+      !!todayCocos &&
+      !!todayTarjeta &&
+      !!todayMayorista &&
+      !!todayCcl &&
+      !!todayCripto
     ) {
       let shouldUpdateOficial = true
       if (todayOficial.length > 0) {
@@ -202,92 +210,108 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      const generalUpdateObject: any = {}
+      const updateObject: any = {}
 
       if (shouldUpdateOficial) {
-        generalUpdateObject.oficial.today = [
-          ...todayOficial,
-          {
-            ask: newOficialAsk,
-            timestamp: admin.firestore.FieldValue.serverTimestamp(),
-          },
-        ]
+        updateObject.oficial = {
+          today: [
+            ...todayOficial,
+            {
+              ask: newOficialAsk,
+              timestamp: admin.firestore.Timestamp.now(),
+            },
+          ],
+        }
       }
 
       if (shouldUpdateBlue) {
-        generalUpdateObject.blue.today = [
-          ...todayBlue,
-          {
-            ask: newBlueAsk,
-            timestamp: admin.firestore.FieldValue.serverTimestamp(),
-          },
-        ]
+        updateObject.blue = {
+          today: [
+            ...todayBlue,
+            {
+              ask: newBlueAsk,
+              timestamp: admin.firestore.Timestamp.now(),
+            },
+          ],
+        }
       }
 
       if (shouldUpdateMep) {
-        generalUpdateObject.mep.today = [
-          ...todayMep,
-          {
-            ask: newMepAsk,
-            timestamp: admin.firestore.FieldValue.serverTimestamp(),
-          },
-        ]
+        updateObject.mep = {
+          today: [
+            ...todayMep,
+            {
+              ask: newMepAsk,
+              timestamp: admin.firestore.Timestamp.now(),
+            },
+          ],
+        }
       }
 
       if (shouldUpdateCocos) {
-        generalUpdateObject.cocos.today = [
-          ...todayCocos,
-          {
-            ask: newCocosAsk,
-            timestamp: admin.firestore.FieldValue.serverTimestamp(),
-          },
-        ]
+        updateObject.cocos = {
+          today: [
+            ...todayCocos,
+            {
+              ask: newCocosAsk,
+              timestamp: admin.firestore.Timestamp.now(),
+            },
+          ],
+        }
       }
 
       if (shouldUpdateTarjeta) {
-        generalUpdateObject.tarjeta.today = [
-          ...todayTarjeta,
-          {
-            ask: newTarjeta,
-            timestamp: admin.firestore.FieldValue.serverTimestamp(),
-          },
-        ]
+        updateObject.tarjeta = {
+          today: [
+            ...todayTarjeta,
+            {
+              ask: newTarjeta,
+              timestamp: admin.firestore.Timestamp.now(),
+            },
+          ],
+        }
       }
 
       if (shouldUpdateMayorista) {
-        generalUpdateObject.mayorista.today = [
-          ...todayMayorista,
-          {
-            ask: newMayoristaAsk,
-            timestamp: admin.firestore.FieldValue.serverTimestamp(),
-          },
-        ]
+        updateObject.mayorista = {
+          today: [
+            ...todayMayorista,
+            {
+              ask: newMayoristaAsk,
+              timestamp: admin.firestore.Timestamp.now(),
+            },
+          ],
+        }
       }
 
       if (shouldUpdateCcl) {
-        generalUpdateObject.ccl.today = [
-          ...todayCcl,
-          {
-            ask: newCclAsk,
-            timestamp: admin.firestore.FieldValue.serverTimestamp(),
-          },
-        ]
+        updateObject.ccl = {
+          today: [
+            ...todayCcl,
+            {
+              ask: newCclAsk,
+              timestamp: admin.firestore.Timestamp.now(),
+            },
+          ],
+        }
       }
 
       if (shouldUpdateCripto) {
-        generalUpdateObject.cripto.today = [
-          ...todayCripto,
-          {
-            ask: newCriptoAsk,
-            timestamp: admin.firestore.FieldValue.serverTimestamp(),
-          },
-        ]
+        updateObject.cripto = {
+          today: [
+            ...todayCripto,
+            {
+              ask: newCriptoAsk,
+              timestamp: admin.firestore.Timestamp.now(),
+            },
+          ],
+        }
       }
 
       await db
         .collection('prices')
         .doc('last-prices')
-        .set(generalUpdateObject, { merge: true })
+        .set(updateObject, { merge: true })
     }
 
     // Oficial
