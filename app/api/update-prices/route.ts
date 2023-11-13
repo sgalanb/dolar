@@ -143,6 +143,7 @@ export async function GET(request: NextRequest) {
           ...todayOficial,
           {
             ask: newOficialAsk,
+            timestamp: admin.firestore.FieldValue.serverTimestamp(),
           },
         ]
       }
@@ -187,6 +188,7 @@ export async function GET(request: NextRequest) {
           ...todayBlue,
           {
             ask: newBlueAsk,
+            timestamp: admin.firestore.FieldValue.serverTimestamp(),
           },
         ]
       }
@@ -231,6 +233,7 @@ export async function GET(request: NextRequest) {
           ...todayMep,
           {
             ask: newMepAsk,
+            timestamp: admin.firestore.FieldValue.serverTimestamp(),
           },
         ]
       }
@@ -275,6 +278,7 @@ export async function GET(request: NextRequest) {
           ...todayCocos,
           {
             ask: newCocosAsk,
+            timestamp: admin.firestore.FieldValue.serverTimestamp(),
           },
         ]
       }
@@ -314,6 +318,7 @@ export async function GET(request: NextRequest) {
           ...todayTarjeta,
           {
             ask: newTarjeta,
+            timestamp: admin.firestore.FieldValue.serverTimestamp(),
           },
         ]
       }
@@ -358,6 +363,7 @@ export async function GET(request: NextRequest) {
           ...todayMayorista,
           {
             ask: newMayoristaAsk,
+            timestamp: admin.firestore.FieldValue.serverTimestamp(),
           },
         ]
       }
@@ -401,6 +407,7 @@ export async function GET(request: NextRequest) {
           ...todayCcl,
           {
             ask: newCclAsk,
+            timestamp: admin.firestore.FieldValue.serverTimestamp(),
           },
         ]
       }
@@ -445,6 +452,7 @@ export async function GET(request: NextRequest) {
           ...todayCripto,
           {
             ask: newCriptoAsk,
+            timestamp: admin.firestore.FieldValue.serverTimestamp(),
           },
         ]
       }

@@ -4,12 +4,12 @@ import { NextRequest } from 'next/server'
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
-  // const authHeader = request.headers.get('authorization')
-  // if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-  //   return new Response(`Not authorized.`, {
-  //     status: 500,
-  //   })
-  // }
+  const authHeader = request.headers.get('authorization')
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    return new Response(`Not authorized.`, {
+      status: 500,
+    })
+  }
 
   try {
     const db = admin.firestore()
@@ -27,6 +27,7 @@ export async function GET(request: NextRequest) {
             today: [
               {
                 ask: lastPrices?.oficial.ask,
+                timestamp: lastPrices?.oficial.timestamp,
               },
             ],
           },
@@ -34,6 +35,7 @@ export async function GET(request: NextRequest) {
             today: [
               {
                 ask: lastPrices?.blue.ask,
+                timestamp: lastPrices?.blue.timestamp,
               },
             ],
           },
@@ -41,6 +43,7 @@ export async function GET(request: NextRequest) {
             today: [
               {
                 ask: lastPrices?.mep.ask,
+                timestamp: lastPrices?.mep.timestamp,
               },
             ],
           },
@@ -48,6 +51,7 @@ export async function GET(request: NextRequest) {
             today: [
               {
                 ask: lastPrices?.cocos.ask,
+                timestamp: lastPrices?.cocos.timestamp,
               },
             ],
           },
@@ -55,6 +59,7 @@ export async function GET(request: NextRequest) {
             today: [
               {
                 ask: lastPrices?.tarjeta.ask,
+                timestamp: lastPrices?.tarjeta.timestamp,
               },
             ],
           },
@@ -62,6 +67,7 @@ export async function GET(request: NextRequest) {
             today: [
               {
                 ask: lastPrices?.mayorista.ask,
+                timestamp: lastPrices?.mayorista.timestamp,
               },
             ],
           },
@@ -69,6 +75,7 @@ export async function GET(request: NextRequest) {
             today: [
               {
                 ask: lastPrices?.ccl.ask,
+                timestamp: lastPrices?.ccl.timestamp,
               },
             ],
           },
@@ -76,6 +83,7 @@ export async function GET(request: NextRequest) {
             today: [
               {
                 ask: lastPrices?.cripto.ask,
+                timestamp: lastPrices?.cripto.timestamp,
               },
             ],
           },
