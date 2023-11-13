@@ -45,7 +45,7 @@ export default function DolarTypeList({ dolarType }: { dolarType: DolarType }) {
             ? '#49ca4b'
             : '#D83141',
         borderWidth: 3,
-        tension: 0.2,
+        tension: 0.1,
         pointRadius: 0, // No points
         //pointBorderColor: 'white',
         borderCapStyle: 'round',
@@ -78,6 +78,8 @@ export default function DolarTypeList({ dolarType }: { dolarType: DolarType }) {
               ? 'bg-cocos-600/20 text-cocos-600'
               : dolarType.name == 'Cocos' && resolvedTheme == 'dark'
               ? 'bg-cocos-500/20 text-cocos-500'
+              : dolarType.name == 'Cocos'
+              ? 'bg-cocos-600/20 text-cocos-600'
               : chartPrices[0] <= chartPrices[chartPrices.length - 1]
               ? 'bg-[#49ca4b]/20 text-[#49ca4b]'
               : 'bg-[#D83141]/20 text-[#D83141]'
