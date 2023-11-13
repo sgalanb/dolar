@@ -11,12 +11,32 @@ import {
   where,
 } from 'firebase/firestore'
 
+interface TodayData {
+  ask: string
+  timestamp: Timestamp
+}
+
 interface PriceData {
   [key: string]: {
-    timestamp: number
-    bid: number
+    bid?: number
     ask: number
+    timestamp: Timestamp
+    today: TodayData[]
   }
+}
+
+export interface LastPricesInterface {
+  [key: string]: {
+    bid?: number
+    ask: number
+    timestamp: number // seconds from epoch
+    today: LastPricesTodayInterface[]
+  }
+}
+
+export interface LastPricesTodayInterface {
+  ask: string
+  timestamp: number // seconds from epoch
 }
 
 export async function getLastPrices() {
@@ -31,17 +51,25 @@ export async function getLastPrices() {
 
   // Function to convert Timestamp to dayjs
   const convertTimestampToDayjs = (timestamp: Timestamp) => {
-    return timestamp.seconds
+    return timestamp.seconds as number
   }
 
   // Iterate over each property in the lastPricesData object
-  const lastPricesFormatted: PriceData = {}
+  const lastPricesFormatted: LastPricesInterface = {}
   for (const [key, value] of Object.entries(lastPricesData)) {
     // Copy all properties from the original object
     lastPricesFormatted[key] = { ...value }
     // Replace the timestamp with a dayjs object
     lastPricesFormatted[key].timestamp = convertTimestampToDayjs(
       value.timestamp
+    )
+
+    // Convert each timestamp in the today array
+    lastPricesFormatted[key].today = value.today.map(
+      (todayItem: TodayData) => ({
+        ...todayItem,
+        timestamp: convertTimestampToDayjs(todayItem.timestamp),
+      })
     )
   }
 

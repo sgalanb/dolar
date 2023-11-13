@@ -3,8 +3,11 @@
 import DolarTypeGrid from '@/components/DolarTypeGrid'
 import DolarTypeList from '@/components/DolarTypeList'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { getLastPricesSnapshot } from '@/lib/firebaseSDK'
-import { DocumentData } from 'firebase/firestore'
+import {
+  LastPricesInterface,
+  LastPricesTodayInterface,
+  getLastPricesSnapshot,
+} from '@/lib/firebaseSDK'
 import { AlignJustify, Grid2X2, Rows } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
@@ -16,19 +19,15 @@ export interface DolarType {
   bid?: string
   ask: string
   timestamp: number
-  today?: TodayLog[]
-}
-
-export interface TodayLog {
-  ask: string
+  today: LastPricesTodayInterface[]
 }
 
 export default function DolarsHome({
   lastPrices,
 }: {
-  lastPrices: DocumentData | undefined
+  lastPrices: LastPricesInterface
 }) {
-  const [prices, setPrices] = useState(lastPrices)
+  const [prices, setPrices] = useState<LastPricesInterface>(lastPrices)
 
   useEffect(() => {
     let unsubscribe: () => void
@@ -49,7 +48,7 @@ export default function DolarsHome({
   const dolars: DolarType[] = [
     {
       name: 'Oficial',
-      bid: `${prices?.oficial.bid.toLocaleString('es-AR', {
+      bid: `${prices?.oficial?.bid?.toLocaleString('es-AR', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
@@ -57,12 +56,12 @@ export default function DolarsHome({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
-      timestamp: prices?.oficial.timestamp.seconds,
+      timestamp: prices?.oficial.timestamp,
       today: prices?.oficial.today,
     },
     {
       name: 'Blue',
-      bid: `${prices?.blue.bid.toLocaleString('es-AR', {
+      bid: `${prices?.blue?.bid?.toLocaleString('es-AR', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
@@ -70,12 +69,12 @@ export default function DolarsHome({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
-      timestamp: prices?.blue.timestamp.seconds,
+      timestamp: prices?.blue.timestamp,
       today: prices?.blue.today,
     },
     {
       name: 'MEP',
-      bid: `${prices?.mep.bid.toLocaleString('es-AR', {
+      bid: `${prices?.mep?.bid?.toLocaleString('es-AR', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
@@ -83,12 +82,12 @@ export default function DolarsHome({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
-      timestamp: prices?.mep.timestamp.seconds,
+      timestamp: prices?.mep.timestamp,
       today: prices?.mep.today,
     },
     {
       name: 'Cocos',
-      bid: `${prices?.cocos.bid.toLocaleString('es-AR', {
+      bid: `${prices?.cocos?.bid?.toLocaleString('es-AR', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
@@ -96,7 +95,7 @@ export default function DolarsHome({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
-      timestamp: prices?.cocos.timestamp.seconds,
+      timestamp: prices?.cocos.timestamp,
       today: prices?.cocos.today,
     },
     {
@@ -105,12 +104,12 @@ export default function DolarsHome({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
-      timestamp: prices?.tarjeta.timestamp.seconds,
+      timestamp: prices?.tarjeta.timestamp,
       today: prices?.tarjeta.today,
     },
     {
       name: 'Mayorista',
-      bid: `${prices?.mayorista.bid.toLocaleString('es-AR', {
+      bid: `${prices?.mayorista?.bid?.toLocaleString('es-AR', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
@@ -118,12 +117,12 @@ export default function DolarsHome({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
-      timestamp: prices?.mayorista.timestamp.seconds,
+      timestamp: prices?.mayorista.timestamp,
       today: prices?.mayorista.today,
     },
     {
       name: 'CCL',
-      bid: `${prices?.ccl.bid.toLocaleString('es-AR', {
+      bid: `${prices?.ccl?.bid?.toLocaleString('es-AR', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
@@ -131,12 +130,12 @@ export default function DolarsHome({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
-      timestamp: prices?.ccl.timestamp.seconds,
+      timestamp: prices?.ccl.timestamp,
       today: prices?.ccl.today,
     },
     {
       name: 'Cripto',
-      bid: `${prices?.cripto.bid.toLocaleString('es-AR', {
+      bid: `${prices?.cripto?.bid?.toLocaleString('es-AR', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
@@ -144,7 +143,7 @@ export default function DolarsHome({
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       })}`,
-      timestamp: prices?.cripto.timestamp.seconds,
+      timestamp: prices?.cripto.timestamp,
       today: prices?.cripto.today,
     },
   ]

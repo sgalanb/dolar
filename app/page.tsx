@@ -1,10 +1,10 @@
 import DolarsHome from '@/components/DolarsHome'
-import { getLastPrices } from '@/lib/firebaseSDK'
+import { LastPricesInterface, getLastPrices } from '@/lib/firebaseSDK'
 
 export const revalidate = 60
 
 export default async function Home() {
-  const lastPrices = await getLastPrices()
+  const lastPrices: LastPricesInterface = await getLastPrices()
 
   return (
     <div className="flex flex-col items-center justify-center gap-9">
