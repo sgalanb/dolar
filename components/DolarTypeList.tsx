@@ -22,11 +22,20 @@ export default function DolarTypeList({ dolarType }: { dolarType: DolarType }) {
     100
 
   const lineData = {
-    labels: new Array(chartPrices.length).fill(''),
+    labels: new Array(
+      parseFloat(dolarType.ask.replace(',', '.')) ==
+      todayPrices[todayPrices.length - 1]
+        ? todayPrices.length
+        : chartPrices.length
+    ).fill(''),
     datasets: [
       {
         label: 'Prices',
-        data: chartPrices,
+        data:
+          parseFloat(dolarType.ask.replace(',', '.')) ==
+          todayPrices[todayPrices.length - 1]
+            ? todayPrices
+            : chartPrices,
         borderColor:
           dolarType.name == 'Cocos' && resolvedTheme == 'light'
             ? '#0062E1'
