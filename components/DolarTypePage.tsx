@@ -7,8 +7,31 @@ import {
   getLastPricesSnapshot,
 } from '@/lib/firebaseSDK'
 import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import updateLocale from 'dayjs/plugin/updateLocale'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
+
+dayjs.extend(relativeTime)
+dayjs.extend(updateLocale)
+
+dayjs.updateLocale('es', {
+  relativeTime: {
+    future: 'en %s',
+    past: 'Hace %s',
+    s: 'unos segundos',
+    m: 'un minuto',
+    mm: '%d minutos',
+    h: 'una hora',
+    hh: '%d horas',
+    d: 'un día',
+    dd: '%d días',
+    M: 'un mes',
+    MM: '%d meses',
+    y: 'un año',
+    yy: '%d años',
+  },
+})
 
 export default function DolarTypePage({ type }: { type: string }) {
   const { resolvedTheme } = useTheme()
@@ -106,7 +129,8 @@ export default function DolarTypePage({ type }: { type: string }) {
               <p className="text-sm font-normal tracking-wider text-zinc-500 dark:text-zinc-400">
                 {dayjs
                   .unix(dolarType.timestamp.seconds)
-                  .format('DD/MM/YYYY - HH:mm')}
+                  .format('DD/MM/YYYY - HH:mm | ') +
+                  dayjs.unix(dolarType.timestamp.seconds).fromNow()}
               </p>
             </div>
             {dolarType.bid ? (

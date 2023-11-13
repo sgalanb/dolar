@@ -2,76 +2,37 @@
 
 import { DolarType } from '@/components/DolarsHome'
 import MiniLineChart from '@/components/charts/MiniLineChart'
-import { getMiniLineChartPrices } from '@/lib/firebaseSDK'
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
-import updateLocale from 'dayjs/plugin/updateLocale'
 import { useTheme } from 'next-themes'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
-
-dayjs.extend(relativeTime)
-dayjs.extend(updateLocale)
-
-dayjs.updateLocale('es', {
-  relativeTime: {
-    future: 'en %s',
-    past: '%s',
-    s: 'unos segundos',
-    m: 'un minuto',
-    mm: '%d minutos',
-    h: 'una hora',
-    hh: '%d horas',
-    d: 'un día',
-    dd: '%d días',
-    M: 'un mes',
-    MM: '%d meses',
-    y: 'un año',
-    yy: '%d años',
-  },
-})
 
 export default function DolarTypeGrid({ dolarType }: { dolarType: DolarType }) {
   const { resolvedTheme } = useTheme()
 
-  const [miniLineChartPrices, setMiniLineChartPrices] = useState<[number] | []>(
-    []
-  )
+  const todayPrices: number[] = dolarType.today
+    ? dolarType.today.map((today) => parseFloat(today.ask))
+    : []
 
-  useEffect(() => {
-    let unsubscribe: () => void
+  const chartPrices = [
+    ...todayPrices,
+    parseFloat(dolarType.ask.replace(',', '.')),
+  ]
 
-      // Immediately invoked async function to handle the promise
-    ;(async () => {
-      unsubscribe = await getMiniLineChartPrices(
-        dolarType.name.toLowerCase(),
-        (newPrices) => {
-          setMiniLineChartPrices(newPrices) // Update the prices state whenever there's a change
-        }
-      )
-    })()
-
-    // Unsubscribe from the snapshot listener when the component unmounts
-    return () => {
-      if (unsubscribe) unsubscribe()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const porcentualChange =
+    ((chartPrices[chartPrices.length - 1] - chartPrices[0]) / chartPrices[0]) *
+    100
 
   const lineData = {
-    labels: new Array(7).fill(''), // Replace with your actual labels if needed
+    labels: new Array(chartPrices.length).fill(''),
     datasets: [
       {
         label: 'Prices',
-        data: miniLineChartPrices, // Replace with your actual data
+        data: chartPrices,
         borderColor:
           dolarType.name == 'Cocos' && resolvedTheme == 'light'
             ? '#0062E1'
             : dolarType.name == 'Cocos' && resolvedTheme == 'dark'
             ? '#3b8df1'
-            : miniLineChartPrices?.length > 1 &&
-              miniLineChartPrices[miniLineChartPrices.length - 1] >
-                miniLineChartPrices[miniLineChartPrices.length - 2]
+            : chartPrices[0] <= chartPrices[chartPrices.length - 1]
             ? '#49ca4b'
             : '#D83141',
         borderWidth: 3,
@@ -83,11 +44,6 @@ export default function DolarTypeGrid({ dolarType }: { dolarType: DolarType }) {
     ],
   }
 
-  const date = dayjs.unix(dolarType.timestamp)
-  const displayDate = dayjs().isSame(date, 'day')
-    ? date.format('HH:mm')
-    : date.fromNow()
-
   return (
     <Link
       href={`/${dolarType.name.toLowerCase()}`}
@@ -95,7 +51,7 @@ export default function DolarTypeGrid({ dolarType }: { dolarType: DolarType }) {
         dolarType.name == 'Cocos'
           ? 'border-2 border-cocos-600 dark:border-cocos-500'
           : ''
-      } grid aspect-square h-full w-full grid-cols-1 grid-rows-[22px,1fr,1fr] flex-col items-center justify-between gap-3 rounded-2xl bg-white p-3 shadow hover:opacity-80 dark:bg-zinc-800 dark:shadow-none`}
+      } grid aspect-square h-full w-full grid-cols-1 grid-rows-[24px,1fr,1fr] flex-col items-center justify-between gap-3 rounded-2xl bg-white p-3 shadow hover:opacity-80 dark:bg-zinc-800 dark:shadow-none`}
     >
       <div className="flex h-full w-full items-center justify-between">
         <h2
@@ -107,16 +63,28 @@ export default function DolarTypeGrid({ dolarType }: { dolarType: DolarType }) {
         >
           {dolarType.name}
         </h2>
-        <p className="w-fit text-sm font-normal text-zinc-500 dark:text-zinc-400">
-          {displayDate}
-        </p>
+        <span
+          className={`${
+            dolarType.name == 'Cocos' && resolvedTheme == 'light'
+              ? 'bg-cocos-600/20 text-cocos-600'
+              : dolarType.name == 'Cocos' && resolvedTheme == 'dark'
+              ? 'bg-cocos-500/20 text-cocos-500'
+              : chartPrices[0] <= chartPrices[chartPrices.length - 1]
+              ? 'bg-[#49ca4b]/20 text-[#49ca4b]'
+              : 'bg-[#D83141]/20 text-[#D83141]'
+          } w-fit rounded p-1 px-2 text-sm font-normal`}
+        >
+          {porcentualChange >= 0
+            ? `+${porcentualChange
+                .toFixed(dolarType.name == 'Mayorista' ? 0 : 2)
+                .replace('.', ',')} %`
+            : `-${Math.abs(porcentualChange)
+                .toFixed(dolarType.name == 'Mayorista' ? 0 : 2)
+                .replace('.', ',')} %`}
+        </span>
       </div>
       <div className="h-full w-full">
-        {miniLineChartPrices?.length > 1 ? (
-          <MiniLineChart lineData={lineData} />
-        ) : (
-          <div className="h-full w-full animate-pulse rounded bg-zinc-100 dark:bg-zinc-700" />
-        )}
+        <MiniLineChart lineData={lineData} />
       </div>
       {dolarType.bid ? (
         <div className="flex h-full w-full flex-col items-center justify-center gap-3">

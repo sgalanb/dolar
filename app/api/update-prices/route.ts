@@ -1,5 +1,6 @@
 import admin from '@/lib/firebase-setup/firebaseAdmin'
 import { calculateAverageCryptoDolarPrices } from '@/lib/utils'
+import dayjs from 'dayjs'
 import { NextRequest } from 'next/server'
 
 export const dynamic = 'force-dynamic'
@@ -86,6 +87,16 @@ export async function GET(request: NextRequest) {
     const lastCriptoAsk = lastPrices?.cripto?.ask
     const lastCriptoBid = lastPrices?.cripto?.bid
 
+    // All ask prices from today
+    const todayOficial = lastPrices?.oficial?.today || ([] as [any] | [])
+    const todayBlue = lastPrices?.blue?.today || ([] as [any] | [])
+    const todayMep = lastPrices?.mep?.today || ([] as [any] | [])
+    const todayCocos = lastPrices?.cocos?.today || ([] as [any] | [])
+    const todayTarjeta = lastPrices?.tarjeta?.today || ([] as [any] | [])
+    const todayMayorista = lastPrices?.mayorista?.today || ([] as [any] | [])
+    const todayCcl = lastPrices?.ccl?.today || ([] as [any] | [])
+    const todayCripto = lastPrices?.cripto?.today || ([] as [any] | [])
+
     // Prices from sources
     const newOficialAsk = newPrices?.dolarBNA?.ask
     const newOficialBid = newPrices?.dolarBNA?.bid
@@ -103,25 +114,44 @@ export async function GET(request: NextRequest) {
     const newCriptoAsk = newPrices?.dolarCrypto?.ask
     const newCriptoBid = newPrices?.dolarCrypto?.bid
 
-    // Register new prices on DB only if they are different from the last ones
+    // Oficial
     if (
       !!newOficialAsk &&
       !!newOficialBid &&
       (newOficialAsk !== lastOficialAsk || newOficialBid !== lastOficialBid)
     ) {
+      let shouldUpdateOficial = true
+      if (todayOficial.length > 0) {
+        const lastTimestamp =
+          todayOficial[todayOficial.length - 1].timestamp.seconds
+
+        if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
+          shouldUpdateOficial = false
+        }
+      }
+
+      const updateDataOficial: any = {
+        oficial: {
+          ask: newOficialAsk,
+          bid: newOficialBid,
+          timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        },
+      }
+
+      if (shouldUpdateOficial) {
+        updateDataOficial.oficial.today = [
+          ...todayOficial,
+          {
+            ask: newOficialAsk,
+          },
+        ]
+      }
+
       await db
         .collection('prices')
         .doc('last-prices')
-        .set(
-          {
-            oficial: {
-              ask: newOficialAsk,
-              bid: newOficialBid,
-              timestamp: admin.firestore.FieldValue.serverTimestamp(),
-            },
-          },
-          { merge: true }
-        )
+        .set(updateDataOficial, { merge: true })
+
       await db.collection('historical-prices').doc().set({
         ask: newOficialAsk,
         bid: newOficialBid,
@@ -129,24 +159,43 @@ export async function GET(request: NextRequest) {
         type: 'oficial',
       })
     }
+    // Blue
     if (
       !!newBlueAsk &&
       !!newBlueBid &&
       (newBlueAsk !== lastBlueAsk || newBlueBid !== lastBlueBid)
     ) {
+      let shouldUpdateBlue = true
+      if (todayBlue.length > 0) {
+        const lastTimestamp = todayBlue[todayBlue.length - 1].timestamp.seconds
+
+        if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
+          shouldUpdateBlue = false
+        }
+      }
+
+      const updateDataBlue: any = {
+        blue: {
+          ask: newBlueAsk,
+          bid: newBlueBid,
+          timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        },
+      }
+
+      if (shouldUpdateBlue) {
+        updateDataBlue.blue.today = [
+          ...todayBlue,
+          {
+            ask: newBlueAsk,
+          },
+        ]
+      }
+
       await db
         .collection('prices')
         .doc('last-prices')
-        .set(
-          {
-            blue: {
-              ask: newBlueAsk,
-              bid: newBlueBid,
-              timestamp: admin.firestore.FieldValue.serverTimestamp(),
-            },
-          },
-          { merge: true }
-        )
+        .set(updateDataBlue, { merge: true })
+
       await db.collection('historical-prices').doc().set({
         ask: newBlueAsk,
         bid: newBlueBid,
@@ -154,24 +203,42 @@ export async function GET(request: NextRequest) {
         type: 'blue',
       })
     }
+    // MEP
     if (
       !!newMepAsk &&
       !!newMepBid &&
       (newMepAsk !== lastMepAsk || newMepBid !== lastMepBid)
     ) {
+      let shouldUpdateMep = true
+      if (todayMep.length > 0) {
+        const lastTimestamp = todayMep[todayMep.length - 1].timestamp.seconds
+
+        if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
+          shouldUpdateMep = false
+        }
+      }
+
+      const updateDataMep: any = {
+        mep: {
+          ask: newMepAsk,
+          bid: newMepBid,
+          timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        },
+      }
+
+      if (shouldUpdateMep) {
+        updateDataMep.mep.today = [
+          ...todayMep,
+          {
+            ask: newMepAsk,
+          },
+        ]
+      }
+
       await db
         .collection('prices')
         .doc('last-prices')
-        .set(
-          {
-            mep: {
-              ask: newMepAsk,
-              bid: newMepBid,
-              timestamp: admin.firestore.FieldValue.serverTimestamp(),
-            },
-          },
-          { merge: true }
-        )
+        .set(updateDataMep, { merge: true })
       await db.collection('historical-prices').doc().set({
         ask: newMepAsk,
         bid: newMepBid,
@@ -179,24 +246,43 @@ export async function GET(request: NextRequest) {
         type: 'mep',
       })
     }
+    // Cocos
     if (
       !!newCocosAsk &&
       !!newCocosBid &&
       (newCocosAsk !== lastCocosAsk || newCocosBid !== lastCocosBid)
     ) {
+      let shouldUpdateCocos = true
+      if (todayCocos.length > 0) {
+        const lastTimestamp =
+          todayCocos[todayCocos.length - 1].timestamp.seconds
+
+        if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
+          shouldUpdateCocos = false
+        }
+      }
+
+      const updateDataCocos: any = {
+        cocos: {
+          ask: newCocosAsk,
+          bid: newCocosBid,
+          timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        },
+      }
+
+      if (shouldUpdateCocos) {
+        updateDataCocos.cocos.today = [
+          ...todayCocos,
+          {
+            ask: newCocosAsk,
+          },
+        ]
+      }
+
       await db
         .collection('prices')
         .doc('last-prices')
-        .set(
-          {
-            cocos: {
-              ask: newCocosAsk,
-              bid: newCocosBid,
-              timestamp: admin.firestore.FieldValue.serverTimestamp(),
-            },
-          },
-          { merge: true }
-        )
+        .set(updateDataCocos, { merge: true })
       await db.collection('historical-prices').doc().set({
         ask: newCocosAsk,
         bid: newCocosBid,
@@ -204,44 +290,82 @@ export async function GET(request: NextRequest) {
         type: 'cocos',
       })
     }
+    // Tarjeta
     if (!!newTarjeta && newTarjeta !== lastTarjeta) {
+      let shouldUpdateTarjeta = true
+      if (todayTarjeta.length > 0) {
+        const lastTimestamp =
+          todayTarjeta[todayTarjeta.length - 1].timestamp.seconds
+
+        if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
+          shouldUpdateTarjeta = false
+        }
+      }
+
+      const updateDataTarjeta: any = {
+        tarjeta: {
+          ask: newTarjeta,
+          timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        },
+      }
+
+      if (shouldUpdateTarjeta) {
+        updateDataTarjeta.tarjeta.today = [
+          ...todayTarjeta,
+          {
+            ask: newTarjeta,
+          },
+        ]
+      }
+
       await db
         .collection('prices')
         .doc('last-prices')
-        .set(
-          {
-            tarjeta: {
-              ask: newTarjeta,
-              timestamp: admin.firestore.FieldValue.serverTimestamp(),
-            },
-          },
-          { merge: true }
-        )
+        .set(updateDataTarjeta, { merge: true })
       await db.collection('historical-prices').doc().set({
         ask: newTarjeta,
         timestamp: admin.firestore.FieldValue.serverTimestamp(),
         type: 'tarjeta',
       })
     }
+    // Mayorista
     if (
       !!newMayoristaAsk &&
       !!newMayoristaBid &&
       (newMayoristaAsk !== lastMayoristaAsk ||
         newMayoristaBid !== lastMayoristaBid)
     ) {
+      let shouldUpdateMayorista = true
+      if (todayMayorista.length > 0) {
+        const lastTimestamp =
+          todayMayorista[todayMayorista.length - 1].timestamp.seconds
+
+        if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
+          shouldUpdateMayorista = false
+        }
+      }
+
+      const updateDataMayorista: any = {
+        mayorista: {
+          ask: newMayoristaAsk,
+          bid: newMayoristaBid,
+          timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        },
+      }
+
+      if (shouldUpdateMayorista) {
+        updateDataMayorista.mayorista.today = [
+          ...todayMayorista,
+          {
+            ask: newMayoristaAsk,
+          },
+        ]
+      }
+
       await db
         .collection('prices')
         .doc('last-prices')
-        .set(
-          {
-            mayorista: {
-              ask: newMayoristaAsk,
-              bid: newMayoristaBid,
-              timestamp: admin.firestore.FieldValue.serverTimestamp(),
-            },
-          },
-          { merge: true }
-        )
+        .set(updateDataMayorista, { merge: true })
       await db.collection('historical-prices').doc().set({
         ask: newMayoristaAsk,
         bid: newMayoristaBid,
@@ -249,24 +373,42 @@ export async function GET(request: NextRequest) {
         type: 'mayorista',
       })
     }
+    // CCL
     if (
       !!newCclAsk &&
       !!newCclBid &&
       (newCclAsk !== lastCclAsk || newCclBid !== lastCclBid)
     ) {
+      let shouldUpdateCcl = true
+      if (todayCcl.length > 0) {
+        const lastTimestamp = todayCcl[todayCcl.length - 1].timestamp.seconds
+
+        if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
+          shouldUpdateCcl = false
+        }
+      }
+
+      const updateDataCcl: any = {
+        ccl: {
+          ask: newCclAsk,
+          bid: newCclBid,
+          timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        },
+      }
+
+      if (shouldUpdateCcl) {
+        updateDataCcl.ccl.today = [
+          ...todayCcl,
+          {
+            ask: newCclAsk,
+          },
+        ]
+      }
+
       await db
         .collection('prices')
         .doc('last-prices')
-        .set(
-          {
-            ccl: {
-              ask: newCclAsk,
-              bid: newCclBid,
-              timestamp: admin.firestore.FieldValue.serverTimestamp(),
-            },
-          },
-          { merge: true }
-        )
+        .set(updateDataCcl, { merge: true })
       await db.collection('historical-prices').doc().set({
         ask: newCclAsk,
         bid: newCclBid,
@@ -274,24 +416,43 @@ export async function GET(request: NextRequest) {
         type: 'ccl',
       })
     }
+    // Cripto
     if (
       !!newCriptoAsk &&
       !!newCriptoBid &&
       (newCriptoAsk !== lastCriptoAsk || newCriptoBid !== lastCriptoBid)
     ) {
+      let shouldUpdateCripto = true
+      if (todayCripto.length > 0) {
+        const lastTimestamp =
+          todayCripto[todayCripto.length - 1].timestamp.seconds
+
+        if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
+          shouldUpdateCripto = false
+        }
+      }
+
+      const updateDataCripto: any = {
+        cripto: {
+          ask: newCriptoAsk,
+          bid: newCriptoBid,
+          timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        },
+      }
+
+      if (shouldUpdateCripto) {
+        updateDataCripto.cripto.today = [
+          ...todayCripto,
+          {
+            ask: newCriptoAsk,
+          },
+        ]
+      }
+
       await db
         .collection('prices')
         .doc('last-prices')
-        .set(
-          {
-            cripto: {
-              ask: newCriptoAsk,
-              bid: newCriptoBid,
-              timestamp: admin.firestore.FieldValue.serverTimestamp(),
-            },
-          },
-          { merge: true }
-        )
+        .set(updateDataCripto, { merge: true })
       await db.collection('historical-prices').doc().set({
         ask: newCriptoAsk,
         bid: newCriptoBid,

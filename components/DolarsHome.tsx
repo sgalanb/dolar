@@ -6,13 +6,21 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { getLastPricesSnapshot } from '@/lib/firebaseSDK'
 import { DocumentData } from 'firebase/firestore'
 import { AlignJustify, Grid2X2, Rows } from 'lucide-react'
+import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
+
+const LastUpdateTime = dynamic(() => import('@/components/LastUpdateTime'))
 
 export interface DolarType {
   name: string
   bid?: string
   ask: string
   timestamp: number
+  today?: TodayLog[]
+}
+
+export interface TodayLog {
+  ask: string
 }
 
 export default function DolarsHome({
@@ -50,6 +58,7 @@ export default function DolarsHome({
         maximumFractionDigits: 2,
       })}`,
       timestamp: prices?.oficial.timestamp.seconds,
+      today: prices?.oficial.today,
     },
     {
       name: 'Blue',
@@ -62,6 +71,7 @@ export default function DolarsHome({
         maximumFractionDigits: 2,
       })}`,
       timestamp: prices?.blue.timestamp.seconds,
+      today: prices?.blue.today,
     },
     {
       name: 'MEP',
@@ -74,6 +84,7 @@ export default function DolarsHome({
         maximumFractionDigits: 2,
       })}`,
       timestamp: prices?.mep.timestamp.seconds,
+      today: prices?.mep.today,
     },
     {
       name: 'Cocos',
@@ -86,6 +97,7 @@ export default function DolarsHome({
         maximumFractionDigits: 2,
       })}`,
       timestamp: prices?.cocos.timestamp.seconds,
+      today: prices?.cocos.today,
     },
     {
       name: 'Tarjeta',
@@ -94,6 +106,7 @@ export default function DolarsHome({
         maximumFractionDigits: 2,
       })}`,
       timestamp: prices?.tarjeta.timestamp.seconds,
+      today: prices?.tarjeta.today,
     },
     {
       name: 'Mayorista',
@@ -106,6 +119,7 @@ export default function DolarsHome({
         maximumFractionDigits: 2,
       })}`,
       timestamp: prices?.mayorista.timestamp.seconds,
+      today: prices?.mayorista.today,
     },
     {
       name: 'CCL',
@@ -118,6 +132,7 @@ export default function DolarsHome({
         maximumFractionDigits: 2,
       })}`,
       timestamp: prices?.ccl.timestamp.seconds,
+      today: prices?.ccl.today,
     },
     {
       name: 'Cripto',
@@ -130,6 +145,7 @@ export default function DolarsHome({
         maximumFractionDigits: 2,
       })}`,
       timestamp: prices?.cripto.timestamp.seconds,
+      today: prices?.cripto.today,
     },
   ]
 
@@ -165,6 +181,7 @@ export default function DolarsHome({
           ))}
         </div>
       </TabsContent>
+      <LastUpdateTime />
     </Tabs>
   )
 }

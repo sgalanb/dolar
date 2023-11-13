@@ -3,6 +3,10 @@
     {
       "path": "/api/update-prices",
       "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/clear-day",
+      "schedule": "0 3 * * *"
     }
   ]
 }
