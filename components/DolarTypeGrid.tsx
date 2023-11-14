@@ -59,7 +59,7 @@ export default function DolarTypeGrid({ dolarType }: { dolarType: DolarType }) {
 
   return (
     <Link
-      href={`/${dolarType.name.toLowerCase()}`}
+      href={`/${dolarType?.name?.toLowerCase()}`}
       className={`${
         dolarType.name == 'Cocos'
           ? 'border-2 border-cocos-600 dark:border-cocos-500'
