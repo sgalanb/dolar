@@ -25,7 +25,9 @@ export default function DolarTypeList({ dolarType }: { dolarType: DolarType }) {
     labels: new Array(
       parseFloat(dolarType.ask.replace(',', '.')) ==
       todayPrices[todayPrices.length - 1]
-        ? todayPrices.length
+        ? todayPrices.length == 1
+          ? 2
+          : todayPrices.length
         : chartPrices.length
     ).fill(''),
     datasets: [
@@ -34,7 +36,9 @@ export default function DolarTypeList({ dolarType }: { dolarType: DolarType }) {
         data:
           parseFloat(dolarType.ask.replace(',', '.')) ==
           todayPrices[todayPrices.length - 1]
-            ? todayPrices
+            ? todayPrices.length == 1
+              ? [todayPrices[0], todayPrices[0]]
+              : todayPrices
             : chartPrices,
         borderColor:
           dolarType.name == 'Cocos' && resolvedTheme == 'light'
