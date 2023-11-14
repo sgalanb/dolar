@@ -1,15 +1,5 @@
 import { db } from '@/lib/firebase-setup/firebase'
-import {
-  Timestamp,
-  collection,
-  doc,
-  getDoc,
-  limit,
-  onSnapshot,
-  orderBy,
-  query,
-  where,
-} from 'firebase/firestore'
+import { Timestamp, doc, getDoc, onSnapshot } from 'firebase/firestore'
 
 interface TodayData {
   ask: string
@@ -39,6 +29,11 @@ export interface LastPricesTodayInterface {
   timestamp: number // seconds from epoch
 }
 
+// Function to convert Timestamp to dayjs
+const convertTimestampToDayjs = (timestamp: Timestamp) => {
+  return timestamp.seconds as number
+}
+
 export async function getLastPrices() {
   const lastPricesDoc = doc(db, 'prices', 'last-prices')
 
@@ -47,11 +42,6 @@ export async function getLastPrices() {
 
   if (!lastPricesData) {
     throw new Error('No data found for last prices.')
-  }
-
-  // Function to convert Timestamp to dayjs
-  const convertTimestampToDayjs = (timestamp: Timestamp) => {
-    return timestamp.seconds as number
   }
 
   // Iterate over each property in the lastPricesData object
@@ -76,67 +66,53 @@ export async function getLastPrices() {
   return lastPricesFormatted
 }
 
-export async function getLastPricesSnapshot(callback: (data: any) => void) {
-  const unsub = onSnapshot(doc(db, 'prices', 'last-prices'), (doc) => {
-    callback(doc.data())
+export async function getLastPricesSnapshot(
+  callback: (data: LastPricesInterface) => void
+) {
+  const unsub = onSnapshot(doc(db, 'prices', 'last-prices'), (docSnapshot) => {
+    const lastPricesData = docSnapshot.data()
+
+    if (!lastPricesData) {
+      throw new Error('No data found for last prices.')
+    }
+
+    const lastPricesFormatted: LastPricesInterface = {}
+    for (const [key, value] of Object.entries(lastPricesData)) {
+      lastPricesFormatted[key] = { ...value }
+      lastPricesFormatted[key].timestamp = convertTimestampToDayjs(
+        value.timestamp
+      )
+
+      lastPricesFormatted[key].today = value.today.map(
+        (todayItem: TodayData) => ({
+          ...todayItem,
+          timestamp: convertTimestampToDayjs(todayItem.timestamp),
+        })
+      )
+    }
+
+    callback(lastPricesFormatted)
   })
 
   return unsub
 }
 
-export async function getMiniLineChartPrices(
+export async function getChartsDataSnapshot(
   type: string,
   callback: (data: any) => void
 ) {
-  const historicalPricesRef = collection(db, 'historical-prices')
+  const unsub = onSnapshot(
+    doc(db, 'charts-data', type.toLowerCase()),
+    (docSnapshot) => {
+      const data = docSnapshot.data()
 
-  const typeQuery = query(
-    historicalPricesRef,
-    where('type', '==', type),
-    orderBy('timestamp', 'desc'),
-    limit(7)
-  )
-
-  const unsub = onSnapshot(typeQuery, (snapshot) => {
-    const prices = snapshot.docs.map((doc) => doc.data().ask)
-    callback(prices.reverse())
-  })
-
-  return unsub
-}
-
-export async function getHistoricalYearPrices(
-  type: string,
-  callback: (data: any) => void
-) {
-  const historicalPricesRef = collection(db, 'historical-prices')
-
-  let currentDate = new Date()
-  let pastYearDate = new Date(
-    currentDate.setFullYear(currentDate.getFullYear() - 1)
-  )
-
-  const typeQuery = query(
-    historicalPricesRef,
-    where('type', '==', type),
-    where('timestamp', '>=', Timestamp.fromDate(pastYearDate)),
-    orderBy('timestamp', 'asc')
-  )
-
-  const unsub = onSnapshot(typeQuery, (snapshot) => {
-    const allPrices = snapshot.docs.map((doc) => doc.data())
-
-    // Group by date and get the last price of each day
-    const lastPricePerDay = allPrices.reduce((acc, price) => {
-      const date = price.timestamp.toDate().toDateString()
-      if (!acc[date] || acc[date].timestamp < price.timestamp) {
-        acc[date] = price
+      if (!data) {
+        throw new Error('No data found for charts data.')
       }
-      return acc
-    }, {})
 
-    callback(Object.values(lastPricePerDay))
-  })
+      callback(data)
+    }
+  )
 
   return unsub
 }

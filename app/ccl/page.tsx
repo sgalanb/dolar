@@ -1,4 +1,5 @@
 import DolarTypePage from '@/components/DolarTypePage'
+import { LastPricesInterface, getLastPrices } from '@/lib/firebaseSDK'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -7,10 +8,8 @@ export const metadata: Metadata = {
     'Seguí la cotización del dólar contado con liquidación hoy en Argentina. Mirá la cotización histórica.',
 }
 
-export default function CCL() {
-  return (
-    <div className="flex w-full items-center justify-center">
-      <DolarTypePage type="CCL" />
-    </div>
-  )
+export default async function CCL() {
+  const lastPrices: LastPricesInterface = await getLastPrices()
+
+  return <DolarTypePage type="CCL" lastPrices={lastPrices.ccl} />
 }

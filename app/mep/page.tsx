@@ -1,4 +1,5 @@
 import DolarTypePage from '@/components/DolarTypePage'
+import { LastPricesInterface, getLastPrices } from '@/lib/firebaseSDK'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -7,10 +8,8 @@ export const metadata: Metadata = {
     'Seguí la cotización del dólar MEP hoy en Argentina. Mirá la cotización histórica.',
 }
 
-export default function MEP() {
-  return (
-    <div className="flex w-full items-center justify-center">
-      <DolarTypePage type="MEP" />
-    </div>
-  )
+export default async function MEP() {
+  const lastPrices: LastPricesInterface = await getLastPrices()
+
+  return <DolarTypePage type="MEP" lastPrices={lastPrices.mep} />
 }

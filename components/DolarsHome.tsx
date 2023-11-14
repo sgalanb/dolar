@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react'
 const LastUpdateTime = dynamic(() => import('@/components/LastUpdateTime'))
 
 export interface DolarType {
-  name: string
+  name?: string
   bid?: string
   ask: string
   timestamp: number

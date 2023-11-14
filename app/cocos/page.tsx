@@ -1,5 +1,5 @@
 import DolarTypePage from '@/components/DolarTypePage'
-import OperaEnCocosButton from '@/components/OperaEnCocosButton'
+import { LastPricesInterface, getLastPrices } from '@/lib/firebaseSDK'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -8,11 +8,8 @@ export const metadata: Metadata = {
     'Seguí la cotización del dólar MEP 24/7 de Cocos hoy en Argentina. Mirá la cotización histórica.',
 }
 
-export default function Cocos() {
-  return (
-    <div className="flex w-full flex-col items-center justify-center gap-9">
-      <DolarTypePage type="Cocos" />
-      <OperaEnCocosButton />
-    </div>
-  )
+export default async function Cocos() {
+  const lastPrices: LastPricesInterface = await getLastPrices()
+
+  return <DolarTypePage type="Cocos" lastPrices={lastPrices.cocos} />
 }
