@@ -115,24 +115,7 @@ export async function GET(request: NextRequest) {
     const newCriptoBid = newPrices?.dolarCrypto?.bid
 
     // Update today arrays
-    if (
-      !!newOficialAsk &&
-      !!newBlueAsk &&
-      !!newMepAsk &&
-      !!newCocosAsk &&
-      !!newTarjeta &&
-      !!newMayoristaAsk &&
-      !!newCclAsk &&
-      !!newCriptoAsk &&
-      !!todayOficial &&
-      !!todayBlue &&
-      !!todayMep &&
-      !!todayCocos &&
-      !!todayTarjeta &&
-      !!todayMayorista &&
-      !!todayCcl &&
-      !!todayCripto
-    ) {
+    if (true) {
       let shouldUpdateOficial = true
       if (todayOficial.length > 0) {
         const lastTimestamp =
@@ -212,7 +195,7 @@ export async function GET(request: NextRequest) {
 
       const updateObject: any = {}
 
-      if (shouldUpdateOficial) {
+      if (shouldUpdateOficial && !!newOficialAsk) {
         updateObject.oficial = {
           today: [
             ...todayOficial,
@@ -224,7 +207,7 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      if (shouldUpdateBlue) {
+      if (shouldUpdateBlue && !!newBlueAsk) {
         updateObject.blue = {
           today: [
             ...todayBlue,
@@ -236,7 +219,7 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      if (shouldUpdateMep) {
+      if (shouldUpdateMep && !!newMepAsk) {
         updateObject.mep = {
           today: [
             ...todayMep,
@@ -248,7 +231,7 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      if (shouldUpdateCocos) {
+      if (shouldUpdateCocos && !!newCocosAsk) {
         updateObject.cocos = {
           today: [
             ...todayCocos,
@@ -260,7 +243,7 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      if (shouldUpdateTarjeta) {
+      if (shouldUpdateTarjeta && !!newTarjeta) {
         updateObject.tarjeta = {
           today: [
             ...todayTarjeta,
@@ -272,7 +255,7 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      if (shouldUpdateMayorista) {
+      if (shouldUpdateMayorista && !!newMayoristaAsk) {
         updateObject.mayorista = {
           today: [
             ...todayMayorista,
@@ -284,7 +267,7 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      if (shouldUpdateCcl) {
+      if (shouldUpdateCcl && !!newCclAsk) {
         updateObject.ccl = {
           today: [
             ...todayCcl,
@@ -296,7 +279,7 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      if (shouldUpdateCripto) {
+      if (shouldUpdateCripto && !!newCriptoAsk) {
         updateObject.cripto = {
           today: [
             ...todayCripto,
