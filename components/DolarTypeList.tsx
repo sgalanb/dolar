@@ -9,13 +9,10 @@ export default function DolarTypeList({ dolarType }: { dolarType: DolarType }) {
   const { resolvedTheme } = useTheme()
 
   const todayPrices: number[] = dolarType.today
-    ? dolarType.today.map((today) => parseFloat(today.ask))
+    ? dolarType.today.map((today) => today.ask)
     : []
 
-  const chartPrices = [
-    ...todayPrices,
-    parseFloat(dolarType.ask.replace(',', '.')),
-  ]
+  const chartPrices = [...todayPrices, dolarType.ask]
 
   const porcentualChange =
     ((chartPrices[chartPrices.length - 1] - chartPrices[0]) / chartPrices[0]) *
@@ -23,8 +20,7 @@ export default function DolarTypeList({ dolarType }: { dolarType: DolarType }) {
 
   const lineData = {
     labels: new Array(
-      parseFloat(dolarType.ask.replace(',', '.')) ==
-      todayPrices[todayPrices.length - 1]
+      dolarType.ask == todayPrices[todayPrices.length - 1]
         ? todayPrices.length == 1
           ? 2
           : todayPrices.length
@@ -34,8 +30,7 @@ export default function DolarTypeList({ dolarType }: { dolarType: DolarType }) {
       {
         label: 'Prices',
         data:
-          parseFloat(dolarType.ask.replace(',', '.')) ==
-          todayPrices[todayPrices.length - 1]
+          dolarType.ask == todayPrices[todayPrices.length - 1]
             ? todayPrices.length == 1
               ? [todayPrices[0], todayPrices[0]]
               : todayPrices
@@ -100,13 +95,17 @@ export default function DolarTypeList({ dolarType }: { dolarType: DolarType }) {
       {dolarType.bid ? (
         <div className="flex h-full w-full flex-col items-end justify-between">
           <p className="text-xl font-semibold leading-5 text-zinc-500 dark:text-zinc-400">
-            {dolarType.bid}
+            {dolarType.bid.toFixed(2).replace('.', ',')}
           </p>
-          <p className="text-xl font-semibold leading-5">{dolarType.ask}</p>
+          <p className="text-xl font-semibold leading-5">
+            {dolarType.ask.toFixed(2).replace('.', ',')}
+          </p>
         </div>
       ) : (
         <div className="flex h-full w-full max-w-[10rem] flex-col items-end justify-center">
-          <p className="text-xl font-semibold leading-5">{dolarType.ask}</p>
+          <p className="text-xl font-semibold leading-5">
+            {dolarType.ask.toFixed(2).replace('.', ',')}
+          </p>
         </div>
       )}
     </Link>

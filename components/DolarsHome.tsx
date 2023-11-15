@@ -16,8 +16,8 @@ const LastUpdateTime = dynamic(() => import('@/components/LastUpdateTime'))
 
 export interface DolarType {
   name?: string
-  bid?: string
-  ask: string
+  bid?: number
+  ask: number
   timestamp: number
   today: LastPricesTodayInterface[]
 }
@@ -48,101 +48,56 @@ export default function DolarsHome({
   const dolars: DolarType[] = [
     {
       name: 'Oficial',
-      bid: `${prices?.oficial?.bid?.toLocaleString('es-AR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}`,
-      ask: `${prices?.oficial.ask.toLocaleString('es-AR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}`,
+      bid: prices?.oficial?.bid,
+      ask: prices?.oficial.ask,
       timestamp: prices?.oficial.timestamp,
       today: prices?.oficial.today,
     },
     {
       name: 'Blue',
-      bid: `${prices?.blue?.bid?.toLocaleString('es-AR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}`,
-      ask: `${prices?.blue.ask.toLocaleString('es-AR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}`,
+      bid: prices?.blue?.bid,
+      ask: prices?.blue.ask,
       timestamp: prices?.blue.timestamp,
       today: prices?.blue.today,
     },
     {
       name: 'MEP',
-      bid: `${prices?.mep?.bid?.toLocaleString('es-AR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}`,
-      ask: `${prices?.mep.ask.toLocaleString('es-AR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}`,
+      bid: prices?.mep?.bid,
+      ask: prices?.mep.ask,
       timestamp: prices?.mep.timestamp,
       today: prices?.mep.today,
     },
     {
       name: 'Cocos',
-      bid: `${prices?.cocos?.bid?.toLocaleString('es-AR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}`,
-      ask: `${prices?.cocos.ask.toLocaleString('es-AR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}`,
+      bid: prices?.cocos?.bid,
+      ask: prices?.cocos.ask,
       timestamp: prices?.cocos.timestamp,
       today: prices?.cocos.today,
     },
     {
       name: 'Tarjeta',
-      ask: `${prices?.tarjeta.ask.toLocaleString('es-AR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}`,
+      ask: prices?.tarjeta.ask,
       timestamp: prices?.tarjeta.timestamp,
       today: prices?.tarjeta.today,
     },
     {
       name: 'Mayorista',
-      bid: `${prices?.mayorista?.bid?.toLocaleString('es-AR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}`,
-      ask: `${prices?.mayorista.ask.toLocaleString('es-AR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}`,
+      bid: prices?.mayorista?.bid,
+      ask: prices?.mayorista.ask,
       timestamp: prices?.mayorista.timestamp,
       today: prices?.mayorista.today,
     },
     {
       name: 'CCL',
-      bid: `${prices?.ccl?.bid?.toLocaleString('es-AR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}`,
-      ask: `${prices?.ccl.ask.toLocaleString('es-AR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}`,
+      bid: prices?.ccl?.bid,
+      ask: prices?.ccl.ask,
       timestamp: prices?.ccl.timestamp,
       today: prices?.ccl.today,
     },
     {
       name: 'Cripto',
-      bid: `${prices?.cripto?.bid?.toLocaleString('es-AR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}`,
-      ask: `${prices?.cripto.ask.toLocaleString('es-AR', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}`,
+      bid: prices?.cripto?.bid,
+      ask: prices?.cripto.ask,
       timestamp: prices?.cripto.timestamp,
       today: prices?.cripto.today,
     },
@@ -168,7 +123,7 @@ export default function DolarsHome({
       </div>
       <TabsContent value="grid" className="w-full self-center">
         <div className="grid w-full grid-cols-1 items-center justify-center gap-3 xxs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
-          {dolars.map((dolarType: DolarType, index: number) => (
+          {dolars.map((dolarType, index) => (
             <DolarTypeGrid dolarType={dolarType} key={index} />
           ))}
         </div>

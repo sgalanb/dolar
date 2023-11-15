@@ -2,7 +2,7 @@ import { db } from '@/lib/firebase-setup/firebase'
 import { Timestamp, doc, getDoc, onSnapshot } from 'firebase/firestore'
 
 interface TodayData {
-  ask: string
+  ask: number
   timestamp: Timestamp
 }
 
@@ -25,7 +25,7 @@ export interface LastPricesInterface {
 }
 
 export interface LastPricesTodayInterface {
-  ask: string
+  ask: number
   timestamp: number // seconds from epoch
 }
 
