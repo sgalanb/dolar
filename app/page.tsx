@@ -1,7 +1,14 @@
 import DolarsHome from '@/components/DolarsHome'
 import { LastPricesInterface, getLastPrices } from '@/lib/firebaseSDK'
+import { Metadata } from 'next'
 
 export const revalidate = 60
+
+export const metadata: Metadata = {
+  title: 'DólarYa | Precio del dólar hoy en Argentina',
+  description:
+    'La forma más fácil de seguir las cotizaciones del dólar en Argentina y conocer valores históricos. Todo en tiempo real y sin publicidad.',
+}
 
 export default async function Home() {
   const lastPrices: LastPricesInterface = await getLastPrices()
