@@ -22,19 +22,22 @@ export default function Footer() {
             <div className="flex flex-col items-center justify-center gap-2 md:items-start">
               <p className="text-lg">Seguí las cotizaciones en redes</p>
               <div className="flex items-center justify-center gap-6">
-                <Link href="/">
+                <Link href="https://x.com/dolarya_info" target="_blank">
                   <Image
-                    src="/social-icons/instagram-icon.svg"
-                    alt="icono de instagram"
+                    src="/social-icons/x-icon.svg"
+                    alt="icono de x/twitter"
                     width={20}
                     height={20}
                     className="hover:opacity-70 dark:invert"
                   />
                 </Link>
-                <Link href="/">
+                <Link
+                  href="https://www.instagram.com/dolarya.info/"
+                  target="_blank"
+                >
                   <Image
-                    src="/social-icons/x-icon.svg"
-                    alt="icono de x/twitter"
+                    src="/social-icons/instagram-icon.svg"
+                    alt="icono de instagram"
                     width={20}
                     height={20}
                     className="hover:opacity-70 dark:invert"
