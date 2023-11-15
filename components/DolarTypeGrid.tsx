@@ -14,10 +14,6 @@ export default function DolarTypeGrid({ dolarType }: { dolarType: DolarType }) {
 
   const chartPrices = [...todayPrices, dolarType.ask]
 
-  if (dolarType.name == 'Cocos') {
-    console.log(typeof dolarType.ask)
-  }
-
   const porcentualChange =
     ((chartPrices[chartPrices.length - 1] - chartPrices[0]) / chartPrices[0]) *
     100
