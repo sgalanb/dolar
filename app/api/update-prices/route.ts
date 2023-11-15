@@ -35,15 +35,11 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    newPrices.dolarMEP = await getDolarMEP()
+    const MEPs = await getDolarMEP()
+    newPrices.dolarMEP = MEPs?.open
+    newPrices.dolarCocos = MEPs?.overnight
   } catch (error) {
     console.error('Failed to fetch dolarMEP', error)
-  }
-
-  try {
-    newPrices.dolarCocos = await getDolarCocos()
-  } catch (error) {
-    console.error('Failed to fetch dolarCocos', error)
   }
 
   try {
@@ -521,23 +517,12 @@ async function getDolarBNA() {
 }
 
 async function getDolarMEP() {
-  const res = await fetch(
-    'https://api.cocos.capital/api/v1/public/open-dolar-mep'
-  )
-  if (!res.ok) {
-    throw new Error('Failed to fetch data')
-  }
-  return res.json()
-}
-
-async function getDolarCocos() {
   const res = await fetch('https://api.cocos.capital/api/v1/public/mep-prices')
   if (!res.ok) {
     throw new Error('Failed to fetch data')
   }
   const data = await res.json()
-
-  return data?.overnight
+  return data
 }
 
 async function getDolarCrypto() {
