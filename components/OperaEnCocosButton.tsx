@@ -10,7 +10,7 @@ export default function OperaEnCocosButton() {
       <Link
         href="https://app.cocos.capital?ref=dolarya.info"
         target="_blank"
-        className="!bg-cocos-600 hover:!bg-cocos-500 dark:!bg-cocos-500 dark:hover:!bg-cocos-600"
+        className="w-fit !bg-cocos-600 hover:!bg-cocos-500 dark:!bg-cocos-500 dark:hover:!bg-cocos-600"
         onClick={() => track('Button | Operá en Cocos')}
       >
         Operá en Cocos
