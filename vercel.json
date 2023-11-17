@@ -35,6 +35,14 @@
     {
       "path": "/api/update-chart-2a",
       "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/api/post-light",
+      "schedule": "30 14 * * *"
+    },
+    {
+      "path": "/api/post-dark",
+      "schedule": "30 20 * * *"
     }
   ]
 }

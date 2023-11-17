@@ -55,16 +55,20 @@ export async function GET(request: Request) {
       parseFloat(searchParams.get('percentageChange8') ?? '') ?? null
 
     const geistMedium = await fetch(
-      new URL('../../assets/Geist-Medium.otf', import.meta.url)
+      new URL('../../../assets/Geist-Medium.otf', import.meta.url)
     ).then((res) => res.arrayBuffer())
 
     const geistSemiBold = await fetch(
-      new URL('../../assets/Geist-SemiBold.otf', import.meta.url)
+      new URL('../../../assets/Geist-SemiBold.otf', import.meta.url)
     ).then((res) => res.arrayBuffer())
 
     const geistBold = await fetch(
-      new URL('../../assets/Geist-Bold.otf', import.meta.url)
+      new URL('../../../assets/Geist-Bold.otf', import.meta.url)
     ).then((res) => res.arrayBuffer())
+
+    const logo = await fetch(
+      new URL('../../../assets/money-with-wings.png', import.meta.url)
+    ).then((res) => res.arrayBuffer() as any)
 
     interface DolarTypeInterface {
       name: string | null
@@ -141,9 +145,9 @@ export async function GET(request: Request) {
 
     return new ImageResponse(
       (
-        <div tw="w-full h-full p-20 flex flex-col justify-between items-center bg-[#09090b]">
+        <div tw="w-full h-full p-20 flex flex-col justify-between items-center bg-[#fafafa]">
           {/* Header */}
-          <div tw="text-white h-16 border-b border-white w-full flex justify-between mb-[40px]">
+          <div tw="text-black h-16 border-b border-zinc-500 w-full flex justify-between mb-[40px]">
             <span
               style={{
                 fontSize: 48,
@@ -177,16 +181,16 @@ export async function GET(request: Request) {
                     key={dolar.name}
                     tw={`${index == 0 ? 'mr-[40px]' : ''} ${
                       dolar.name == 'Cocos'
-                        ? 'border-[4px] border-[#3B8DF1] p-[26px]'
+                        ? 'border-[4px] border-[#0062E1] p-[26px]'
                         : 'p-[30px]'
-                    } flex flex-col justify-between items-center w-[500px] h-[177.5px] bg-zinc-800 rounded-2xl`}
+                    } flex flex-col justify-between items-center w-[500px] h-[177.5px] bg-white shadow rounded-2xl`}
                   >
                     <div tw="flex justify-between items-center w-full">
                       <span
                         tw={`${
                           dolar.name == 'Cocos'
-                            ? 'text-[#3B8DF1]'
-                            : 'text-white'
+                            ? 'text-[#0062E1]'
+                            : 'text-black'
                         }`}
                         style={priceStyle}
                       >
@@ -194,7 +198,7 @@ export async function GET(request: Request) {
                       </span>
                       {dolar.name !== 'Tarjeta' && (
                         <span
-                          tw="text-zinc-400"
+                          tw="text-zinc-500"
                           style={{
                             fontSize: 48,
                             fontFamily: 'Geist-Medium',
@@ -210,7 +214,7 @@ export async function GET(request: Request) {
                       <span
                         tw={`${
                           dolar.name == 'Cocos'
-                            ? 'text-[#3B8DF1]'
+                            ? 'text-[#0062E1]'
                             : dolar?.percentageChange! >= 0
                             ? 'text-[#49ca4b]'
                             : 'text-[#D83141]'
@@ -226,7 +230,7 @@ export async function GET(request: Request) {
                               .replace('.', ',')} %`}
                       </span>
                       <span
-                        tw={`${dolar.name == 'Tarjeta' ? '' : ''} text-white`}
+                        tw={`${dolar.name == 'Tarjeta' ? '' : ''} text-black`}
                         style={
                           dolar.name == 'Tarjeta'
                             ? {
@@ -254,17 +258,21 @@ export async function GET(request: Request) {
             ))}
           </div>
           {/* Footer */}
-          <div tw="text-white h-16 border-t border-white w-full flex items-end justify-between mt-[40px]">
-            <span
-              style={{
-                fontSize: 48,
-                fontFamily: 'Geist-Bold',
-                lineHeight: 1,
-                letterSpacing: -4,
-              }}
-            >
-              DólarYa
-            </span>
+          <div tw="text-black h-16 border-t border-zinc-500 w-full flex items-end justify-between mt-[40px]">
+            <div tw="flex items-center justify-center">
+              <img width="36" height="36" src={logo} alt="" />
+              <span
+                style={{
+                  fontSize: 48,
+                  fontFamily: 'Geist-Bold',
+                  lineHeight: 1,
+                  letterSpacing: -4,
+                  paddingLeft: 8,
+                }}
+              >
+                DólarYa
+              </span>
+            </div>
             <span
               style={{
                 fontSize: 48,

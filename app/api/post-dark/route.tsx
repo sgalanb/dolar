@@ -1,6 +1,7 @@
 import admin from '@/lib/firebase-setup/firebaseAdmin'
 import { twitterClient } from '@/lib/twitterClient'
 import dayjs from 'dayjs'
+import 'dayjs/locale/es'
 import updateLocale from 'dayjs/plugin/updateLocale'
 import { NextRequest } from 'next/server'
 dayjs.extend(updateLocale)
@@ -135,7 +136,7 @@ export async function GET(request: NextRequest) {
       },
     ]
 
-    const imageURL = `https://dolarya.info/og/?name1=${
+    const imageURL = `https://dolarya.info/og/social-post-dark?name1=${
       dolarTypes[0].name
     }&name2=${dolarTypes[1].name}&name3=${dolarTypes[2].name}&name4=${
       dolarTypes[3].name
@@ -161,16 +162,20 @@ export async function GET(request: NextRequest) {
       dolarTypes[6].percentageChange
     }&percentageChange8=${dolarTypes[7].percentageChange}&date=${dayjs().format(
       'D MMMM YYYY'
-    )}&time=${dayjs().format('HH:mm')}`
+    )}&time=${dayjs().locale('es').format('HH:mm')}`
 
-    const mediaId = await twitterClient.v1.uploadMedia(imageURL)
+    const imageBuffer = await downloadImage(imageURL)
+    const mediaId = await twitterClient.v1.uploadMedia(imageBuffer, {
+      type: 'image/png',
+    })
+
     await twitterClient.v2.tweet({
       media: {
         media_ids: [mediaId],
       },
     })
 
-    return new Response(JSON.stringify({ imageURL }), {
+    return new Response('Tweeted. Lights out and away we go!', {
       status: 200,
     })
   } catch (error: unknown) {
@@ -182,6 +187,19 @@ export async function GET(request: NextRequest) {
       return new Response(`Unknown error occurred: ${error}`, {
         status: 500,
       })
+    }
+  }
+
+  async function downloadImage(url: string) {
+    try {
+      const response = await fetch(url)
+      if (!response.ok) {
+        throw new Error('Failed to download image')
+      }
+      const imageData = await response.arrayBuffer()
+      return Buffer.from(imageData)
+    } catch (error) {
+      throw new Error('Failed to download image')
     }
   }
 }
