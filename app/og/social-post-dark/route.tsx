@@ -153,7 +153,7 @@ export async function GET(request: Request) {
                 fontSize: 48,
                 fontFamily: 'Geist-Bold',
                 lineHeight: 1,
-                letterSpacing: -4,
+                letterSpacing: -2,
               }}
             >
               {date}
@@ -163,7 +163,7 @@ export async function GET(request: Request) {
                 fontSize: 48,
                 fontFamily: 'Geist-Medium',
                 lineHeight: 1,
-                letterSpacing: -4,
+                letterSpacing: -2,
               }}
             >
               {time}
@@ -266,7 +266,7 @@ export async function GET(request: Request) {
                   fontSize: 48,
                   fontFamily: 'Geist-Bold',
                   lineHeight: 1,
-                  letterSpacing: -4,
+                  letterSpacing: -2,
                   paddingLeft: 8,
                 }}
               >
@@ -278,7 +278,7 @@ export async function GET(request: Request) {
                 fontSize: 48,
                 fontFamily: 'Geist-Medium',
                 lineHeight: 1,
-                letterSpacing: -4,
+                letterSpacing: -2,
               }}
             >
               dolarya.info
