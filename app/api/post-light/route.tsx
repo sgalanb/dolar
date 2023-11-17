@@ -162,7 +162,7 @@ export async function GET(request: NextRequest) {
       dolarTypes[6].percentageChange
     }&percentageChange8=${dolarTypes[7].percentageChange}&date=${dayjs().format(
       'D MMMM YYYY'
-    )}&time=${dayjs().locale('es').format('HH:mm')}`
+    )}&time=${dayjs().locale('es').subtract(3, 'hour').format('HH:mm')}`
 
     const imageBuffer = await downloadImage(imageURL)
     const mediaId = await twitterClient.v1.uploadMedia(imageBuffer, {
