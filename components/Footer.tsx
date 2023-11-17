@@ -1,9 +1,9 @@
 'use client'
 
+import InstagramButton from '@/components/InstagramButton'
+import TwitterButton from '@/components/TwitterButton'
 import { Separator } from '@/components/ui/separator'
 import dynamic from 'next/dynamic'
-import Image from 'next/image'
-import Link from 'next/link'
 import Balancer from 'react-wrap-balancer'
 
 const ThemeToggle = dynamic(() => import('@/components/ThemeToggle'), {
@@ -22,27 +22,8 @@ export default function Footer() {
             <div className="flex flex-col items-center justify-center gap-2 md:items-start">
               <p className="text-lg">Seguí las cotizaciones en redes</p>
               <div className="flex items-center justify-center gap-6">
-                <Link href="https://x.com/dolarya_info" target="_blank">
-                  <Image
-                    src="/social-icons/x-icon.svg"
-                    alt="icono de x/twitter"
-                    width={20}
-                    height={20}
-                    className="hover:opacity-70 dark:invert"
-                  />
-                </Link>
-                <Link
-                  href="https://www.instagram.com/dolarya.info/"
-                  target="_blank"
-                >
-                  <Image
-                    src="/social-icons/instagram-icon.svg"
-                    alt="icono de instagram"
-                    width={20}
-                    height={20}
-                    className="hover:opacity-70 dark:invert"
-                  />
-                </Link>
+                <TwitterButton />
+                <InstagramButton />
               </div>
             </div>
 
