@@ -64,8 +64,16 @@ export default function HistoricalCharts({
 
   const lineData = {
     labels:
-      !!chartPrices?.[selectedTime] && chartPrices?.[selectedTime]?.length > 1
-        ? selectedTime == '1m' || selectedTime == '1s' || selectedTime == '1d'
+      selectedTime == '1d'
+        ? [
+            ...lastPrices.today.map((data: any) => {
+              return dayjs.unix(data.timestamp).format('DD MMM HH:mm')
+            }),
+            'Actual',
+          ]
+        : !!chartPrices?.[selectedTime] &&
+          chartPrices?.[selectedTime]?.length > 1
+        ? selectedTime == '1m' || selectedTime == '1s'
           ? chartPrices?.[selectedTime]
               ?.map((data: any) => {
                 return dayjs.unix(data.timestamp.seconds).format('DD MMM HH:mm')
@@ -81,13 +89,22 @@ export default function HistoricalCharts({
       {
         label: 'Precio',
         data:
-          !!chartPrices?.[selectedTime] &&
-          chartPrices?.[selectedTime]?.length > 1
+          selectedTime == '1d'
+            ? [
+                ...lastPrices.today.map((data: any) => {
+                  return data.ask.toFixed(2)
+                }),
+                lastPrices.ask.toFixed(2),
+              ]
+            : !!chartPrices?.[selectedTime] &&
+              chartPrices?.[selectedTime]?.length > 1
             ? chartPrices?.[selectedTime]
                 ?.map((data: any) => {
-                  return data.ask
+                  const ask = data.ask
+                  const type = typeof ask
+                  return type == 'number' ? ask.toFixed(2) : ask
                 })
-                .concat(lastPrices.ask)
+                .concat(lastPrices.ask.toFixed(2))
             : [lastPrices.ask, lastPrices.ask],
         fill: false,
         backgroundColor:

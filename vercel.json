@@ -9,10 +9,6 @@
       "schedule": "0 3 * * *"
     },
     {
-      "path": "/api/update-chart-1d",
-      "schedule": "* * * * *"
-    },
-    {
       "path": "/api/update-chart-1s",
       "schedule": "0 3 * * *"
     },
