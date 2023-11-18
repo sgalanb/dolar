@@ -3,9 +3,9 @@ import { LastPricesInterface, getLastPrices } from '@/lib/firebaseSDK'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Dólar Blue | DólarYa',
+  title: 'Dólar Blue - Precio del dólar blue hoy | DólarYa',
   description:
-    'Seguí la cotización del dólar blue hoy en Argentina. Mirá la cotización histórica.',
+    'Seguí la cotización del dólar informal hoy en Argentina y mirá los gráficos históricos.',
 }
 
 export default async function Blue() {

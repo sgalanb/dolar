@@ -3,9 +3,9 @@ import { LastPricesInterface, getLastPrices } from '@/lib/firebaseSDK'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Dólar MEP | DólarYa',
+  title: 'Dólar MEP - Precio del dólar MEP hoy | DólarYa',
   description:
-    'Seguí la cotización del dólar MEP hoy en Argentina. Mirá la cotización histórica.',
+    'Seguí la cotización del dólar bolsa hoy en Argentina y mirá los gráficos históricos.',
 }
 
 export default async function MEP() {

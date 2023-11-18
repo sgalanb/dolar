@@ -3,9 +3,9 @@ import { LastPricesInterface, getLastPrices } from '@/lib/firebaseSDK'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Dólar Cripto | DólarYa',
+  title: 'Dólar Cripto - Precio del dólar cripto hoy | DólarYa',
   description:
-    'Seguí la cotización del dólar cripto hoy en Argentina. Mirá la cotización histórica.',
+    'Seguí la cotización del dólar crypto hoy en Argentina y mirá los gráficos históricos.',
 }
 
 export default async function Cripto() {

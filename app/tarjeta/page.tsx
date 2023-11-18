@@ -3,9 +3,9 @@ import { LastPricesInterface, getLastPrices } from '@/lib/firebaseSDK'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Dólar Tarjeta | DólarYa',
+  title: 'Dólar Tarjeta - Precio del dólar tarjeta hoy | DólarYa',
   description:
-    'Seguí la cotización del dólar tarjeta hoy en Argentina. Mirá la cotización histórica.',
+    'Seguí la cotización del dólar tarjeta hoy en Argentina y mirá los gráficos históricos.',
 }
 
 export default async function Tarjeta() {
