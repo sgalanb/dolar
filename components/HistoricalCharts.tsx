@@ -134,7 +134,7 @@ export default function HistoricalCharts({
 
   return (
     <>
-      <div className="flex w-full flex-col items-center justify-center gap-6">
+      <div className="flex w-full flex-col items-center justify-center gap-3">
         <div className="flex w-full items-center justify-between gap-3 rounded-2xl bg-zinc-200 p-1 dark:bg-zinc-800">
           {timeOptions.map((option: (typeof timeOptions)[0]) => (
             <button
