@@ -117,29 +117,29 @@ export default function HistoricalCharts({
 
   return (
     <>
-      {chartPrices ? (
-        <div className="flex w-full flex-col items-center justify-center gap-6">
-          <div className="flex w-full items-center justify-between gap-3 rounded-2xl bg-zinc-200 p-1 dark:bg-zinc-800">
-            {timeOptions.map((option: (typeof timeOptions)[0]) => (
-              <button
-                key={option.value}
-                className={`w-full rounded-2xl px-2 py-1 text-sm font-semibold ${
-                  selectedTime == option.value
-                    ? 'bg-zinc-100 dark:bg-zinc-950'
-                    : 'text-zinc-400 dark:text-zinc-500'
-                }`}
-                onClick={() => setSelectedTime(option.value)}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
-          <LineChart lineData={lineData} />
-          <LastUpdateTime />
+      <div className="flex w-full flex-col items-center justify-center gap-6">
+        <div className="flex w-full items-center justify-between gap-3 rounded-2xl bg-zinc-200 p-1 dark:bg-zinc-800">
+          {timeOptions.map((option: (typeof timeOptions)[0]) => (
+            <button
+              key={option.value}
+              className={`w-full rounded-2xl px-2 py-1 text-sm font-semibold ${
+                selectedTime == option.value
+                  ? 'bg-zinc-100 dark:bg-zinc-950'
+                  : 'text-zinc-400 dark:text-zinc-500'
+              }`}
+              onClick={() => setSelectedTime(option.value)}
+            >
+              {option.label}
+            </button>
+          ))}
         </div>
-      ) : (
-        <></>
-      )}
+        {chartPrices ? (
+          <LineChart lineData={lineData} />
+        ) : (
+          <div className="aspect-[2/1] w-full animate-pulse rounded-2xl dark:bg-zinc-800"></div>
+        )}
+        <LastUpdateTime />
+      </div>
     </>
   )
 }
