@@ -1,0 +1,19 @@
+{
+  "name": "DólarYa | Precio del dólar hoy en Argentina",
+  "short_name": "DólarYa",
+  "icons": [
+    {
+      "src": "/icon-square.png",
+      "sizes": "192x192",
+      "type": "image/jpg"
+    },
+    {
+      "src": "/icon-square.png",
+      "sizes": "512x512",
+      "type": "image/jpg"
+    }
+  ],
+  "theme_color": "#000000",
+  "background_color": "#fafafa",
+  "display": "standalone"
+}
