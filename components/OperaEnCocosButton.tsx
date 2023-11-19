@@ -2,7 +2,6 @@
 
 import { Button } from '@/components/ui/button'
 import { track } from '@vercel/analytics/react'
-import { ArrowUpRightSquare } from 'lucide-react'
 import Link from 'next/link'
 
 export default function OperaEnCocosButton({
@@ -30,7 +29,7 @@ export default function OperaEnCocosButton({
           target="_blank"
           onClick={() => track('Button | Fuente Dólar Cocos')}
         >
-          - Cocos Capital <ArrowUpRightSquare className="h-4 w-4" />
+          - Cocos Capital
         </Link>
       )}
     </>

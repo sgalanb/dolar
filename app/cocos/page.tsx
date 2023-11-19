@@ -3,6 +3,7 @@ import OperaEnCocosButton from '@/components/OperaEnCocosButton'
 import { Separator } from '@/components/ui/separator'
 import { LastPricesInterface, getLastPrices } from '@/lib/firebaseSDK'
 import { Metadata } from 'next'
+import Link from 'next/link'
 import Balancer from 'react-wrap-balancer'
 
 export const metadata: Metadata = {
@@ -33,11 +34,14 @@ export default async function Cocos() {
             ¿Qué es el Dólar Cocos?
           </h2>
           <p>
-            El Dólar Cocos es el precio de compra y de venta de dólar MEP en la
-            aplicación de Cocos Capital. A diferencia de otras plataformas, en
-            Cocos podés operar dólar MEP todos los días de la semana, las 24
-            horas del día. Es 100% legal y la actividad está regulada por la
-            CNV.
+            El dólar Cocos representa el precio del{' '}
+            <Link href="/mep" className="underline underline-offset-2">
+              dólar MEP
+            </Link>{' '}
+            en la aplicación de Cocos Capital. A diferencia de otras
+            plataformas, en Cocos podés operar dólar MEP todos los días de la
+            semana, las 24 horas del día. Es 100% legal y la actividad está
+            regulada por la CNV.
           </p>
         </div>
         <Separator orientation="vertical" />
