@@ -35,10 +35,6 @@
     {
       "path": "/api/post-light",
       "schedule": "30 14 * * 1-5"
-    },
-    {
-      "path": "/api/post-dark",
-      "schedule": "30 20 * * 1-5"
     }
   ]
 }
