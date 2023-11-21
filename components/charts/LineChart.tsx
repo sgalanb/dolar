@@ -83,7 +83,7 @@ export default function LineChart({ lineData }: any) {
         },
       }}
       plugins={[hoverLine]}
-      className="hover:cursor-cell"
+      className="touch-none hover:cursor-cell"
     />
   )
 }
