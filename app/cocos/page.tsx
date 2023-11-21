@@ -28,7 +28,7 @@ export default async function Cocos() {
           <OperaEnCocosButton variant="button" />
         </span>
       </div>
-      <div className="grid w-full grid-cols-1 gap-3 md:grid-cols-[3fr,1px,1fr]">
+      <div className="flex w-full flex-col gap-3 md:grid md:grid-cols-[3fr,1px,1fr]">
         <div className="flex flex-col gap-3 rounded-2xl">
           <h2 className="text-xl font-semibold leading-5">
             ¿Qué es el Dólar Cocos?
