@@ -72,7 +72,7 @@ export default function DolarTypePage({
             className="h-5 w-5"
             color={resolvedTheme == 'dark' ? '#a1a1aa' : '#71717a'}
           /> */}
-          <div className="flex flex-col items-start justify-center text-sm font-normal tracking-wider text-zinc-500 dark:text-zinc-400">
+          <div className="flex flex-col items-start justify-center text-sm font-normal tracking-wider text-black/50 dark:text-white/50">
             <p>
               {dayjs.unix(dolarType.timestamp).format('DD/MM/YYYY - HH:mm')}
             </p>
@@ -83,10 +83,10 @@ export default function DolarTypePage({
         {dolarType.bid ? (
           <div className="flex w-40 flex-col items-center justify-center gap-3">
             <div className="flex w-full items-center justify-between">
-              <span className="text-sm font-normal text-zinc-500 dark:text-zinc-400">
+              <span className="text-sm font-normal text-black/50 dark:text-white/50">
                 Vendé
               </span>
-              <p className="text-xl font-semibold leading-5 text-zinc-500 dark:text-zinc-400">
+              <p className="text-xl font-semibold leading-5 text-black/50 dark:text-white/50">
                 {`$${dolarType.bid.toLocaleString('es-AR', {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,

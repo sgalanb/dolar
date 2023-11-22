@@ -142,7 +142,7 @@ export default function HistoricalCharts({
               className={`w-full rounded-2xl px-2 py-1 text-sm font-semibold ${
                 selectedTime == option.value
                   ? 'bg-zinc-100 dark:bg-zinc-950'
-                  : 'text-zinc-400 dark:text-zinc-500'
+                  : 'text-black/50 dark:text-white/50'
               }`}
               onClick={() => setSelectedTime(option.value)}
             >

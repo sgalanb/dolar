@@ -58,13 +58,13 @@ export default function Footer() {
         <Separator className="my-0" />
 
         <div className="flex flex-col gap-1">
-          <p className="w-full text-center text-sm text-zinc-500 dark:text-zinc-400">
+          <p className="w-full text-center text-sm text-black/50 dark:text-white/50">
             <Balancer>
               Los valores son meramente informativos y se basan en la
               información provista por cada proveedor.
             </Balancer>
           </p>
-          <p className="w-full text-center text-sm text-zinc-500 dark:text-zinc-400">
+          <p className="w-full text-center text-sm text-black/50 dark:text-white/50">
             <Balancer>
               No garantizamos que el servicio sea ininterrumpido, rápido,
               preciso o libres de errores.

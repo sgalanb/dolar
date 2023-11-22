@@ -23,7 +23,7 @@ export default function LastUpdateTime() {
   }, [])
 
   return (
-    <span className="w-full text-center text-sm font-normal tracking-tight text-zinc-500 dark:text-zinc-400">
+    <span className="w-full text-center text-sm font-normal tracking-tight text-black/50 dark:text-white/50">
       Última actualización: {localTime}
     </span>
   )
