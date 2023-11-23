@@ -15,31 +15,6 @@ export async function GET(request: NextRequest) {
     const lastPrices = (
       await db.collection('prices').doc('last-prices').get()
     ).data()
-    const lastOficialAsk = lastPrices?.oficial?.ask
-    const lastOficialBid = lastPrices?.oficial?.bid
-    const lastBlueAsk = lastPrices?.blue?.ask
-    const lastBlueBid = lastPrices?.blue?.bid
-    const lastMepAsk = lastPrices?.mep?.ask
-    const lastMepBid = lastPrices?.mep?.bid
-    const lastCocosAsk = lastPrices?.cocos?.ask
-    const lastCocosBid = lastPrices?.cocos?.bid
-    const lastTarjeta = lastPrices?.tarjeta.ask
-    const lastMayoristaAsk = lastPrices?.mayorista?.ask
-    const lastMayoristaBid = lastPrices?.mayorista?.bid
-    const lastCclAsk = lastPrices?.ccl?.ask
-    const lastCclBid = lastPrices?.ccl?.bid
-    const lastCriptoAsk = lastPrices?.cripto?.ask
-    const lastCriptoBid = lastPrices?.cripto?.bid
-
-    // All ask prices from today
-    const todayOficial = lastPrices?.oficial?.today || ([] as [any] | [])
-    const todayBlue = lastPrices?.blue?.today || ([] as [any] | [])
-    const todayMep = lastPrices?.mep?.today || ([] as [any] | [])
-    const todayCocos = lastPrices?.cocos?.today || ([] as [any] | [])
-    const todayTarjeta = lastPrices?.tarjeta?.today || ([] as [any] | [])
-    const todayMayorista = lastPrices?.mayorista?.today || ([] as [any] | [])
-    const todayCcl = lastPrices?.ccl?.today || ([] as [any] | [])
-    const todayCripto = lastPrices?.cripto?.today || ([] as [any] | [])
 
     if (!lastPrices || !type) {
       throw new Error('Failed to fetch data')
@@ -49,7 +24,7 @@ export async function GET(request: NextRequest) {
 
     const todayPrices = selectedType.today
       ? selectedType.today.map((today: any) => ({
-          value: today.ask.toFixed(2),
+          value: today?.ask?.toFixed(2),
           date: today.timestamp.seconds,
         }))
       : []
@@ -57,7 +32,7 @@ export async function GET(request: NextRequest) {
     const chartPrices = [
       ...todayPrices,
       {
-        value: selectedType.ask.toFixed(2),
+        value: selectedType?.ask?.toFixed(2),
         date: selectedType.timestamp.seconds,
       },
     ]
@@ -68,12 +43,12 @@ export async function GET(request: NextRequest) {
       100
 
     const returnData = {
-      ask: selectedType.ask.toFixed(2),
-      bid: selectedType.bid.toFixed(2),
+      ask: selectedType?.ask?.toFixed(2),
+      bid: selectedType?.bid?.toFixed(2),
       percentageChange:
         type == 'mayorista'
-          ? porcentualChange.toFixed(0)
-          : porcentualChange.toFixed(2),
+          ? porcentualChange?.toFixed(0)
+          : porcentualChange?.toFixed(2),
       today:
         selectedType.ask == todayPrices[todayPrices.length - 1]?.value
           ? todayPrices.length == 1
