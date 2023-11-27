@@ -1,11 +1,10 @@
 'use client'
 
+import AppStoreButton from '@/components/AppStoreButton'
 import InstagramButton from '@/components/InstagramButton'
 import TwitterButton from '@/components/TwitterButton'
 import { Separator } from '@/components/ui/separator'
 import dynamic from 'next/dynamic'
-import Image from 'next/image'
-import Link from 'next/link'
 import Balancer from 'react-wrap-balancer'
 
 const ThemeToggle = dynamic(() => import('@/components/ThemeToggle'), {
@@ -30,19 +29,7 @@ export default function Footer() {
               <div className="flex flex-col items-center justify-center gap-1 pt-3 md:items-start">
                 <p className="text-lg">Bajate la app con widgets</p>
                 <div className="flex items-center justify-center gap-6">
-                  <Link
-                    href="https://apps.apple.com/ar/app/d%C3%B3larya-precio-del-d%C3%B3lar-hoy/id6472918637?platform=iphone"
-                    className="flex h-8 items-center justify-center"
-                    target="_blank"
-                  >
-                    <Image
-                      src="/social-icons/apple-icon.svg"
-                      alt="descárgalo en el app store"
-                      width={20}
-                      height={20}
-                      className="hover:opacity-70 dark:invert"
-                    />
-                  </Link>
+                  <AppStoreButton />
                 </div>
               </div>
             </div>
