@@ -10,6 +10,8 @@ export const metadata: Metadata = {
     title: 'Dólar CCL - Precio del dólar contado con liqui hoy | DólarYa',
     description:
       'Seguí la cotización del dólar contado con liquidación hoy en Argentina y mirá los gráficos históricos.',
+    card: 'summary_large_image',
+    site: '@dolarya_info',
   },
 }
 

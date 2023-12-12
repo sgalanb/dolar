@@ -12,6 +12,8 @@ export const metadata: Metadata = {
     title: 'Dólar Blue - Precio del dólar blue hoy | DólarYa',
     description:
       'Seguí la cotización del dólar informal hoy en Argentina y mirá los gráficos históricos.',
+    card: 'summary_large_image',
+    site: '@dolarya_info',
   },
 }
 
