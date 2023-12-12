@@ -8,6 +8,11 @@ export const metadata: Metadata = {
   title: 'DólarYa | Precio del dólar hoy en Argentina',
   description:
     'La forma más fácil de seguir las cotizaciones del dólar en Argentina y conocer valores históricos. Todo en tiempo real y sin publicidad.',
+  twitter: {
+    title: 'DólarYa | Precio del dólar hoy en Argentina',
+    description:
+      'La forma más fácil de seguir las cotizaciones del dólar en Argentina y conocer valores históricos. Todo en tiempo real y sin publicidad.',
+  },
 }
 
 export default async function Home() {

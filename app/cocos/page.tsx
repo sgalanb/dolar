@@ -10,6 +10,11 @@ export const metadata: Metadata = {
   title: 'Dólar Cocos - Precio del dólar Cocos hoy | DólarYa',
   description:
     'Seguí la cotización del dólar Cocos 24/7 hoy en Argentina y mirá los gráficos históricos.',
+  twitter: {
+    title: 'Dólar Cocos - Precio del dólar Cocos hoy | DólarYa',
+    description:
+      'Seguí la cotización del dólar Cocos 24/7 hoy en Argentina y mirá los gráficos históricos.',
+  },
 }
 
 export default async function Cocos() {

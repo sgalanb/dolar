@@ -8,6 +8,11 @@ export const metadata: Metadata = {
   title: 'Dólar Cripto - Precio del dólar cripto hoy | DólarYa',
   description:
     'Seguí la cotización del dólar crypto hoy en Argentina y mirá los gráficos históricos.',
+  twitter: {
+    title: 'Dólar Cripto - Precio del dólar cripto hoy | DólarYa',
+    description:
+      'Seguí la cotización del dólar crypto hoy en Argentina y mirá los gráficos históricos.',
+  },
 }
 
 export default async function Cripto() {

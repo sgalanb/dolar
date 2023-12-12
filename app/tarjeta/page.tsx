@@ -6,6 +6,11 @@ export const metadata: Metadata = {
   title: 'Dólar Tarjeta - Precio del dólar tarjeta hoy | DólarYa',
   description:
     'Seguí la cotización del dólar tarjeta hoy en Argentina y mirá los gráficos históricos.',
+  twitter: {
+    title: 'Dólar Tarjeta - Precio del dólar tarjeta hoy | DólarYa',
+    description:
+      'Seguí la cotización del dólar tarjeta hoy en Argentina y mirá los gráficos históricos.',
+  },
 }
 
 export default async function Tarjeta() {

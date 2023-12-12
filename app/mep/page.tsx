@@ -8,6 +8,11 @@ export const metadata: Metadata = {
   title: 'Dólar MEP - Precio del dólar MEP hoy | DólarYa',
   description:
     'Seguí la cotización del dólar bolsa hoy en Argentina y mirá los gráficos históricos.',
+  twitter: {
+    title: 'Dólar MEP - Precio del dólar MEP hoy | DólarYa',
+    description:
+      'Seguí la cotización del dólar bolsa hoy en Argentina y mirá los gráficos históricos.',
+  },
 }
 
 export default async function MEP() {

@@ -6,6 +6,11 @@ export const metadata: Metadata = {
   title: 'Dólar Oficial - Precio del dólar oficial hoy | DólarYa',
   description:
     'Seguí la cotización del dólar oficial hoy en Argentina y mirá los gráficos históricos.',
+  twitter: {
+    title: 'Dólar Oficial - Precio del dólar oficial hoy | DólarYa',
+    description:
+      'Seguí la cotización del dólar oficial hoy en Argentina y mirá los gráficos históricos.',
+  },
 }
 
 export default async function Oficial() {
