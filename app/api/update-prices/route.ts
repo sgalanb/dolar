@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     dolarMEP: null,
     dolarCocos: null,
     dolarCrypto: null,
-    dolarMayorista: null,
+    // dolarMayorista: null,
   }
 
   try {
@@ -48,17 +48,11 @@ export async function GET(request: NextRequest) {
     console.error('Failed to fetch dolarCrypto', error)
   }
 
-  try {
-    newPrices.dolarMayorista = await getDolarMayorista()
-  } catch (error) {
-    console.error('Failed to fetch dolarMayorista', error)
-  }
-
-  try {
-    await endpointsTestUsage()
-  } catch (error) {
-    console.error('Failed to fetch Test', error)
-  }
+  // try {
+  //   newPrices.dolarMayorista = await getDolarMayorista()
+  // } catch (error) {
+  //   console.error('Failed to fetch dolarMayorista', error)
+  // }
 
   try {
     const db = admin.firestore()
@@ -160,15 +154,15 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      let shouldUpdateMayorista = true
-      if (todayMayorista.length > 0) {
-        const lastTimestamp =
-          todayMayorista[todayMayorista.length - 1].timestamp.seconds
+      // let shouldUpdateMayorista = true
+      // if (todayMayorista.length > 0) {
+      //   const lastTimestamp =
+      //     todayMayorista[todayMayorista.length - 1].timestamp.seconds
 
-        if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
-          shouldUpdateMayorista = false
-        }
-      }
+      //   if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
+      //     shouldUpdateMayorista = false
+      //   }
+      // }
 
       let shouldUpdateCcl = true
       if (todayCcl.length > 0) {
@@ -251,17 +245,17 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      if (shouldUpdateMayorista && !!newMayoristaAsk) {
-        updateObject.mayorista = {
-          today: [
-            ...todayMayorista,
-            {
-              ask: newMayoristaAsk,
-              timestamp: admin.firestore.Timestamp.now(),
-            },
-          ],
-        }
-      }
+      // if (shouldUpdateMayorista && !!newMayoristaAsk) {
+      //   updateObject.mayorista = {
+      //     today: [
+      //       ...todayMayorista,
+      //       {
+      //         ask: newMayoristaAsk,
+      //         timestamp: admin.firestore.Timestamp.now(),
+      //       },
+      //     ],
+      //   }
+      // }
 
       if (shouldUpdateCcl && !!newCclAsk) {
         updateObject.ccl = {
@@ -415,31 +409,31 @@ export async function GET(request: NextRequest) {
       })
     }
     // Mayorista
-    if (
-      !!newMayoristaAsk &&
-      !!newMayoristaBid &&
-      (newMayoristaAsk !== lastMayoristaAsk ||
-        newMayoristaBid !== lastMayoristaBid)
-    ) {
-      const updateDataMayorista: any = {
-        mayorista: {
-          ask: newMayoristaAsk,
-          bid: newMayoristaBid,
-          timestamp: admin.firestore.FieldValue.serverTimestamp(),
-        },
-      }
+    // if (
+    //   !!newMayoristaAsk &&
+    //   !!newMayoristaBid &&
+    //   (newMayoristaAsk !== lastMayoristaAsk ||
+    //     newMayoristaBid !== lastMayoristaBid)
+    // ) {
+    //   const updateDataMayorista: any = {
+    //     mayorista: {
+    //       ask: newMayoristaAsk,
+    //       bid: newMayoristaBid,
+    //       timestamp: admin.firestore.FieldValue.serverTimestamp(),
+    //     },
+    //   }
 
-      await db
-        .collection('prices')
-        .doc('last-prices')
-        .set(updateDataMayorista, { merge: true })
-      await db.collection('historical-prices').doc().set({
-        ask: newMayoristaAsk,
-        bid: newMayoristaBid,
-        timestamp: admin.firestore.FieldValue.serverTimestamp(),
-        type: 'mayorista',
-      })
-    }
+    //   await db
+    //     .collection('prices')
+    //     .doc('last-prices')
+    //     .set(updateDataMayorista, { merge: true })
+    //   await db.collection('historical-prices').doc().set({
+    //     ask: newMayoristaAsk,
+    //     bid: newMayoristaBid,
+    //     timestamp: admin.firestore.FieldValue.serverTimestamp(),
+    //     type: 'mayorista',
+    //   })
+    // }
     // CCL
     if (
       !!newCclAsk &&
@@ -543,18 +537,10 @@ async function getOtherDolars() {
   return res.json()
 }
 
-async function getDolarMayorista() {
-  const res = await fetch('https://dolarapi.com/v1/dolares/mayorista')
-  if (!res.ok) {
-    throw new Error('Failed to fetch data')
-  }
-  return res.json()
-}
-
-async function endpointsTestUsage() {
-  const res = await fetch('https://www.pretzeldiary.com/api/counter-endpoint')
-  if (!res.ok) {
-    throw new Error('Failed to fetch data')
-  }
-  return
-}
+// async function getDolarMayorista() {
+//   const res = await fetch('https://dolarapi.com/v1/dolares/mayorista')
+//   if (!res.ok) {
+//     throw new Error('Failed to fetch data')
+//   }
+//   return res.json()
+// }
