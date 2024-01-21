@@ -6,30 +6,40 @@ import { NextRequest } from 'next/server'
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
-  const authHeader = request.headers.get('authorization')
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return new Response(`Not authorized.`, {
-      status: 500,
-    })
-  }
+  // const authHeader = request.headers.get('authorization')
+  // if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  //   return new Response(`Not authorized.`, {
+  //     status: 500,
+  //   })
+  // }
 
-  let newPrices: any = {
-    dolarBNA: null,
-    otherDolars: null,
+  let newPrices: {
+    dolarOficial: any
+    dolarBlue: any
+    dolarMEP: any
+    dolarCocos: any
+    dolarTarjeta: any
+    dolarMayorista: any
+    dolarCCL: any
+    dolarCrypto: any
+  } = {
+    dolarOficial: null,
+    dolarBlue: null,
     dolarMEP: null,
     dolarCocos: null,
+    dolarTarjeta: null,
+    dolarMayorista: null,
+    dolarCCL: null,
     dolarCrypto: null,
-    // dolarMayorista: null,
   }
 
   try {
-    newPrices.dolarBNA = await getDolarBNA()
-  } catch (error) {
-    console.error('Failed to fetch dolarBNA', error)
-  }
-
-  try {
-    newPrices.otherDolars = await getOtherDolars()
+    const otherDolars = await getOtherDolars()
+    newPrices.dolarOficial = otherDolars?.oficial?.price
+    newPrices.dolarBlue = otherDolars?.blue
+    newPrices.dolarTarjeta = otherDolars?.tarjeta?.price
+    newPrices.dolarMayorista = otherDolars?.mayorista?.price
+    newPrices.dolarCCL = otherDolars?.ccl?.al30['48hs']?.price
   } catch (error) {
     console.error('Failed to fetch otherDolars', error)
   }
@@ -47,12 +57,6 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Failed to fetch dolarCrypto', error)
   }
-
-  // try {
-  //   newPrices.dolarMayorista = await getDolarMayorista()
-  // } catch (error) {
-  //   console.error('Failed to fetch dolarMayorista', error)
-  // }
 
   try {
     const db = admin.firestore()
@@ -88,19 +92,19 @@ export async function GET(request: NextRequest) {
     const todayCripto = lastPrices?.cripto?.today || ([] as [any] | [])
 
     // Prices from sources
-    const newOficialAsk = newPrices?.dolarBNA?.ask
-    const newOficialBid = newPrices?.dolarBNA?.bid
-    const newBlueAsk = newPrices?.otherDolars?.blue
-    const newBlueBid = newPrices?.otherDolars?.blue_bid
+    const newOficialAsk = newPrices?.dolarOficial
+    const newOficialBid = newPrices?.dolarOficial
+    const newBlueAsk = newPrices?.dolarBlue?.ask
+    const newBlueBid = newPrices?.dolarBlue?.bid
     const newMepAsk = newPrices?.dolarMEP?.ask
     const newMepBid = newPrices?.dolarMEP?.bid
     const newCocosAsk = newPrices?.dolarCocos?.ask
     const newCocosBid = newPrices?.dolarCocos?.bid
-    const newTarjeta = newPrices?.otherDolars?.solidario
-    const newMayoristaAsk = newPrices?.dolarMayorista?.venta
-    const newMayoristaBid = newPrices?.dolarMayorista?.compra
-    const newCclAsk = newPrices?.otherDolars?.ccl
-    const newCclBid = newPrices?.otherDolars?.ccl
+    const newTarjeta = newPrices?.dolarTarjeta
+    const newMayoristaAsk = newPrices?.dolarMayorista
+    const newMayoristaBid = newPrices?.dolarMayorista
+    const newCclAsk = newPrices?.dolarCCL
+    const newCclBid = newPrices?.dolarCCL
     const newCriptoAsk = newPrices?.dolarCrypto?.ask
     const newCriptoBid = newPrices?.dolarCrypto?.bid
 
@@ -154,15 +158,15 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      // let shouldUpdateMayorista = true
-      // if (todayMayorista.length > 0) {
-      //   const lastTimestamp =
-      //     todayMayorista[todayMayorista.length - 1].timestamp.seconds
+      let shouldUpdateMayorista = true
+      if (todayMayorista.length > 0) {
+        const lastTimestamp =
+          todayMayorista[todayMayorista.length - 1].timestamp.seconds
 
-      //   if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
-      //     shouldUpdateMayorista = false
-      //   }
-      // }
+        if (dayjs.unix(lastTimestamp).isAfter(dayjs().subtract(30, 'minute'))) {
+          shouldUpdateMayorista = false
+        }
+      }
 
       let shouldUpdateCcl = true
       if (todayCcl.length > 0) {
@@ -245,17 +249,17 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      // if (shouldUpdateMayorista && !!newMayoristaAsk) {
-      //   updateObject.mayorista = {
-      //     today: [
-      //       ...todayMayorista,
-      //       {
-      //         ask: newMayoristaAsk,
-      //         timestamp: admin.firestore.Timestamp.now(),
-      //       },
-      //     ],
-      //   }
-      // }
+      if (shouldUpdateMayorista && !!newMayoristaAsk) {
+        updateObject.mayorista = {
+          today: [
+            ...todayMayorista,
+            {
+              ask: newMayoristaAsk,
+              timestamp: admin.firestore.Timestamp.now(),
+            },
+          ],
+        }
+      }
 
       if (shouldUpdateCcl && !!newCclAsk) {
         updateObject.ccl = {
@@ -409,31 +413,31 @@ export async function GET(request: NextRequest) {
       })
     }
     // Mayorista
-    // if (
-    //   !!newMayoristaAsk &&
-    //   !!newMayoristaBid &&
-    //   (newMayoristaAsk !== lastMayoristaAsk ||
-    //     newMayoristaBid !== lastMayoristaBid)
-    // ) {
-    //   const updateDataMayorista: any = {
-    //     mayorista: {
-    //       ask: newMayoristaAsk,
-    //       bid: newMayoristaBid,
-    //       timestamp: admin.firestore.FieldValue.serverTimestamp(),
-    //     },
-    //   }
+    if (
+      !!newMayoristaAsk &&
+      !!newMayoristaBid &&
+      (newMayoristaAsk !== lastMayoristaAsk ||
+        newMayoristaBid !== lastMayoristaBid)
+    ) {
+      const updateDataMayorista: any = {
+        mayorista: {
+          ask: newMayoristaAsk,
+          bid: newMayoristaBid,
+          timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        },
+      }
 
-    //   await db
-    //     .collection('prices')
-    //     .doc('last-prices')
-    //     .set(updateDataMayorista, { merge: true })
-    //   await db.collection('historical-prices').doc().set({
-    //     ask: newMayoristaAsk,
-    //     bid: newMayoristaBid,
-    //     timestamp: admin.firestore.FieldValue.serverTimestamp(),
-    //     type: 'mayorista',
-    //   })
-    // }
+      await db
+        .collection('prices')
+        .doc('last-prices')
+        .set(updateDataMayorista, { merge: true })
+      await db.collection('historical-prices').doc().set({
+        ask: newMayoristaAsk,
+        bid: newMayoristaBid,
+        timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        type: 'mayorista',
+      })
+    }
     // CCL
     if (
       !!newCclAsk &&
@@ -502,14 +506,6 @@ export async function GET(request: NextRequest) {
 }
 
 // Fetch functions
-async function getDolarBNA() {
-  const res = await fetch('https://criptoya.com/api/bna')
-  if (!res.ok) {
-    throw new Error('Failed to fetch data')
-  }
-  return res.json()
-}
-
 async function getDolarMEP() {
   const res = await fetch('https://api.cocos.capital/api/v1/public/mep-prices')
   if (!res.ok) {
@@ -536,11 +532,3 @@ async function getOtherDolars() {
   }
   return res.json()
 }
-
-// async function getDolarMayorista() {
-//   const res = await fetch('https://dolarapi.com/v1/dolares/mayorista')
-//   if (!res.ok) {
-//     throw new Error('Failed to fetch data')
-//   }
-//   return res.json()
-// }
