@@ -1,6 +1,5 @@
 'use client'
 
-import AppStoreButton from '@/components/AppStoreButton'
 import InstagramButton from '@/components/InstagramButton'
 import TwitterButton from '@/components/TwitterButton'
 import { Separator } from '@/components/ui/separator'
@@ -25,12 +24,6 @@ export default function Footer() {
               <div className="flex items-center justify-center gap-6">
                 <TwitterButton />
                 <InstagramButton />
-              </div>
-              <div className="flex flex-col items-center justify-center gap-1 pt-3 md:items-start">
-                <p className="text-lg">Bajate la app con widgets</p>
-                <div className="flex items-center justify-center gap-6">
-                  <AppStoreButton />
-                </div>
               </div>
             </div>
           </div>
