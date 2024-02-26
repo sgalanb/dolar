@@ -9,10 +9,12 @@ export default function DolarTypeList({ dolarType }: { dolarType: DolarType }) {
   const { resolvedTheme } = useTheme()
 
   const todayPrices: number[] = dolarType.today
-    ? dolarType.today.map((today) => today.ask)
+    ? dolarType.today.map((today: any) => parseFloat(today.ask))
     : []
 
-  const chartPrices = [...todayPrices, dolarType.ask]
+  const chartPrices = dolarType.ask
+    ? [...todayPrices, dolarType.ask]
+    : todayPrices
 
   const porcentualChange =
     ((chartPrices[chartPrices.length - 1] - chartPrices[0]) / chartPrices[0]) *
@@ -39,10 +41,10 @@ export default function DolarTypeList({ dolarType }: { dolarType: DolarType }) {
           dolarType.name == 'Cocos' && resolvedTheme == 'light'
             ? '#0062E1'
             : dolarType.name == 'Cocos' && resolvedTheme == 'dark'
-            ? '#3b8df1'
-            : chartPrices[0] <= chartPrices[chartPrices.length - 1]
-            ? '#49ca4b'
-            : '#D83141',
+              ? '#3b8df1'
+              : chartPrices[0] <= chartPrices[chartPrices.length - 1]
+                ? '#49ca4b'
+                : '#D83141',
         borderWidth: 3,
         tension: 0.1,
         pointRadius: 0, // No points
@@ -76,12 +78,12 @@ export default function DolarTypeList({ dolarType }: { dolarType: DolarType }) {
             dolarType.name == 'Cocos' && resolvedTheme == 'light'
               ? 'bg-cocos-600/20 text-cocos-600'
               : dolarType.name == 'Cocos' && resolvedTheme == 'dark'
-              ? 'bg-cocos-500/20 text-cocos-500'
-              : dolarType.name == 'Cocos'
-              ? 'bg-cocos-600/20 text-cocos-600'
-              : chartPrices[0] <= chartPrices[chartPrices.length - 1]
-              ? 'bg-[#49ca4b]/20 text-[#49ca4b]'
-              : 'bg-[#D83141]/20 text-[#D83141]'
+                ? 'bg-cocos-500/20 text-cocos-500'
+                : dolarType.name == 'Cocos'
+                  ? 'bg-cocos-600/20 text-cocos-600'
+                  : chartPrices[0] <= chartPrices[chartPrices.length - 1]
+                    ? 'bg-[#49ca4b]/20 text-[#49ca4b]'
+                    : 'bg-[#D83141]/20 text-[#D83141]'
           } w-fit rounded p-1 px-2 text-sm font-normal`}
         >
           {porcentualChange >= 0
@@ -98,13 +100,13 @@ export default function DolarTypeList({ dolarType }: { dolarType: DolarType }) {
             {dolarType.bid.toFixed(2).replace('.', ',')}
           </p>
           <p className="text-xl font-semibold leading-5">
-            {dolarType.ask.toFixed(2).replace('.', ',')}
+            {dolarType?.ask?.toFixed(2).replace('.', ',')}
           </p>
         </div>
       ) : (
         <div className="flex h-full w-full max-w-[10rem] flex-col items-end justify-center">
           <p className="text-xl font-semibold leading-5">
-            {dolarType.ask.toFixed(2).replace('.', ',')}
+            {dolarType?.ask?.toFixed(2).replace('.', ',')}
           </p>
         </div>
       )}

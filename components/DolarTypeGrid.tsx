@@ -12,7 +12,9 @@ export default function DolarTypeGrid({ dolarType }: { dolarType: DolarType }) {
     ? dolarType.today.map((today: any) => parseFloat(today.ask))
     : []
 
-  const chartPrices = [...todayPrices, dolarType.ask]
+  const chartPrices = dolarType.ask
+    ? [...todayPrices, dolarType.ask]
+    : todayPrices
 
   const porcentualChange =
     ((chartPrices[chartPrices.length - 1] - chartPrices[0]) / chartPrices[0]) *
@@ -51,8 +53,6 @@ export default function DolarTypeGrid({ dolarType }: { dolarType: DolarType }) {
       },
     ],
   }
-
-  console.log(dolarType)
 
   return (
     <Link
@@ -120,7 +120,7 @@ export default function DolarTypeGrid({ dolarType }: { dolarType: DolarType }) {
           <div className="flex w-full items-center justify-between">
             <span className="text-sm font-normal">Comprá</span>
             <p className="text-xl font-semibold leading-5">
-              {dolarType.ask.toFixed(2).replace('.', ',')}
+              {dolarType?.ask?.toFixed(2).replace('.', ',')}
             </p>
           </div>
         </div>

@@ -1,5 +1,6 @@
-import admin from '@/lib/firebase-setup/firebaseAdmin'
+import { LastPrices } from '@/app/api/get-last-prices/types'
 import { twitterClient } from '@/lib/twitterClient'
+import { domain, getPercentageChange } from '@/lib/utils'
 import dayjs from 'dayjs'
 import 'dayjs/locale/es'
 import updateLocale from 'dayjs/plugin/updateLocale'
@@ -25,7 +26,9 @@ dayjs.updateLocale('es', {
 
 export const dynamic = 'force-dynamic'
 
+// This endpoint runs at 11:30 AM UTC -3
 export async function GET(request: NextRequest) {
+  // Only allow Vercel to access this endpoint
   const authHeader = request.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return new Response(`Not authorized.`, {
@@ -34,19 +37,9 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const db = admin.firestore()
-
-    const lastPrices = (
-      await db.collection('prices').doc('last-prices').get()
-    ).data()
-
-    const getPercentageChange = (chartPricesArray: any[]) => {
-      return (
-        ((chartPricesArray[chartPricesArray.length - 1] - chartPricesArray[0]) /
-          chartPricesArray[0]) *
-        100
-      )
-    }
+    const lastPrices: LastPrices = await fetch(
+      `${domain}/api/get-last-prices`
+    ).then((res) => res.json())
 
     const oficialTodayPrices: number[] = lastPrices?.oficial.today.map(
       (today: any) => today.ask

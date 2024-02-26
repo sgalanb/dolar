@@ -1,105 +1,93 @@
 'use client'
 
+import { LastPrices, PriceType } from '@/app/api/get-last-prices/types'
 import DolarTypeGrid from '@/components/DolarTypeGrid'
 import DolarTypeList from '@/components/DolarTypeList'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import {
-  LastPricesInterface,
-  LastPricesTodayInterface,
-  getLastPricesSnapshot,
-} from '@/lib/firebaseSDK'
+import { fetcher } from '@/lib/utils'
 import { AlignJustify, Grid2X2, Rows } from 'lucide-react'
 import dynamic from 'next/dynamic'
-import { useEffect, useState } from 'react'
+import useSWR from 'swr'
 
 const LastUpdateTime = dynamic(() => import('@/components/LastUpdateTime'))
 
 export interface DolarType {
   name?: string
   bid?: number
-  ask: number
-  timestamp: number
-  today: LastPricesTodayInterface[]
+  ask?: number
+  timestamp: Date
+  today: PriceType[]
 }
 
-export default function DolarsHome({
-  lastPrices,
-}: {
-  lastPrices: LastPricesInterface
-}) {
-  const [prices, setPrices] = useState<LastPricesInterface>(lastPrices)
-
-  useEffect(() => {
-    let unsubscribe: () => void
-
-      // Immediately invoked async function to handle the promise
-    ;(async () => {
-      unsubscribe = await getLastPricesSnapshot((newPrices) => {
-        setPrices(newPrices) // Update the prices state whenever there's a change
-      })
-    })()
-
-    // Unsubscribe from the snapshot listener when the component unmounts
-    return () => {
-      if (unsubscribe) unsubscribe()
-    }
-  }, [])
+export default function DolarsHome({ lastPrices }: { lastPrices: LastPrices }) {
+  const {
+    data: prices,
+    isLoading,
+    error,
+  }: {
+    data: LastPrices
+    isLoading: boolean
+    error: any
+  } = useSWR<any>('/api/get-last-prices', fetcher, {
+    refreshInterval: 60000,
+    fallbackData: lastPrices,
+  })
 
   const dolars: DolarType[] = [
     {
       name: 'Oficial',
       bid: prices?.oficial?.bid,
-      ask: prices?.oficial.ask,
-      timestamp: prices?.oficial.timestamp,
-      today: prices?.oficial.today,
+      ask: prices?.oficial?.ask,
+      timestamp: prices?.oficial?.timestamp,
+      today: prices?.oficial?.today,
     },
     {
       name: 'Blue',
       bid: prices?.blue?.bid,
-      ask: prices?.blue.ask,
-      timestamp: prices?.blue.timestamp,
-      today: prices?.blue.today,
+      ask: prices?.blue?.ask,
+      timestamp: prices?.blue?.timestamp,
+      today: prices?.blue?.today,
     },
     {
       name: 'MEP',
       bid: prices?.mep?.bid,
-      ask: prices?.mep.ask,
-      timestamp: prices?.mep.timestamp,
-      today: prices?.mep.today,
+      ask: prices?.mep?.ask,
+      timestamp: prices?.mep?.timestamp,
+      today: prices?.mep?.today,
     },
     {
       name: 'Cocos',
       bid: prices?.cocos?.bid,
-      ask: prices?.cocos.ask,
-      timestamp: prices?.cocos.timestamp,
-      today: prices?.cocos.today,
+      ask: prices?.cocos?.ask,
+      timestamp: prices?.cocos?.timestamp,
+      today: prices?.cocos?.today,
     },
     {
       name: 'Tarjeta',
-      ask: prices?.tarjeta.ask,
-      timestamp: prices?.tarjeta.timestamp,
-      today: prices?.tarjeta.today,
+      ask: prices?.tarjeta?.ask,
+      timestamp: prices?.tarjeta?.timestamp,
+      today: prices?.tarjeta?.today,
     },
     {
       name: 'Mayorista',
       bid: prices?.mayorista?.bid,
-      ask: prices?.mayorista.ask,
-      timestamp: prices?.mayorista.timestamp,
-      today: prices?.mayorista.today,
+      ask: prices?.mayorista?.ask,
+      timestamp: prices?.mayorista?.timestamp,
+      today: prices?.mayorista?.today,
     },
     {
       name: 'CCL',
       bid: prices?.ccl?.bid,
-      ask: prices?.ccl.ask,
-      timestamp: prices?.ccl.timestamp,
-      today: prices?.ccl.today,
+      ask: prices?.ccl?.ask,
+      timestamp: prices?.ccl?.timestamp,
+      today: prices?.ccl?.today,
     },
     {
       name: 'Cripto',
       bid: prices?.cripto?.bid,
-      ask: prices?.cripto.ask,
-      timestamp: prices?.cripto.timestamp,
-      today: prices?.cripto.today,
+      ask: prices?.cripto?.ask,
+      timestamp: prices?.cripto?.timestamp,
+      today: prices?.cripto?.today,
     },
   ]
 

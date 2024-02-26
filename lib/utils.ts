@@ -6,55 +6,55 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-// Average crypto dolar ask and bid
-interface ExchangeData {
-  ask: number
-  bid: number
+// Get the domain for the current environment
+export const domain = process.env.NEXT_PUBLIC_VERCEL_URL
+  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+  : 'http://localhost:3000'
+
+// Get today's date at 00:00:00 in UTC
+export const startTodayUTC = new Date(
+  Date.UTC(
+    new Date().getFullYear(),
+    new Date().getMonth(),
+    new Date().getDate()
+  )
+)
+
+// Get today's date - X days at 00:00:00 in UTC
+export const startDaysAgoUTC = (days: number) =>
+  new Date(
+    Date.UTC(
+      new Date().getFullYear(),
+      new Date().getMonth(),
+      new Date().getDate() - days
+    )
+  )
+
+// Standard fetcher for SWR
+interface SWRError extends Error {
+  status: number
 }
+export async function fetcher<JSON = any>(
+  input: RequestInfo,
+  init?: RequestInit
+): Promise<JSON> {
+  const res = await fetch(input, init)
 
-interface ExchangeRates {
-  [key: string]: ExchangeData
-}
-
-export function calculateAverageCryptoDolarPrices(
-  exchangeRates: ExchangeRates
-): {
-  ask: number
-  bid: number
-} {
-  let totalAsk = 0
-  let totalBid = 0
-  let count = 0
-
-  const whitelistedExchanges = [
-    'belo',
-    'lemoncash',
-    'ripio',
-    'buenbit',
-    'letsbit',
-    'fiwind',
-  ]
-
-  // Filter out non whitelisted exchanges
-  const filteredExchangeRates = Object.keys(exchangeRates)
-    .filter((key) => whitelistedExchanges.includes(key))
-    .reduce((obj, key) => {
-      obj[key] = exchangeRates[key]
-      return obj
-    }, {} as ExchangeRates)
-
-  // Loop through each exchange to sum asks and bids
-  for (const key in filteredExchangeRates) {
-    if (filteredExchangeRates.hasOwnProperty(key)) {
-      totalAsk += filteredExchangeRates[key].ask
-      totalBid += filteredExchangeRates[key].bid
-      count++
-    }
+  if (!res.ok) {
+    const error = await res.text()
+    const err = new Error(error) as SWRError
+    err.status = res.status
+    throw err
   }
 
-  // Calculate averages
-  const averageAsk = totalAsk / count
-  const averageBid = totalBid / count
+  return res.json()
+}
 
-  return { ask: averageAsk, bid: averageBid }
+// Get the percentage change between the first and last element of an array
+export const getPercentageChange = (chartPricesArray: any[]) => {
+  return (
+    ((chartPricesArray[chartPricesArray.length - 1] - chartPricesArray[0]) /
+      chartPricesArray[0]) *
+    100
+  )
 }

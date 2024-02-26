@@ -1,5 +1,6 @@
+import { LastPrices } from '@/app/api/get-last-prices/types'
 import DolarsHome from '@/components/DolarsHome'
-import { LastPricesInterface, getLastPrices } from '@/lib/firebaseSDK'
+import { domain } from '@/lib/utils'
 import { Metadata } from 'next'
 
 export const revalidate = 60
@@ -18,7 +19,9 @@ export const metadata: Metadata = {
 }
 
 export default async function Home() {
-  const lastPrices: LastPricesInterface = await getLastPrices()
+  const lastPrices: LastPrices = await fetch(
+    `${domain}/api/get-last-prices`
+  ).then((res) => res.json())
 
   return (
     <div className="flex flex-col items-center justify-center gap-9">

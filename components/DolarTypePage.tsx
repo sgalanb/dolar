@@ -1,12 +1,13 @@
 'use client'
 
+import { ChartPrices } from '@/app/api/get-chart-data/types'
+import { LastPrices } from '@/app/api/get-last-prices/types'
 import HistoricalCharts from '@/components/HistoricalCharts'
-import { getLastPricesSnapshot } from '@/lib/firebaseSDK'
+import { fetcher } from '@/lib/utils'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import updateLocale from 'dayjs/plugin/updateLocale'
-import { useTheme } from 'next-themes'
-import { useEffect, useState } from 'react'
+import useSWR from 'swr'
 require('dayjs/locale/es')
 
 dayjs.extend(relativeTime)
@@ -35,28 +36,32 @@ export default function DolarTypePage({
   lastPrices,
 }: {
   type: string
-  lastPrices: any
+  lastPrices: LastPrices
 }) {
-  const { resolvedTheme } = useTheme()
+  const {
+    data: prices,
+    isLoading,
+    error,
+  }: {
+    data: LastPrices
+    isLoading: boolean
+    error: any
+  } = useSWR<any>('/api/get-last-prices', fetcher, {
+    refreshInterval: 60000,
+    fallbackData: lastPrices,
+  })
 
-  const [dolarType, setDolarType] = useState(lastPrices)
+  const {
+    data: chartPrices,
+  }: {
+    data: ChartPrices
+    isLoading: boolean
+    error: any
+  } = useSWR<any>('/api/get-last-prices', fetcher, {
+    refreshInterval: 60000,
+  })
 
-  useEffect(() => {
-    let unsubscribe: () => void
-
-      // Immediately invoked async function to handle the promise
-    ;(async () => {
-      unsubscribe = await getLastPricesSnapshot((newPrices) => {
-        setDolarType(newPrices[type.toLowerCase()]) // Update the prices state whenever there's a change
-      })
-    })()
-
-    // Unsubscribe from the snapshot listener when the component unmounts
-    return () => {
-      if (unsubscribe) unsubscribe()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  console.log(prices[type.toLowerCase()])
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-9">
@@ -74,20 +79,26 @@ export default function DolarTypePage({
           /> */}
           <div className="flex flex-col items-start justify-center text-sm font-normal tracking-wider text-black/50 dark:text-white/50">
             <p>
-              {dayjs.unix(dolarType.timestamp).format('DD/MM/YYYY - HH:mm')}
+              {dayjs(prices[type.toLowerCase()]?.timestamp).format(
+                'DD/MM/YYYY - HH:mm'
+              )}
             </p>
-            <p>{dayjs.unix(dolarType.timestamp).locale('es').fromNow()}</p>
+            <p>
+              {dayjs(prices[type.toLowerCase()]?.timestamp)
+                .locale('es')
+                .fromNow()}
+            </p>
           </div>
           {/* </div> */}
         </div>
-        {dolarType.bid ? (
+        {prices[type.toLowerCase()]?.bid ? (
           <div className="flex w-40 flex-col items-center justify-center gap-3">
             <div className="flex w-full items-center justify-between">
               <span className="text-sm font-normal text-black/50 dark:text-white/50">
                 Vendé
               </span>
               <p className="text-xl font-semibold leading-5 text-black/50 dark:text-white/50">
-                {`$${dolarType.bid.toLocaleString('es-AR', {
+                {`$${prices[type.toLowerCase()]?.bid?.toLocaleString('es-AR', {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })}`}
@@ -95,31 +106,33 @@ export default function DolarTypePage({
             </div>
             <div className="flex w-full items-center justify-between">
               <span className="text-sm font-normal ">Comprá</span>
-              <p className="text-xl font-semibold leading-5">{`$${dolarType.ask.toLocaleString(
-                'es-AR',
-                {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                }
-              )}`}</p>
+              <p className="text-xl font-semibold leading-5">{`$${prices[
+                type.toLowerCase()
+              ]?.ask?.toLocaleString('es-AR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}`}</p>
             </div>
           </div>
         ) : (
           <div className="flex w-40 flex-col items-center justify-center">
             <div className="flex w-full items-center justify-between">
               <span className="text-sm font-normal">Comprá</span>
-              <p className="text-xl font-semibold leading-5">{`$${dolarType.ask.toLocaleString(
-                'es-AR',
-                {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                }
-              )}`}</p>
+              <p className="text-xl font-semibold leading-5">{`$${prices[
+                type.toLowerCase()
+              ]?.ask?.toLocaleString('es-AR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}`}</p>
             </div>
           </div>
         )}
       </div>
-      <HistoricalCharts type={type} lastPrices={dolarType} />
+      <HistoricalCharts
+        type={type}
+        lastPrices={prices}
+        chartPrices={chartPrices}
+      />
     </div>
   )
 }

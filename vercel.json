@@ -5,34 +5,6 @@
       "schedule": "* * * * *"
     },
     {
-      "path": "/api/clear-day",
-      "schedule": "0 3 * * *"
-    },
-    {
-      "path": "/api/update-chart-1s",
-      "schedule": "0 3 * * *"
-    },
-    {
-      "path": "/api/update-chart-1m",
-      "schedule": "0 3 * * *"
-    },
-    {
-      "path": "/api/update-chart-3m",
-      "schedule": "0 3 * * *"
-    },
-    {
-      "path": "/api/update-chart-6m",
-      "schedule": "0 3 * * *"
-    },
-    {
-      "path": "/api/update-chart-1a",
-      "schedule": "0 3 * * *"
-    },
-    {
-      "path": "/api/update-chart-2a",
-      "schedule": "0 3 * * *"
-    },
-    {
       "path": "/api/post-light",
       "schedule": "30 14 * * 1-5"
     },

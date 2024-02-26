@@ -1,49 +1,23 @@
 'use client'
 
+import { ChartPrices } from '@/app/api/get-chart-data/types'
+import { LastPrices } from '@/app/api/get-last-prices/types'
 import LastUpdateTime from '@/components/LastUpdateTime'
 import LineChart from '@/components/charts/LineChart'
-import { getChartsDataSnapshot } from '@/lib/firebaseSDK'
 import dayjs from 'dayjs'
-import { Timestamp } from 'firebase/firestore'
 import { useTheme } from 'next-themes'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 export default function HistoricalCharts({
   type,
   lastPrices,
+  chartPrices,
 }: {
   type: string
-  lastPrices: any
+  lastPrices: LastPrices
+  chartPrices: ChartPrices
 }) {
   const { resolvedTheme } = useTheme()
-
-  type ChartPricesType = {
-    [key in '2a' | '1a' | '6m' | '3m' | '1m' | '1s' | '1d']: {
-      ask: number | string
-      timestamp: Timestamp
-    }[]
-  }
-
-  const [chartPrices, setChartPrices] = useState<ChartPricesType | undefined>(
-    undefined
-  )
-
-  useEffect(() => {
-    let unsubscribe: () => void
-
-      // Immediately invoked async function to handle the promise
-    ;(async () => {
-      unsubscribe = await getChartsDataSnapshot(type, (newPrices) => {
-        setChartPrices(newPrices) // Update the prices state whenever there's a change
-      })
-    })()
-
-    // Unsubscribe from the snapshot listener when the component unmounts
-    return () => {
-      if (unsubscribe) unsubscribe()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const [selectedTime, setSelectedTime] = useState<
     '2a' | '1a' | '6m' | '3m' | '1m' | '1s' | '1d'
@@ -66,46 +40,56 @@ export default function HistoricalCharts({
     labels:
       selectedTime == '1d'
         ? [
-            ...lastPrices.today.map((data: any) => {
-              return dayjs.unix(data.timestamp).format('DD MMM HH:mm')
+            ...lastPrices[type.toLowerCase()]?.today.map((data: any) => {
+              return dayjs(data.timestamp).format('DD MMM HH:mm')
             }),
             'Actual',
           ]
         : !!chartPrices?.[selectedTime] &&
-          chartPrices?.[selectedTime]?.length > 1
-        ? selectedTime == '1m' || selectedTime == '1s'
-          ? chartPrices?.[selectedTime]
-              ?.map((data: any) => {
-                return dayjs.unix(data.timestamp.seconds).format('DD MMM HH:mm')
-              })
-              .concat('Actual')
-          : chartPrices?.[selectedTime]
-              ?.map((data: any) => {
-                return dayjs.unix(data.timestamp.seconds).format("DD MMM 'YY")
-              })
-              .concat('Actual')
-        : [dayjs.unix(lastPrices.timestamp).format('DD MMM HH:mm'), 'Actual'],
+            chartPrices?.[selectedTime]?.length > 1
+          ? selectedTime == '1m' || selectedTime == '1s'
+            ? chartPrices?.[selectedTime]
+                ?.map((data: any) => {
+                  return dayjs
+                    .unix(data.timestamp.seconds)
+                    .format('DD MMM HH:mm')
+                })
+                .concat('Actual')
+            : chartPrices?.[selectedTime]
+                ?.map((data: any) => {
+                  return dayjs(data.timestamp.seconds).format("DD MMM 'YY")
+                })
+                .concat('Actual')
+          : [
+              dayjs(lastPrices[type.toLowerCase()]?.timestamp).format(
+                'DD MMM HH:mm'
+              ),
+              'Actual',
+            ],
     datasets: [
       {
         label: 'Precio',
         data:
           selectedTime == '1d'
             ? [
-                ...lastPrices.today.map((data: any) => {
+                ...lastPrices[type.toLowerCase()]?.today.map((data: any) => {
                   return data.ask.toFixed(2)
                 }),
-                lastPrices.ask.toFixed(2),
+                lastPrices[type.toLowerCase()]?.ask?.toFixed(2),
               ]
             : !!chartPrices?.[selectedTime] &&
-              chartPrices?.[selectedTime]?.length > 1
-            ? chartPrices?.[selectedTime]
-                ?.map((data: any) => {
-                  const ask = data.ask
-                  const type = typeof ask
-                  return type == 'number' ? ask.toFixed(2) : ask
-                })
-                .concat(lastPrices.ask.toFixed(2))
-            : [lastPrices.ask, lastPrices.ask],
+                chartPrices?.[selectedTime]?.length > 1
+              ? chartPrices?.[selectedTime]
+                  ?.map((data: any) => {
+                    const ask = data.ask
+                    const type = typeof ask
+                    return type == 'number' ? ask.toFixed(2) : ask
+                  })
+                  .concat(lastPrices[type.toLowerCase()]?.ask?.toFixed(2))
+              : [
+                  lastPrices[type.toLowerCase()]?.ask,
+                  lastPrices[type.toLowerCase()]?.ask,
+                ],
         fill: false,
         backgroundColor:
           type == 'Cocos'
@@ -113,16 +97,16 @@ export default function HistoricalCharts({
               ? '#3b8df1'
               : '#0062E1'
             : resolvedTheme == 'dark'
-            ? 'white'
-            : 'black',
+              ? 'white'
+              : 'black',
         borderColor:
           type == 'Cocos'
             ? resolvedTheme == 'dark'
               ? '#3b8df1'
               : '#0062E1'
             : resolvedTheme == 'dark'
-            ? 'white'
-            : 'black',
+              ? 'white'
+              : 'black',
         borderWidth: 3,
         tension: 0.1,
         pointRadius: 0, // No points
