@@ -6,7 +6,7 @@ import { startDaysAgo } from '@/lib/utils'
 import { and, asc, eq, gte } from 'drizzle-orm'
 import { NextRequest } from 'next/server'
 
-export const revalidate = 60
+export const revalidate = 86400
 
 export async function GET(req: NextRequest) {
   try {
