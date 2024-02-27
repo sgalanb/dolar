@@ -57,11 +57,9 @@ export default function DolarTypePage({
     data: ChartPrices
     isLoading: boolean
     error: any
-  } = useSWR<any>('/api/get-last-prices', fetcher, {
+  } = useSWR<any>(`/api/get-chart-data?type=${type.toLowerCase()}`, fetcher, {
     refreshInterval: 60000,
   })
-
-  console.log(prices[type.toLowerCase()])
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-9">

@@ -50,14 +50,12 @@ export default function HistoricalCharts({
           ? selectedTime == '1m' || selectedTime == '1s'
             ? chartPrices?.[selectedTime]
                 ?.map((data: any) => {
-                  return dayjs
-                    .unix(data.timestamp.seconds)
-                    .format('DD MMM HH:mm')
+                  return dayjs(data.timestamp).format('DD MMM HH:mm')
                 })
                 .concat('Actual')
             : chartPrices?.[selectedTime]
                 ?.map((data: any) => {
-                  return dayjs(data.timestamp.seconds).format("DD MMM 'YY")
+                  return dayjs(data.timestamp).format("DD MMM 'YY")
                 })
                 .concat('Actual')
           : [

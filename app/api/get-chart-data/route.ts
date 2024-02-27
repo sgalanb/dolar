@@ -6,7 +6,7 @@ import { startDaysAgoUTC } from '@/lib/utils'
 import { and, asc, eq, gte } from 'drizzle-orm'
 import { NextRequest } from 'next/server'
 
-export const revalidate = 30
+export const revalidate = 60
 
 export async function GET(req: NextRequest) {
   try {
@@ -61,6 +61,22 @@ export async function GET(req: NextRequest) {
       ),
     })
 
+    // const fiveYearsQuery = await db.query.historicalPrices.findMany({
+    //   orderBy: [asc(historicalPrices.timestamp)],
+    //   where: and(
+    //     eq(historicalPrices.type, type),
+    //     gte(historicalPrices.timestamp, startDaysAgoUTC(1825))
+    //   ),
+    // })
+
+    // const tenYearsQuery = await db.query.historicalPrices.findMany({
+    //   orderBy: [asc(historicalPrices.timestamp)],
+    //   where: and(
+    //     eq(historicalPrices.type, type),
+    //     gte(historicalPrices.timestamp, startDaysAgoUTC(3650))
+    //   ),
+    // })
+
     // Use only the first and last prices of each day
     const oneWeekArray = calculateFirstAndLastPricesPerDay(oneWeekQuery)
     const oneMonthArray = calculateFirstAndLastPricesPerDay(oneMonthQuery)
@@ -69,6 +85,8 @@ export async function GET(req: NextRequest) {
     const sixMonthsArray = calculateLatestPricesPerDay(sixMonthsQuery)
     const oneYearArray = calculateLatestPricesPerDay(oneYearQuery)
     const twoYearsArray = calculateLatestPricesPerDay(twoYearsQuery)
+    // const fiveYearsArray = calculateLatestPricesPerDay(fiveYearsQuery)
+    // const tenYearsArray = calculateLatestPricesPerDay(tenYearsQuery)
 
     const chartPrices: ChartPrices = {
       '1s': oneWeekArray,
@@ -77,6 +95,8 @@ export async function GET(req: NextRequest) {
       '6m': sixMonthsArray,
       '1a': oneYearArray,
       '2a': twoYearsArray,
+      // '5a': fiveYearsArray,
+      // '10a': tenYearsArray,
     }
 
     return new Response(JSON.stringify(chartPrices), {
