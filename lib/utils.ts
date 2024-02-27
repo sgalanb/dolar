@@ -10,11 +10,11 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // Get today's date at 00:00:00 in UTC -3
-export const startToday = dayjs().startOf('day').utcOffset(-3).toDate()
+export const startToday = dayjs().utcOffset(-3).startOf('day').toDate()
 
 // Get today's date - X days at 00:00:00 in UTC -3
 export const startDaysAgo = (days: number) =>
-  dayjs().subtract(days, 'day').startOf('day').utcOffset(-3).toDate()
+  dayjs().utcOffset(-3).subtract(days, 'day').startOf('day').toDate()
 
 // Standard fetcher for SWR
 interface SWRError extends Error {
