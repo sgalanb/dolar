@@ -101,17 +101,17 @@ export default function DolarTypeGrid({ dolarType }: { dolarType: DolarType }) {
       {dolarType.bid ? (
         <div className="flex h-[3.25rem] w-full flex-col items-center justify-center gap-3">
           <div className="flex w-full items-center justify-between">
+            <span className="text-sm font-normal ">Comprá</span>
+            <p className="text-xl font-semibold leading-5">
+              {dolarType?.ask?.toFixed(2)?.replace('.', ',')}
+            </p>
+          </div>
+          <div className="flex w-full items-center justify-between">
             <span className="text-sm font-normal text-black/50 dark:text-white/50">
               Vendé
             </span>
             <p className="text-xl font-semibold leading-5 text-black/50 dark:text-white/50">
               {dolarType?.bid?.toFixed(2)?.replace('.', ',')}
-            </p>
-          </div>
-          <div className="flex w-full items-center justify-between">
-            <span className="text-sm font-normal ">Comprá</span>
-            <p className="text-xl font-semibold leading-5">
-              {dolarType?.ask?.toFixed(2)?.replace('.', ',')}
             </p>
           </div>
         </div>

@@ -112,6 +112,15 @@ export default function DolarTypePage({
         {prices[type.toLowerCase()]?.bid ? (
           <div className="flex w-40 flex-col items-center justify-center gap-3">
             <div className="flex w-full items-center justify-between">
+              <span className="text-sm font-normal ">Comprá</span>
+              <p className="text-xl font-semibold leading-5">{`$${prices[
+                type.toLowerCase()
+              ]?.ask?.toLocaleString('es-AR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}`}</p>
+            </div>
+            <div className="flex w-full items-center justify-between">
               <span className="text-sm font-normal text-black/50 dark:text-white/50">
                 Vendé
               </span>
@@ -121,15 +130,6 @@ export default function DolarTypePage({
                   maximumFractionDigits: 2,
                 })}`}
               </p>
-            </div>
-            <div className="flex w-full items-center justify-between">
-              <span className="text-sm font-normal ">Comprá</span>
-              <p className="text-xl font-semibold leading-5">{`$${prices[
-                type.toLowerCase()
-              ]?.ask?.toLocaleString('es-AR', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}`}</p>
             </div>
           </div>
         ) : (

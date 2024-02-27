@@ -148,8 +148,6 @@ export async function GET(req: NextRequest) {
     const fiveYears = await fiveYearsQuery()
     const tenYears = await tenYearsQuery()
 
-    console.log(threeMonths)
-
     // Use only the first and last prices of each day
     const oneWeekArray = calculateFirstAndLastPricesPerDay(oneWeek)
     const oneMonthArray = calculateFirstAndLastPricesPerDay(oneMonth)

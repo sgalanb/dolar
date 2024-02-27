@@ -96,11 +96,11 @@ export default function DolarTypeList({ dolarType }: { dolarType: DolarType }) {
       </div>
       {dolarType.bid ? (
         <div className="flex h-full w-full flex-col items-end justify-between">
-          <p className="text-xl font-semibold leading-5 text-black/50 dark:text-white/50">
-            {dolarType.bid.toFixed(2).replace('.', ',')}
-          </p>
           <p className="text-xl font-semibold leading-5">
             {dolarType?.ask?.toFixed(2).replace('.', ',')}
+          </p>
+          <p className="text-xl font-semibold leading-5 text-black/50 dark:text-white/50">
+            {dolarType.bid.toFixed(2).replace('.', ',')}
           </p>
         </div>
       ) : (
