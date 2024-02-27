@@ -148,6 +148,8 @@ export async function GET(req: NextRequest) {
     const fiveYears = await fiveYearsQuery()
     const tenYears = await tenYearsQuery()
 
+    console.log(threeMonths)
+
     // Use only the first and last prices of each day
     const oneWeekArray = calculateFirstAndLastPricesPerDay(oneWeek)
     const oneMonthArray = calculateFirstAndLastPricesPerDay(oneMonth)
@@ -188,7 +190,7 @@ export async function GET(req: NextRequest) {
 
 function calculateFirstAndLastPricesPerDay(prices: any) {
   const reduce = prices.reduce((acc: any, price: any) => {
-    const date = price.timestamp.toDateString()
+    const date = price.timestamp
     if (!acc[date]) {
       acc[date] = [price]
     } else {
@@ -206,7 +208,7 @@ function calculateFirstAndLastPricesPerDay(prices: any) {
 
 function calculateLatestPricesPerDay(prices: any) {
   const reduce = prices.reduce((acc: any, price: any) => {
-    const date = price.timestamp.toDateString()
+    const date = price.timestamp
     if (!acc[date] || acc[date].timestamp < price.timestamp) {
       acc[date] = price
     }
