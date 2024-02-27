@@ -168,6 +168,11 @@ export async function GET() {
       ),
     })
 
+    const cleanCripto = [
+      ...calculateOnePricePerHalfHour(todayCripto),
+      todayCripto[todayCripto.length - 1],
+    ]
+
     // Return
     const lastPrices: LastPrices = {
       oficial: {
@@ -252,7 +257,7 @@ export async function GET() {
         today:
           todayCripto.length === 0
             ? [lastCriptoPriceObject]
-            : todayCripto.map((price) => ({
+            : cleanCripto.map((price: any) => ({
                 ask: parseFloat(price?.ask ?? ''),
                 bid: parseFloat(price?.bid ?? ''),
                 timestamp: price.timestamp,
@@ -274,4 +279,25 @@ export async function GET() {
       })
     }
   }
+}
+
+function calculateOnePricePerHalfHour(prices: any) {
+  const reduce = prices.reduce((acc: any, price: any) => {
+    const date = price.timestamp.toDateString()
+    const hours = price.timestamp.getHours()
+    const minutes = price.timestamp.getMinutes()
+    const halfHour = Math.floor(minutes / 30)
+    const key = `${date}-${hours}-${halfHour}`
+
+    if (!acc[key]) {
+      acc[key] = price
+    }
+    return acc
+  }, {})
+
+  // Join all the arrays into one
+  return Object.values(reduce).reduce(
+    (acc: any, current: any) => acc.concat(current),
+    []
+  ) as PriceType[]
 }
