@@ -190,7 +190,7 @@ export async function GET(req: NextRequest) {
 
 function calculateFirstAndLastPricesPerDay(prices: any) {
   const reduce = prices.reduce((acc: any, price: any) => {
-    const date = price.timestamp
+    const date = new Date(price.timestamp).toDateString()
     if (!acc[date]) {
       acc[date] = [price]
     } else {
@@ -208,7 +208,7 @@ function calculateFirstAndLastPricesPerDay(prices: any) {
 
 function calculateLatestPricesPerDay(prices: any) {
   const reduce = prices.reduce((acc: any, price: any) => {
-    const date = price.timestamp
+    const date = new Date(price.timestamp).toDateString()
     if (!acc[date] || acc[date].timestamp < price.timestamp) {
       acc[date] = price
     }
