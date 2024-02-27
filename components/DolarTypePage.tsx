@@ -70,7 +70,11 @@ export default function DolarTypePage({
           <h1 className={`flex w-full gap-2 text-xl font-semibold leading-5`}>
             {`Dólar ${type}`}
             <span className="hidden text-black/50 dark:text-white/50 sm:block">
-              {type === 'MEP' || type === 'CCL' ? '(AL30 48HS)' : ''}
+              {type === 'MEP' || type === 'CCL'
+                ? '(AL30 48HS)'
+                : type === 'Cripto'
+                  ? '(USDC)'
+                  : ''}
             </span>
           </h1>
           {/* <div className="flex items-center justify-start gap-2">
@@ -80,11 +84,17 @@ export default function DolarTypePage({
           /> */}
           <div className="flex flex-col items-start justify-center text-sm font-normal tracking-wider text-black/50 dark:text-white/50">
             <p className="block sm:hidden">
-              {type === 'MEP' || type === 'CCL' ? 'AL30 | 48HS' : ''}
+              {type === 'MEP' || type === 'CCL'
+                ? 'AL30 | 48HS'
+                : type === 'Cripto'
+                  ? 'USDC'
+                  : ''}
             </p>
             <p
               className={`${
-                type === 'MEP' || type === 'CCL' ? 'hidden sm:block' : ''
+                type === 'MEP' || type === 'CCL' || type === 'Cripto'
+                  ? 'hidden sm:block'
+                  : ''
               }`}
             >
               {dayjs(prices[type.toLowerCase()]?.timestamp).format(
