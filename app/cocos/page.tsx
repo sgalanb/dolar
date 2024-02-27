@@ -1,5 +1,8 @@
+import { LastPrices } from '@/app/api/get-last-prices/types'
+import DolarTypePage from '@/components/DolarTypePage'
 import OperaEnCocosButton from '@/components/OperaEnCocosButton'
 import { Separator } from '@/components/ui/separator'
+import { domain } from '@/lib/utils'
 import { Metadata } from 'next'
 import Link from 'next/link'
 import Balancer from 'react-wrap-balancer'
@@ -18,13 +21,13 @@ export const metadata: Metadata = {
 }
 
 export default async function Cocos() {
-  // const lastPrices: LastPrices = await fetch(
-  //   `${domain}/api/get-last-prices`
-  // ).then((res) => res.json())
+  const lastPrices: LastPrices = await fetch(
+    `${domain}/api/get-last-prices`
+  ).then((res) => res.json())
 
   return (
     <div className="flex flex-col items-center justify-center gap-9">
-      {/* <DolarTypePage type="Cocos" lastPrices={lastPrices} /> */}
+      <DolarTypePage type="Cocos" lastPrices={lastPrices} />
       <div className="flex w-full flex-col items-center justify-center gap-6 rounded-2xl border-[4px] border-cocos-600 bg-white p-6 dark:bg-zinc-100 md:flex-row md:p-9">
         <h2 className="text-center text-2xl font-bold text-cocos-900 md:w-2/3 md:text-left">
           <Balancer>

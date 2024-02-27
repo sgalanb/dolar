@@ -1,3 +1,5 @@
+import { LastPrices } from '@/app/api/get-last-prices/types'
+import DolarsHome from '@/components/DolarsHome'
 import { Metadata } from 'next'
 
 export const revalidate = 60
@@ -16,13 +18,13 @@ export const metadata: Metadata = {
 }
 
 export default async function Home() {
-  // const lastPrices: LastPrices = await fetch(
-  //   `https://dolarya.info/api/get-last-prices`
-  // ).then((res) => res.json())
+  const lastPrices: LastPrices = await fetch(
+    `https://dolarya.info/api/get-last-prices`
+  ).then((res) => res.json())
 
   return (
     <div className="flex flex-col items-center justify-center gap-9">
-      {/* <DolarsHome lastPrices={lastPrices} /> */}
+      <DolarsHome lastPrices={lastPrices} />
       {/* <div className="flex w-full flex-col gap-3">
         <h2 className="w-full text-xl font-semibold tracking-tighter">
           Preguntas Frecuentes
