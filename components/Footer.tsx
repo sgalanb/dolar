@@ -16,7 +16,7 @@ export default function Footer() {
       className={`sticky top-0 z-40 border-t
       border-zinc-200 bg-white backdrop-blur-md transition-colors duration-200 dark:border-zinc-800 dark:bg-zinc-950`}
     >
-      <div className="mx-auto flex w-full max-w-3xl flex-col items-center justify-center gap-6 px-3 py-7">
+      <div className="mx-auto flex w-full max-w-3xl flex-col items-center justify-center gap-6 px-3 py-6">
         <div className="flex w-full flex-col items-center justify-center gap-6 md:flex-row md:justify-between">
           <div className="flex flex-col items-center justify-center gap-9 md:flex-row md:gap-0">
             <div className="flex flex-col items-center justify-center gap-1 md:items-start">
