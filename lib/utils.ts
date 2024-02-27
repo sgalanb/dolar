@@ -1,25 +1,20 @@
 import { clsx, type ClassValue } from 'clsx'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
 import { twMerge } from 'tailwind-merge'
+dayjs.extend(utc)
 
 // shadcn/ui setup
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-// Get today's date at 00:00:00 in UTC
-export const startTodayUTC = new Date(
-  new Date().getFullYear(),
-  new Date().getMonth(),
-  new Date().getDate()
-)
+// Get today's date at 00:00:00 in UTC -3
+export const startToday = dayjs().startOf('day').utcOffset(-3).toDate()
 
-// Get today's date - X days at 00:00:00 in UTC
-export const startDaysAgoUTC = (days: number) =>
-  new Date(
-    new Date().getFullYear(),
-    new Date().getMonth(),
-    new Date().getDate() - days
-  )
+// Get today's date - X days at 00:00:00 in UTC -3
+export const startDaysAgo = (days: number) =>
+  dayjs().subtract(days, 'day').startOf('day').utcOffset(-3).toDate()
 
 // Standard fetcher for SWR
 interface SWRError extends Error {

@@ -1,7 +1,7 @@
 import { LastPrices, PriceType } from '@/app/api/get-last-prices/types'
 import { db } from '@/app/db'
 import { historicalPrices } from '@/app/db/schema'
-import { startTodayUTC } from '@/lib/utils'
+import { startToday } from '@/lib/utils'
 import { and, asc, desc, eq, gte } from 'drizzle-orm'
 
 export const revalidate = 30
@@ -24,7 +24,7 @@ export async function GET() {
       orderBy: [asc(historicalPrices.timestamp)],
       where: and(
         eq(historicalPrices.type, 'oficial'),
-        gte(historicalPrices.timestamp, startTodayUTC)
+        gte(historicalPrices.timestamp, startToday)
       ),
     })
 
@@ -44,7 +44,7 @@ export async function GET() {
       orderBy: [asc(historicalPrices.timestamp)],
       where: and(
         eq(historicalPrices.type, 'blue'),
-        gte(historicalPrices.timestamp, startTodayUTC)
+        gte(historicalPrices.timestamp, startToday)
       ),
     })
 
@@ -64,7 +64,7 @@ export async function GET() {
       orderBy: [asc(historicalPrices.timestamp)],
       where: and(
         eq(historicalPrices.type, 'mep'),
-        gte(historicalPrices.timestamp, startTodayUTC)
+        gte(historicalPrices.timestamp, startToday)
       ),
     })
 
@@ -84,7 +84,7 @@ export async function GET() {
       orderBy: [asc(historicalPrices.timestamp)],
       where: and(
         eq(historicalPrices.type, 'cocos'),
-        gte(historicalPrices.timestamp, startTodayUTC)
+        gte(historicalPrices.timestamp, startToday)
       ),
     })
 
@@ -104,7 +104,7 @@ export async function GET() {
       orderBy: [asc(historicalPrices.timestamp)],
       where: and(
         eq(historicalPrices.type, 'tarjeta'),
-        gte(historicalPrices.timestamp, startTodayUTC)
+        gte(historicalPrices.timestamp, startToday)
       ),
     })
 
@@ -124,7 +124,7 @@ export async function GET() {
       orderBy: [asc(historicalPrices.timestamp)],
       where: and(
         eq(historicalPrices.type, 'mayorista'),
-        gte(historicalPrices.timestamp, startTodayUTC)
+        gte(historicalPrices.timestamp, startToday)
       ),
     })
 
@@ -144,7 +144,7 @@ export async function GET() {
       orderBy: [asc(historicalPrices.timestamp)],
       where: and(
         eq(historicalPrices.type, 'ccl'),
-        gte(historicalPrices.timestamp, startTodayUTC)
+        gte(historicalPrices.timestamp, startToday)
       ),
     })
 
@@ -164,7 +164,7 @@ export async function GET() {
       orderBy: [asc(historicalPrices.timestamp)],
       where: and(
         eq(historicalPrices.type, 'cripto'),
-        gte(historicalPrices.timestamp, startTodayUTC)
+        gte(historicalPrices.timestamp, startToday)
       ),
     })
 

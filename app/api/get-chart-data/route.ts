@@ -2,7 +2,7 @@ import { ChartPrices } from '@/app/api/get-chart-data/types'
 import { PriceType } from '@/app/api/get-last-prices/types'
 import { db } from '@/app/db'
 import { historicalPrices } from '@/app/db/schema'
-import { startDaysAgoUTC } from '@/lib/utils'
+import { startDaysAgo } from '@/lib/utils'
 import { and, asc, eq, gte } from 'drizzle-orm'
 import { NextRequest } from 'next/server'
 
@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
       orderBy: [asc(historicalPrices.timestamp)],
       where: and(
         eq(historicalPrices.type, type),
-        gte(historicalPrices.timestamp, startDaysAgoUTC(7))
+        gte(historicalPrices.timestamp, startDaysAgo(7))
       ),
     })
 
@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
       orderBy: [asc(historicalPrices.timestamp)],
       where: and(
         eq(historicalPrices.type, type),
-        gte(historicalPrices.timestamp, startDaysAgoUTC(30))
+        gte(historicalPrices.timestamp, startDaysAgo(30))
       ),
     })
 
@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
       orderBy: [asc(historicalPrices.timestamp)],
       where: and(
         eq(historicalPrices.type, type),
-        gte(historicalPrices.timestamp, startDaysAgoUTC(90))
+        gte(historicalPrices.timestamp, startDaysAgo(90))
       ),
     })
 
@@ -41,7 +41,7 @@ export async function GET(req: NextRequest) {
       orderBy: [asc(historicalPrices.timestamp)],
       where: and(
         eq(historicalPrices.type, type),
-        gte(historicalPrices.timestamp, startDaysAgoUTC(180))
+        gte(historicalPrices.timestamp, startDaysAgo(180))
       ),
     })
 
@@ -49,7 +49,7 @@ export async function GET(req: NextRequest) {
       orderBy: [asc(historicalPrices.timestamp)],
       where: and(
         eq(historicalPrices.type, type),
-        gte(historicalPrices.timestamp, startDaysAgoUTC(365))
+        gte(historicalPrices.timestamp, startDaysAgo(365))
       ),
     })
 
@@ -57,7 +57,7 @@ export async function GET(req: NextRequest) {
       orderBy: [asc(historicalPrices.timestamp)],
       where: and(
         eq(historicalPrices.type, type),
-        gte(historicalPrices.timestamp, startDaysAgoUTC(730))
+        gte(historicalPrices.timestamp, startDaysAgo(730))
       ),
     })
 
@@ -65,7 +65,7 @@ export async function GET(req: NextRequest) {
     //   orderBy: [asc(historicalPrices.timestamp)],
     //   where: and(
     //     eq(historicalPrices.type, type),
-    //     gte(historicalPrices.timestamp, startDaysAgoUTC(1825))
+    //     gte(historicalPrices.timestamp, startDaysAgo(1825))
     //   ),
     // })
 
@@ -73,7 +73,7 @@ export async function GET(req: NextRequest) {
     //   orderBy: [asc(historicalPrices.timestamp)],
     //   where: and(
     //     eq(historicalPrices.type, type),
-    //     gte(historicalPrices.timestamp, startDaysAgoUTC(3650))
+    //     gte(historicalPrices.timestamp, startDaysAgo(3650))
     //   ),
     // })
 
