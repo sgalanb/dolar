@@ -19,7 +19,8 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   const lastPrices: LastPrices = await fetch(
-    `https://dolarya.info/api/get-last-prices`
+    `https://dolarya.info/api/get-last-prices`,
+    { next: { revalidate: 60 } }
   ).then((res) => res.json())
 
   return (
