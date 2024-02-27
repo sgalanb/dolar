@@ -47,7 +47,7 @@ export default function DolarTypePage({
     isLoading: boolean
     error: any
   } = useSWR<any>('/api/get-last-prices', fetcher, {
-    refreshInterval: 60000,
+    refreshInterval: 1000,
     fallbackData: lastPrices,
   })
 
@@ -58,7 +58,7 @@ export default function DolarTypePage({
     isLoading: boolean
     error: any
   } = useSWR<any>(`/api/get-chart-data?type=${type.toLowerCase()}`, fetcher, {
-    refreshInterval: 60000,
+    refreshInterval: 1000,
   })
 
   return (
@@ -67,9 +67,12 @@ export default function DolarTypePage({
         className={`flex w-full items-center justify-between gap-3 rounded-2xl`}
       >
         <div className="flex w-fit flex-col items-start justify-center gap-3">
-          <h1
-            className={`w-full text-xl font-semibold leading-5`}
-          >{`Dólar ${type}`}</h1>
+          <h1 className={`flex w-full gap-2 text-xl font-semibold leading-5`}>
+            {`Dólar ${type}`}
+            <span className="text-black/50 dark:text-white/50">
+              {type === 'MEP' || type === 'CCL' ? '(AL30 48HS)' : ''}
+            </span>
+          </h1>
           {/* <div className="flex items-center justify-start gap-2">
           <CalendarClock
             className="h-5 w-5"

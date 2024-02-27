@@ -20,11 +20,11 @@ export default function HistoricalCharts({
   const { resolvedTheme } = useTheme()
 
   const [selectedTime, setSelectedTime] = useState<
-    '2a' | '1a' | '6m' | '3m' | '1m' | '1s' | '1d'
+    '10a' | '5a' | '2a' | '1a' | '6m' | '3m' | '1m' | '1s' | '1d'
   >('3m')
 
   const timeOptions: {
-    value: '2a' | '1a' | '6m' | '3m' | '1m' | '1s' | '1d'
+    value: '10a' | '5a' | '2a' | '1a' | '6m' | '3m' | '1m' | '1s' | '1d'
     label: string
   }[] = [
     { value: '1d', label: '1D' },
@@ -34,6 +34,8 @@ export default function HistoricalCharts({
     { value: '6m', label: '6M' },
     { value: '1a', label: '1A' },
     { value: '2a', label: '2A' },
+    { value: '5a', label: '5A' },
+    { value: '10a', label: '10A' },
   ]
 
   const lineData = {
@@ -117,7 +119,7 @@ export default function HistoricalCharts({
   return (
     <>
       <div className="flex w-full flex-col items-center justify-center gap-3">
-        <div className="flex w-full items-center justify-between gap-3 rounded-2xl bg-zinc-200 p-1 dark:bg-zinc-800">
+        <div className="flex w-full items-center justify-between gap-3 overflow-x-auto rounded-2xl bg-zinc-200 p-1 dark:bg-zinc-800">
           {timeOptions.map((option: (typeof timeOptions)[0]) => (
             <button
               key={option.value}

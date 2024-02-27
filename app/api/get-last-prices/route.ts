@@ -3,8 +3,7 @@ import { db } from '@/app/db'
 import { historicalPrices } from '@/app/db/schema'
 import { startToday } from '@/lib/utils'
 import { and, asc, desc, eq, gte } from 'drizzle-orm'
-
-export const revalidate = 30
+import { unstable_cache } from 'next/cache'
 
 export async function GET() {
   try {
@@ -20,13 +19,22 @@ export async function GET() {
       timestamp: lastOficial?.timestamp ?? new Date(),
     }
 
-    const todayOficial = await db.query.historicalPrices.findMany({
-      orderBy: [asc(historicalPrices.timestamp)],
-      where: and(
-        eq(historicalPrices.type, 'oficial'),
-        gte(historicalPrices.timestamp, startToday)
-      ),
-    })
+    const todayOficialQuery = unstable_cache(
+      async () => {
+        return await db.query.historicalPrices.findMany({
+          orderBy: [asc(historicalPrices.timestamp)],
+          where: and(
+            eq(historicalPrices.type, 'oficial'),
+            gte(historicalPrices.timestamp, startToday)
+          ),
+        })
+      },
+      ['todayOficial'],
+      {
+        revalidate: 60,
+      }
+    )
+    const todayOficial = await todayOficialQuery()
 
     // Blue
     const lastBlue = await db.query.historicalPrices.findFirst({
@@ -40,13 +48,22 @@ export async function GET() {
       timestamp: lastBlue?.timestamp ?? new Date(),
     }
 
-    const todayBlue = await db.query.historicalPrices.findMany({
-      orderBy: [asc(historicalPrices.timestamp)],
-      where: and(
-        eq(historicalPrices.type, 'blue'),
-        gte(historicalPrices.timestamp, startToday)
-      ),
-    })
+    const todayBlueQuery = unstable_cache(
+      async () => {
+        return await db.query.historicalPrices.findMany({
+          orderBy: [asc(historicalPrices.timestamp)],
+          where: and(
+            eq(historicalPrices.type, 'blue'),
+            gte(historicalPrices.timestamp, startToday)
+          ),
+        })
+      },
+      ['todayBlue'],
+      {
+        revalidate: 60,
+      }
+    )
+    const todayBlue = await todayBlueQuery()
 
     // Mep
     const lastMep = await db.query.historicalPrices.findFirst({
@@ -60,13 +77,22 @@ export async function GET() {
       timestamp: lastMep?.timestamp ?? new Date(),
     }
 
-    const todayMep = await db.query.historicalPrices.findMany({
-      orderBy: [asc(historicalPrices.timestamp)],
-      where: and(
-        eq(historicalPrices.type, 'mep'),
-        gte(historicalPrices.timestamp, startToday)
-      ),
-    })
+    const todayMepQuery = unstable_cache(
+      async () => {
+        return await db.query.historicalPrices.findMany({
+          orderBy: [asc(historicalPrices.timestamp)],
+          where: and(
+            eq(historicalPrices.type, 'mep'),
+            gte(historicalPrices.timestamp, startToday)
+          ),
+        })
+      },
+      ['todayMep'],
+      {
+        revalidate: 60,
+      }
+    )
+    const todayMep = await todayMepQuery()
 
     // Cocos
     const lastCocos = await db.query.historicalPrices.findFirst({
@@ -80,13 +106,22 @@ export async function GET() {
       timestamp: lastCocos?.timestamp ?? new Date(),
     }
 
-    const todayCocos = await db.query.historicalPrices.findMany({
-      orderBy: [asc(historicalPrices.timestamp)],
-      where: and(
-        eq(historicalPrices.type, 'cocos'),
-        gte(historicalPrices.timestamp, startToday)
-      ),
-    })
+    const todayCocosQuery = unstable_cache(
+      async () => {
+        return await db.query.historicalPrices.findMany({
+          orderBy: [asc(historicalPrices.timestamp)],
+          where: and(
+            eq(historicalPrices.type, 'cocos'),
+            gte(historicalPrices.timestamp, startToday)
+          ),
+        })
+      },
+      ['todayCocos'],
+      {
+        revalidate: 60,
+      }
+    )
+    const todayCocos = await todayCocosQuery()
 
     // Tarjeta
     const lastTarjeta = await db.query.historicalPrices.findFirst({
@@ -100,13 +135,22 @@ export async function GET() {
       timestamp: lastTarjeta?.timestamp ?? new Date(),
     }
 
-    const todayTarjeta = await db.query.historicalPrices.findMany({
-      orderBy: [asc(historicalPrices.timestamp)],
-      where: and(
-        eq(historicalPrices.type, 'tarjeta'),
-        gte(historicalPrices.timestamp, startToday)
-      ),
-    })
+    const todayTarjetaQuery = unstable_cache(
+      async () => {
+        return await db.query.historicalPrices.findMany({
+          orderBy: [asc(historicalPrices.timestamp)],
+          where: and(
+            eq(historicalPrices.type, 'tarjeta'),
+            gte(historicalPrices.timestamp, startToday)
+          ),
+        })
+      },
+      ['todayTarjeta'],
+      {
+        revalidate: 60,
+      }
+    )
+    const todayTarjeta = await todayTarjetaQuery()
 
     // Mayorista
     const lastMayorista = await db.query.historicalPrices.findFirst({
@@ -120,13 +164,22 @@ export async function GET() {
       timestamp: lastMayorista?.timestamp ?? new Date(),
     }
 
-    const todayMayorista = await db.query.historicalPrices.findMany({
-      orderBy: [asc(historicalPrices.timestamp)],
-      where: and(
-        eq(historicalPrices.type, 'mayorista'),
-        gte(historicalPrices.timestamp, startToday)
-      ),
-    })
+    const todayMayoristaQuery = unstable_cache(
+      async () => {
+        return await db.query.historicalPrices.findMany({
+          orderBy: [asc(historicalPrices.timestamp)],
+          where: and(
+            eq(historicalPrices.type, 'mayorista'),
+            gte(historicalPrices.timestamp, startToday)
+          ),
+        })
+      },
+      ['todayMayorista'],
+      {
+        revalidate: 60,
+      }
+    )
+    const todayMayorista = await todayMayoristaQuery()
 
     // CCL
     const lastCcl = await db.query.historicalPrices.findFirst({
@@ -140,13 +193,22 @@ export async function GET() {
       timestamp: lastCcl?.timestamp ?? new Date(),
     }
 
-    const todayCcl = await db.query.historicalPrices.findMany({
-      orderBy: [asc(historicalPrices.timestamp)],
-      where: and(
-        eq(historicalPrices.type, 'ccl'),
-        gte(historicalPrices.timestamp, startToday)
-      ),
-    })
+    const todayCclQuery = unstable_cache(
+      async () => {
+        return await db.query.historicalPrices.findMany({
+          orderBy: [asc(historicalPrices.timestamp)],
+          where: and(
+            eq(historicalPrices.type, 'ccl'),
+            gte(historicalPrices.timestamp, startToday)
+          ),
+        })
+      },
+      ['todayCcl'],
+      {
+        revalidate: 60,
+      }
+    )
+    const todayCcl = await todayCclQuery()
 
     // Cripto
     const lastCripto = await db.query.historicalPrices.findFirst({
@@ -160,17 +222,26 @@ export async function GET() {
       timestamp: lastCripto?.timestamp ?? new Date(),
     }
 
-    const todayCripto = await db.query.historicalPrices.findMany({
-      orderBy: [asc(historicalPrices.timestamp)],
-      where: and(
-        eq(historicalPrices.type, 'cripto'),
-        gte(historicalPrices.timestamp, startToday)
-      ),
-    })
+    const todayCriptoQuery = unstable_cache(
+      async () => {
+        return await db.query.historicalPrices.findMany({
+          orderBy: [asc(historicalPrices.timestamp)],
+          where: and(
+            eq(historicalPrices.type, 'cripto'),
+            gte(historicalPrices.timestamp, startToday)
+          ),
+        })
+      },
+      ['todayCripto'],
+      {
+        revalidate: 60,
+      }
+    )
+    const todayCripto = await todayCriptoQuery()
 
     const cleanCripto = [
       ...calculateOnePricePerHalfHour(todayCripto),
-      todayCripto[todayCripto.length - 1],
+      lastCripto,
     ]
 
     // Return
@@ -180,7 +251,7 @@ export async function GET() {
         today:
           todayOficial.length === 0
             ? [lastOficialPriceObject]
-            : todayOficial.map((price) => ({
+            : todayOficial.map((price: any) => ({
                 ask: parseFloat(price?.ask ?? ''),
                 bid: parseFloat(price?.bid ?? ''),
                 timestamp: price.timestamp,
@@ -191,7 +262,7 @@ export async function GET() {
         today:
           todayBlue.length === 0
             ? [lastBluePriceObject]
-            : todayBlue.map((price) => ({
+            : todayBlue.map((price: any) => ({
                 ask: parseFloat(price?.ask ?? ''),
                 bid: parseFloat(price?.bid ?? ''),
                 timestamp: price.timestamp,
@@ -202,7 +273,7 @@ export async function GET() {
         today:
           todayMep.length === 0
             ? [lastMepPriceObject]
-            : todayMep.map((price) => ({
+            : todayMep.map((price: any) => ({
                 ask: parseFloat(price?.ask ?? ''),
                 bid: parseFloat(price?.bid ?? ''),
                 timestamp: price.timestamp,
@@ -213,7 +284,7 @@ export async function GET() {
         today:
           todayCocos.length === 0
             ? [lastCocosPriceObject]
-            : todayCocos.map((price) => ({
+            : todayCocos.map((price: any) => ({
                 ask: parseFloat(price?.ask ?? ''),
                 bid: parseFloat(price?.bid ?? ''),
                 timestamp: price.timestamp,
@@ -224,7 +295,7 @@ export async function GET() {
         today:
           todayTarjeta.length === 0
             ? [lastTarjetaPriceObject]
-            : todayTarjeta.map((price) => ({
+            : todayTarjeta.map((price: any) => ({
                 ask: parseFloat(price?.ask ?? ''),
                 bid: parseFloat(price?.bid ?? ''),
                 timestamp: price.timestamp,
@@ -235,7 +306,7 @@ export async function GET() {
         today:
           todayMayorista.length === 0
             ? [lastMayoristaPriceObject]
-            : todayMayorista.map((price) => ({
+            : todayMayorista.map((price: any) => ({
                 ask: parseFloat(price?.ask ?? ''),
                 bid: parseFloat(price?.bid ?? ''),
                 timestamp: price.timestamp,
@@ -246,7 +317,7 @@ export async function GET() {
         today:
           todayCcl.length === 0
             ? [lastCclPriceObject]
-            : todayCcl.map((price) => ({
+            : todayCcl.map((price: any) => ({
                 ask: parseFloat(price?.ask ?? ''),
                 bid: parseFloat(price?.bid ?? ''),
                 timestamp: price.timestamp,

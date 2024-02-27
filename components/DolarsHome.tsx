@@ -29,7 +29,7 @@ export default function DolarsHome({ lastPrices }: { lastPrices: LastPrices }) {
     isLoading: boolean
     error: any
   } = useSWR<any>('/api/get-last-prices', fetcher, {
-    refreshInterval: 60000,
+    refreshInterval: 1000,
     fallbackData: lastPrices,
   })
 

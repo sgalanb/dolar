@@ -2,8 +2,6 @@ import { LastPrices } from '@/app/api/get-last-prices/types'
 import DolarsHome from '@/components/DolarsHome'
 import { Metadata } from 'next'
 
-export const revalidate = 60
-
 export const metadata: Metadata = {
   title: 'DólarYa | Precio del dólar hoy en Argentina',
   description:

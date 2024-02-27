@@ -42,11 +42,11 @@ export default async function MEP() {
         <div className="flex flex-col items-start justify-start gap-3 rounded-2xl">
           <h2 className="text-xl font-semibold leading-5">Fuente de precios</h2>
           <Link
-            href="https://app.cocos.capital?ref=dolarya.info"
+            href="https://criptoya.com/"
             className="flex items-center justify-center gap-1 hover:underline"
             target="_blank"
           >
-            - Cocos Capital
+            - CriptoYa
           </Link>
         </div>
       </div>
