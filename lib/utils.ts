@@ -6,11 +6,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-// Get the domain for the current environment
-export const domain = process.env.NEXT_PUBLIC_VERCEL_URL
-  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-  : 'http://localhost:3000'
-
 // Get today's date at 00:00:00 in UTC
 export const startTodayUTC = new Date(
   Date.UTC(

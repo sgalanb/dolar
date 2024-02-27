@@ -1,6 +1,6 @@
 import { LastPrices } from '@/app/api/get-last-prices/types'
 import { twitterClient } from '@/lib/twitterClient'
-import { domain, getPercentageChange } from '@/lib/utils'
+import { getPercentageChange } from '@/lib/utils'
 import dayjs from 'dayjs'
 import 'dayjs/locale/es'
 import updateLocale from 'dayjs/plugin/updateLocale'
@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const lastPrices: LastPrices = await fetch(
-      `${domain}/api/get-last-prices`
+      `https://dolarya.info/api/get-last-prices`
     ).then((res) => res.json())
 
     const oficialTodayPrices: number[] = lastPrices?.oficial.today.map(

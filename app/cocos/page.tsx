@@ -2,7 +2,6 @@ import { LastPrices } from '@/app/api/get-last-prices/types'
 import DolarTypePage from '@/components/DolarTypePage'
 import OperaEnCocosButton from '@/components/OperaEnCocosButton'
 import { Separator } from '@/components/ui/separator'
-import { domain } from '@/lib/utils'
 import { Metadata } from 'next'
 import Link from 'next/link'
 import Balancer from 'react-wrap-balancer'
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
 
 export default async function Cocos() {
   const lastPrices: LastPrices = await fetch(
-    `${domain}/api/get-last-prices`
+    `https://dolarya.info/api/get-last-prices`
   ).then((res) => res.json())
 
   return (
