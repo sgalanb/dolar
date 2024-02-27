@@ -1,6 +1,3 @@
-import { LastPrices } from '@/app/api/get-last-prices/types'
-import DolarTypePage from '@/components/DolarTypePage'
-import { domain } from '@/lib/utils'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -17,8 +14,9 @@ export const metadata: Metadata = {
 }
 
 export default async function Mayorista() {
-  const lastPrices: LastPrices = await fetch(
-    `${domain}/api/get-last-prices`
-  ).then((res) => res.json())
-  return <DolarTypePage type="Mayorista" lastPrices={lastPrices} />
+  // const lastPrices: LastPrices = await fetch(
+  //   `${domain}/api/get-last-prices`
+  // ).then((res) => res.json())
+  // return <DolarTypePage type="Mayorista" lastPrices={lastPrices} />
+  return <div></div>
 }

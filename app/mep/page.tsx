@@ -1,7 +1,4 @@
-import { LastPrices } from '@/app/api/get-last-prices/types'
-import DolarTypePage from '@/components/DolarTypePage'
 import { Separator } from '@/components/ui/separator'
-import { domain } from '@/lib/utils'
 import { Metadata } from 'next'
 import Link from 'next/link'
 
@@ -19,13 +16,13 @@ export const metadata: Metadata = {
 }
 
 export default async function MEP() {
-  const lastPrices: LastPrices = await fetch(
-    `${domain}/api/get-last-prices`
-  ).then((res) => res.json())
+  // const lastPrices: LastPrices = await fetch(
+  //   `${domain}/api/get-last-prices`
+  // ).then((res) => res.json())
 
   return (
     <div className="flex flex-col items-center justify-center gap-9">
-      <DolarTypePage type="MEP" lastPrices={lastPrices} />
+      {/* <DolarTypePage type="MEP" lastPrices={lastPrices} /> */}
       <div className="flex w-full flex-col gap-3 md:grid md:grid-cols-[3fr,1px,1fr]">
         <div className="flex flex-col gap-3 rounded-2xl">
           <h2 className="text-xl font-semibold leading-5">
