@@ -8,21 +8,17 @@ export function cn(...inputs: ClassValue[]) {
 
 // Get today's date at 00:00:00 in UTC
 export const startTodayUTC = new Date(
-  Date.UTC(
-    new Date().getFullYear(),
-    new Date().getMonth(),
-    new Date().getDate()
-  )
+  new Date().getFullYear(),
+  new Date().getMonth(),
+  new Date().getDate()
 )
 
 // Get today's date - X days at 00:00:00 in UTC
 export const startDaysAgoUTC = (days: number) =>
   new Date(
-    Date.UTC(
-      new Date().getFullYear(),
-      new Date().getMonth(),
-      new Date().getDate() - days
-    )
+    new Date().getFullYear(),
+    new Date().getMonth(),
+    new Date().getDate() - days
   )
 
 // Standard fetcher for SWR
