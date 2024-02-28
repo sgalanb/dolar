@@ -94,6 +94,8 @@ export async function GET() {
     )
     const todayMep = await todayMepQuery()
 
+    const cleanMep = [...calculateOnePricePerHalfHour(todayMep), lastMep]
+
     // Cocos
     const lastCocos = await db.query.historicalPrices.findFirst({
       orderBy: [desc(historicalPrices.timestamp)],
@@ -210,6 +212,8 @@ export async function GET() {
     )
     const todayCcl = await todayCclQuery()
 
+    const cleanCcl = [...calculateOnePricePerHalfHour(todayCcl), lastCcl]
+
     // Cripto
     const lastCripto = await db.query.historicalPrices.findFirst({
       orderBy: [desc(historicalPrices.timestamp)],
@@ -273,7 +277,7 @@ export async function GET() {
         today:
           todayMep.length === 0
             ? [lastMepPriceObject]
-            : todayMep.map((price: any) => ({
+            : cleanMep.map((price: any) => ({
                 ask: parseFloat(price?.ask ?? ''),
                 bid: parseFloat(price?.bid ?? ''),
                 timestamp: price.timestamp,
@@ -317,7 +321,7 @@ export async function GET() {
         today:
           todayCcl.length === 0
             ? [lastCclPriceObject]
-            : todayCcl.map((price: any) => ({
+            : cleanCcl.map((price: any) => ({
                 ask: parseFloat(price?.ask ?? ''),
                 bid: parseFloat(price?.bid ?? ''),
                 timestamp: price.timestamp,
