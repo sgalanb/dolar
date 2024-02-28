@@ -79,13 +79,15 @@ export async function GET() {
 
     const todayMepQuery = unstable_cache(
       async () => {
-        return await db.query.historicalPrices.findMany({
+        const query = await db.query.historicalPrices.findMany({
           orderBy: [asc(historicalPrices.timestamp)],
           where: and(
             eq(historicalPrices.type, 'mep'),
             gte(historicalPrices.timestamp, startToday)
           ),
         })
+
+        return calculateOnePricePerHalfHour(query)
       },
       ['todayMep'],
       {
@@ -93,8 +95,7 @@ export async function GET() {
       }
     )
     const todayMep = await todayMepQuery()
-
-    const cleanMep = [...calculateOnePricePerHalfHour(todayMep), lastMep]
+    const cleanMep = [...todayMep, lastMep]
 
     // Cocos
     const lastCocos = await db.query.historicalPrices.findFirst({
@@ -197,13 +198,15 @@ export async function GET() {
 
     const todayCclQuery = unstable_cache(
       async () => {
-        return await db.query.historicalPrices.findMany({
+        const query = await db.query.historicalPrices.findMany({
           orderBy: [asc(historicalPrices.timestamp)],
           where: and(
             eq(historicalPrices.type, 'ccl'),
             gte(historicalPrices.timestamp, startToday)
           ),
         })
+
+        return calculateOnePricePerHalfHour(query)
       },
       ['todayCcl'],
       {
@@ -211,8 +214,7 @@ export async function GET() {
       }
     )
     const todayCcl = await todayCclQuery()
-
-    const cleanCcl = [...calculateOnePricePerHalfHour(todayCcl), lastCcl]
+    const cleanCcl = [...todayCcl, lastCcl]
 
     // Cripto
     const lastCripto = await db.query.historicalPrices.findFirst({
@@ -228,13 +230,15 @@ export async function GET() {
 
     const todayCriptoQuery = unstable_cache(
       async () => {
-        return await db.query.historicalPrices.findMany({
+        const query = await db.query.historicalPrices.findMany({
           orderBy: [asc(historicalPrices.timestamp)],
           where: and(
             eq(historicalPrices.type, 'cripto'),
             gte(historicalPrices.timestamp, startToday)
           ),
         })
+
+        return calculateOnePricePerHalfHour(query)
       },
       ['todayCripto'],
       {
@@ -242,11 +246,7 @@ export async function GET() {
       }
     )
     const todayCripto = await todayCriptoQuery()
-
-    const cleanCripto = [
-      ...calculateOnePricePerHalfHour(todayCripto),
-      lastCripto,
-    ]
+    const cleanCripto = [...todayCripto, lastCripto]
 
     // Return
     const lastPrices: LastPrices = {
