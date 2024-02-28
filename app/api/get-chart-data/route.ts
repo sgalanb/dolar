@@ -13,13 +13,14 @@ export async function GET(req: NextRequest) {
 
     const oneWeekQuery = unstable_cache(
       async () => {
-        return await db.query.historicalPrices.findMany({
+        const query = await db.query.historicalPrices.findMany({
           orderBy: [asc(historicalPrices.timestamp)],
           where: and(
             eq(historicalPrices.type, type),
             gte(historicalPrices.timestamp, startDaysAgo(7))
           ),
         })
+        return calculateFirstAndLastPricesPerDay(query)
       },
       [`oneWeek ${type}`],
       {
@@ -29,13 +30,14 @@ export async function GET(req: NextRequest) {
 
     const oneMonthQuery = unstable_cache(
       async () => {
-        return await db.query.historicalPrices.findMany({
+        const query = await db.query.historicalPrices.findMany({
           orderBy: [asc(historicalPrices.timestamp)],
           where: and(
             eq(historicalPrices.type, type),
             gte(historicalPrices.timestamp, startDaysAgo(30))
           ),
         })
+        return calculateFirstAndLastPricesPerDay(query)
       },
       [`oneMonth ${type}`],
       {
@@ -45,13 +47,14 @@ export async function GET(req: NextRequest) {
 
     const threeMonthsQuery = unstable_cache(
       async () => {
-        return await db.query.historicalPrices.findMany({
+        const query = await db.query.historicalPrices.findMany({
           orderBy: [asc(historicalPrices.timestamp)],
           where: and(
             eq(historicalPrices.type, type),
             gte(historicalPrices.timestamp, startDaysAgo(90))
           ),
         })
+        return calculateLatestPricesPerDay(query)
       },
       [`threeMonths ${type}`],
       {
@@ -61,13 +64,14 @@ export async function GET(req: NextRequest) {
 
     const sixMonthsQuery = unstable_cache(
       async () => {
-        return await db.query.historicalPrices.findMany({
+        const query = await db.query.historicalPrices.findMany({
           orderBy: [asc(historicalPrices.timestamp)],
           where: and(
             eq(historicalPrices.type, type),
             gte(historicalPrices.timestamp, startDaysAgo(180))
           ),
         })
+        return calculateLatestPricesPerDay(query)
       },
       [`sixMonths ${type}`],
       {
@@ -77,13 +81,14 @@ export async function GET(req: NextRequest) {
 
     const oneYearQuery = unstable_cache(
       async () => {
-        return await db.query.historicalPrices.findMany({
+        const query = await db.query.historicalPrices.findMany({
           orderBy: [asc(historicalPrices.timestamp)],
           where: and(
             eq(historicalPrices.type, type),
             gte(historicalPrices.timestamp, startDaysAgo(365))
           ),
         })
+        return calculateLatestPricesPerDay(query)
       },
       [`oneYear ${type}`],
       {
@@ -93,13 +98,14 @@ export async function GET(req: NextRequest) {
 
     const twoYearsQuery = unstable_cache(
       async () => {
-        return await db.query.historicalPrices.findMany({
+        const query = await db.query.historicalPrices.findMany({
           orderBy: [asc(historicalPrices.timestamp)],
           where: and(
             eq(historicalPrices.type, type),
             gte(historicalPrices.timestamp, startDaysAgo(730))
           ),
         })
+        return calculateLatestPricesPerDay(query)
       },
       [`twoYears ${type}`],
       {
@@ -109,13 +115,14 @@ export async function GET(req: NextRequest) {
 
     const fiveYearsQuery = unstable_cache(
       async () => {
-        return await db.query.historicalPrices.findMany({
+        const query = await db.query.historicalPrices.findMany({
           orderBy: [asc(historicalPrices.timestamp)],
           where: and(
             eq(historicalPrices.type, type),
             gte(historicalPrices.timestamp, startDaysAgo(1825))
           ),
         })
+        return calculateLatestPricesPerDay(query)
       },
       [`fiveYears ${type}`],
       {
@@ -125,13 +132,14 @@ export async function GET(req: NextRequest) {
 
     const tenYearsQuery = unstable_cache(
       async () => {
-        return await db.query.historicalPrices.findMany({
+        const query = await db.query.historicalPrices.findMany({
           orderBy: [asc(historicalPrices.timestamp)],
           where: and(
             eq(historicalPrices.type, type),
             gte(historicalPrices.timestamp, startDaysAgo(3650))
           ),
         })
+        return calculateLatestPricesPerDay(query)
       },
       [`tenYears ${type}`],
       {
@@ -139,25 +147,14 @@ export async function GET(req: NextRequest) {
       }
     )
 
-    const oneWeek = await oneWeekQuery()
-    const oneMonth = await oneMonthQuery()
-    const threeMonths = await threeMonthsQuery()
-    const sixMonths = await sixMonthsQuery()
-    const oneYear = await oneYearQuery()
-    const twoYears = await twoYearsQuery()
-    const fiveYears = await fiveYearsQuery()
-    const tenYears = await tenYearsQuery()
-
-    // Use only the first and last prices of each day
-    const oneWeekArray = calculateFirstAndLastPricesPerDay(oneWeek)
-    const oneMonthArray = calculateFirstAndLastPricesPerDay(oneMonth)
-    // Use only the last price of each day
-    const threeMonthsArray = calculateLatestPricesPerDay(threeMonths)
-    const sixMonthsArray = calculateLatestPricesPerDay(sixMonths)
-    const oneYearArray = calculateLatestPricesPerDay(oneYear)
-    const twoYearsArray = calculateLatestPricesPerDay(twoYears)
-    const fiveYearsArray = calculateLatestPricesPerDay(fiveYears)
-    const tenYearsArray = calculateLatestPricesPerDay(tenYears)
+    const oneWeekArray = await oneWeekQuery()
+    const oneMonthArray = await oneMonthQuery()
+    const threeMonthsArray = await threeMonthsQuery()
+    const sixMonthsArray = await sixMonthsQuery()
+    const oneYearArray = await oneYearQuery()
+    const twoYearsArray = await twoYearsQuery()
+    const fiveYearsArray = await fiveYearsQuery()
+    const tenYearsArray = await tenYearsQuery()
 
     const chartPrices: ChartPrices = {
       '1s': oneWeekArray,
