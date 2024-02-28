@@ -354,11 +354,12 @@ export async function GET() {
 
 function calculateOnePricePerHalfHour(prices: any) {
   const reduce = prices.reduce((acc: any, price: any) => {
-    const date = price.timestamp.toDateString()
-    const hours = price.timestamp.getHours()
-    const minutes = price.timestamp.getMinutes()
+    const dateString = new Date(price.timestamp).toDateString()
+    const date = new Date(price.timestamp)
+    const hours = date.getHours()
+    const minutes = date.getMinutes()
     const halfHour = Math.floor(minutes / 30)
-    const key = `${date}-${hours}-${halfHour}`
+    const key = `${dateString}-${hours}-${halfHour}`
 
     if (!acc[key]) {
       acc[key] = price
