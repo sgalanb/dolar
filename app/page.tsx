@@ -84,14 +84,14 @@ export async function generateMetadata(): Promise<Metadata> {
       title: 'DólarYa | Precio del dólar hoy en Argentina',
       description:
         'La forma más fácil de seguir las cotizaciones del dólar en Argentina y conocer valores históricos. Todo en tiempo real y sin publicidad.',
-      images: [ogImageURL],
+      images: [encodeURIComponent(ogImageURL)],
       type: 'website',
     },
     twitter: {
       title: 'DólarYa | Precio del dólar hoy en Argentina',
       description:
         'La forma más fácil de seguir las cotizaciones del dólar en Argentina y conocer valores históricos. Todo en tiempo real y sin publicidad.',
-      images: [ogImageURL],
+      images: [encodeURIComponent(ogImageURL)],
       card: 'summary_large_image',
       site: '@dolarya_info',
       creator: '@sgalanb',
