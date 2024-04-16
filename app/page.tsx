@@ -1,6 +1,9 @@
 import { LastPrices } from '@/app/api/get-last-prices/types'
 import DolarsHome from '@/components/DolarsHome'
+import dayjs from 'dayjs'
+import timezone from 'dayjs/plugin/timezone'
 import { Metadata } from 'next'
+dayjs.extend(timezone)
 
 export async function generateMetadata(): Promise<Metadata> {
   const lastPrices: LastPrices = await fetch(
@@ -24,10 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const criptoAsk = lastPrices?.cripto?.ask?.toFixed(2)?.replace('.', ',')
   const criptoDiffNumber = getDiff(lastPrices?.cripto)
   const criptoDiff = criptoDiffNumber.toFixed(2)?.replace('.', ',')
-  const hora = new Date().toLocaleTimeString('es-AR', {
-    hour: '2-digit',
-    minute: '2-digit',
-  })
+  const hora = dayjs().tz('America/Argentina/Buenos_Aires').format('HH:mm')
 
   const ogImageURL =
     `https://sharepreviews.com/og/c53d5587-3530-418e-908b-270eb6440c43?` +
