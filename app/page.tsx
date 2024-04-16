@@ -53,26 +53,26 @@ export async function generateMetadata(): Promise<Metadata> {
     }` +
     `&${
       oficialDiffNumber >= 0
-        ? `oficial_positive_diff_value=${oficialDiff}`
-        : `oficial_negative_diff_value=${oficialDiff}`
+        ? `oficial_positive_diff_value=+ ${oficialDiff}%`
+        : `oficial_negative_diff_value=- ${oficialDiff}%`
     }` +
     `&oficial_ask_value=${oficialAsk}&oficial_bid_value=${oficialBid}` +
     `&${
       blueDiffNumber >= 0
-        ? `blue_positive_diff_value=${blueDiff}`
-        : `blue_negative_diff_value=${blueDiff}`
+        ? `blue_positive_diff_value=+ ${blueDiff}%`
+        : `blue_negative_diff_value=- ${blueDiff}%`
     }` +
     `&blue_ask_value=${blueAsk}&blue_bid_value=${blueBid}` +
     `&${
       mepDiffNumber >= 0
-        ? `mep_positive_diff_value=${mepDiff}`
-        : `mep_negative_diff_value=${mepDiff}`
+        ? `mep_positive_diff_value=+ ${mepDiff}%`
+        : `mep_negative_diff_value=- ${mepDiff}%`
     }` +
     `&mep_ask_value=${mepAsk}&mep_bid_value=${mepBid}` +
     `&${
       criptoDiffNumber >= 0
-        ? `cripto_positive_diff_value=${criptoDiff}`
-        : `cripto_negative_diff_value=${criptoDiff}`
+        ? `cripto_positive_diff_value=+ ${criptoDiff}%`
+        : `cripto_negative_diff_value=- ${criptoDiff}%`
     }` +
     `&cripto_ask_value=${criptoAsk}&cripto_bid_value=${criptoBid}&hora_value=${hora}`
 
