@@ -2,17 +2,107 @@ import { LastPrices } from '@/app/api/get-last-prices/types'
 import DolarsHome from '@/components/DolarsHome'
 import { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'DólarYa | Precio del dólar hoy en Argentina',
-  description:
-    'La forma más fácil de seguir las cotizaciones del dólar en Argentina y conocer valores históricos. Todo en tiempo real y sin publicidad.',
-  twitter: {
+export async function generateMetadata(): Promise<Metadata> {
+  const lastPrices: LastPrices = await fetch(
+    `https://dolarya.info/api/get-last-prices`,
+    { next: { revalidate: 60 } }
+  ).then((res) => res.json())
+
+  const oficialBid = lastPrices?.oficial?.bid?.toFixed(2)?.replace('.', ',')
+  const oficialAsk = lastPrices?.oficial?.ask?.toFixed(2)?.replace('.', ',')
+  const oficialDiffNumber = getDiff(lastPrices?.oficial)
+  const oficialDiff = oficialDiffNumber.toFixed(2)?.replace('.', ',')
+  const blueBid = lastPrices?.blue?.bid?.toFixed(2)?.replace('.', ',')
+  const blueAsk = lastPrices?.blue?.ask?.toFixed(2)?.replace('.', ',')
+  const blueDiffNumber = getDiff(lastPrices?.blue)
+  const blueDiff = blueDiffNumber.toFixed(2)?.replace('.', ',')
+  const mepBid = lastPrices?.mep?.bid?.toFixed(2)?.replace('.', ',')
+  const mepAsk = lastPrices?.mep?.ask?.toFixed(2)?.replace('.', ',')
+  const mepDiffNumber = getDiff(lastPrices?.mep)
+  const mepDiff = mepDiffNumber.toFixed(2)?.replace('.', ',')
+  const criptoBid = lastPrices?.cripto?.bid?.toFixed(2)?.replace('.', ',')
+  const criptoAsk = lastPrices?.cripto?.ask?.toFixed(2)?.replace('.', ',')
+  const criptoDiffNumber = getDiff(lastPrices?.cripto)
+  const criptoDiff = criptoDiffNumber.toFixed(2)?.replace('.', ',')
+  const hora = new Date().toLocaleTimeString('es-AR', {
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+
+  const ogImageURL = `https://sharepreviews.com/og/c53d5587-3530-418e-908b-270eb6440c43?
+  ${
+    oficialDiffNumber >= 0
+      ? 'oficial_positive_diff_isVisible=true'
+      : 'oficial_negative_diff_isVisible=true'
+  }
+  &
+  ${
+    blueDiffNumber >= 0
+      ? 'blue_positive_diff_isVisible=true'
+      : 'blue_negative_diff_isVisible=true'
+  }
+  &
+  ${
+    mepDiffNumber >= 0
+      ? 'mep_positive_diff_isVisible=true'
+      : 'mep_negative_diff_isVisible=true'
+  }
+  &
+  ${
+    criptoDiffNumber >= 0
+      ? 'cripto_positive_diff_isVisible=true'
+      : 'cripto_negative_diff_isVisible=true'
+  }
+  &
+  ${
+    oficialDiffNumber >= 0
+      ? `oficial_positive_diff_value=${oficialDiff}`
+      : `oficial_negative_diff_value=${oficialDiff}`
+  }
+  &oficial_ask_value=${oficialAsk}&oficial_bid_value=${oficialBid}
+  &
+  ${
+    blueDiffNumber >= 0
+      ? `blue_positive_diff_value=${blueDiff}`
+      : `blue_negative_diff_value=${blueDiff}`
+  }
+  &blue_ask_value=${blueAsk}&blue_bid_value=${blueBid}
+  &
+  ${
+    mepDiffNumber >= 0
+      ? `mep_positive_diff_value=${mepDiff}`
+      : `mep_negative_diff_value=${mepDiff}`
+  }
+  &mep_ask_value=${mepAsk}&mep_bid_value=${mepBid}
+  &
+  ${
+    criptoDiffNumber >= 0
+      ? `cripto_positive_diff_value=${criptoDiff}`
+      : `cripto_negative_diff_value=${criptoDiff}`
+  }
+  &cripto_ask_value=${criptoAsk}&cripto_bid_value=${criptoBid}&hora_value=${hora}`
+
+  return {
     title: 'DólarYa | Precio del dólar hoy en Argentina',
     description:
       'La forma más fácil de seguir las cotizaciones del dólar en Argentina y conocer valores históricos. Todo en tiempo real y sin publicidad.',
-    card: 'summary_large_image',
-    site: '@dolarya_info',
-  },
+    openGraph: {
+      title: 'DólarYa | Precio del dólar hoy en Argentina',
+      description:
+        'La forma más fácil de seguir las cotizaciones del dólar en Argentina y conocer valores históricos. Todo en tiempo real y sin publicidad.',
+      images: [ogImageURL],
+      type: 'website',
+    },
+    twitter: {
+      title: 'DólarYa | Precio del dólar hoy en Argentina',
+      description:
+        'La forma más fácil de seguir las cotizaciones del dólar en Argentina y conocer valores históricos. Todo en tiempo real y sin publicidad.',
+      images: [ogImageURL],
+      card: 'summary_large_image',
+      site: '@dolarya_info',
+      creator: '@sgalanb',
+    },
+  }
 }
 
 export default async function Home() {
@@ -182,4 +272,20 @@ export default async function Home() {
       </div> */}
     </div>
   )
+}
+
+const getDiff = (dolarType: any) => {
+  const todayPrices: number[] = dolarType.today
+    ? dolarType.today.map((today: any) => parseFloat(today.ask))
+    : []
+
+  const chartPrices = dolarType.ask
+    ? [...todayPrices, dolarType.ask]
+    : todayPrices
+
+  const porcentualChange =
+    ((chartPrices[chartPrices.length - 1] - chartPrices[0]) / chartPrices[0]) *
+    100
+
+  return porcentualChange
 }
