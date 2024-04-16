@@ -29,58 +29,52 @@ export async function generateMetadata(): Promise<Metadata> {
     minute: '2-digit',
   })
 
-  const ogImageURL = `https://sharepreviews.com/og/c53d5587-3530-418e-908b-270eb6440c43?
-  ${
-    oficialDiffNumber >= 0
-      ? 'oficial_positive_diff_isVisible=true'
-      : 'oficial_negative_diff_isVisible=true'
-  }
-  &
-  ${
-    blueDiffNumber >= 0
-      ? 'blue_positive_diff_isVisible=true'
-      : 'blue_negative_diff_isVisible=true'
-  }
-  &
-  ${
-    mepDiffNumber >= 0
-      ? 'mep_positive_diff_isVisible=true'
-      : 'mep_negative_diff_isVisible=true'
-  }
-  &
-  ${
-    criptoDiffNumber >= 0
-      ? 'cripto_positive_diff_isVisible=true'
-      : 'cripto_negative_diff_isVisible=true'
-  }
-  &
-  ${
-    oficialDiffNumber >= 0
-      ? `oficial_positive_diff_value=${oficialDiff}`
-      : `oficial_negative_diff_value=${oficialDiff}`
-  }
-  &oficial_ask_value=${oficialAsk}&oficial_bid_value=${oficialBid}
-  &
-  ${
-    blueDiffNumber >= 0
-      ? `blue_positive_diff_value=${blueDiff}`
-      : `blue_negative_diff_value=${blueDiff}`
-  }
-  &blue_ask_value=${blueAsk}&blue_bid_value=${blueBid}
-  &
-  ${
-    mepDiffNumber >= 0
-      ? `mep_positive_diff_value=${mepDiff}`
-      : `mep_negative_diff_value=${mepDiff}`
-  }
-  &mep_ask_value=${mepAsk}&mep_bid_value=${mepBid}
-  &
-  ${
-    criptoDiffNumber >= 0
-      ? `cripto_positive_diff_value=${criptoDiff}`
-      : `cripto_negative_diff_value=${criptoDiff}`
-  }
-  &cripto_ask_value=${criptoAsk}&cripto_bid_value=${criptoBid}&hora_value=${hora}`
+  const ogImageURL =
+    `https://sharepreviews.com/og/c53d5587-3530-418e-908b-270eb6440c43?` +
+    `${
+      oficialDiffNumber >= 0
+        ? 'oficial_positive_diff_isVisible=true'
+        : 'oficial_negative_diff_isVisible=true'
+    }` +
+    `&${
+      blueDiffNumber >= 0
+        ? 'blue_positive_diff_isVisible=true'
+        : 'blue_negative_diff_isVisible=true'
+    }` +
+    `&${
+      mepDiffNumber >= 0
+        ? 'mep_positive_diff_isVisible=true'
+        : 'mep_negative_diff_isVisible=true'
+    }` +
+    `&${
+      criptoDiffNumber >= 0
+        ? 'cripto_positive_diff_isVisible=true'
+        : 'cripto_negative_diff_isVisible=true'
+    }` +
+    `&${
+      oficialDiffNumber >= 0
+        ? `oficial_positive_diff_value=${oficialDiff}`
+        : `oficial_negative_diff_value=${oficialDiff}`
+    }` +
+    `&oficial_ask_value=${oficialAsk}&oficial_bid_value=${oficialBid}` +
+    `&${
+      blueDiffNumber >= 0
+        ? `blue_positive_diff_value=${blueDiff}`
+        : `blue_negative_diff_value=${blueDiff}`
+    }` +
+    `&blue_ask_value=${blueAsk}&blue_bid_value=${blueBid}` +
+    `&${
+      mepDiffNumber >= 0
+        ? `mep_positive_diff_value=${mepDiff}`
+        : `mep_negative_diff_value=${mepDiff}`
+    }` +
+    `&mep_ask_value=${mepAsk}&mep_bid_value=${mepBid}` +
+    `&${
+      criptoDiffNumber >= 0
+        ? `cripto_positive_diff_value=${criptoDiff}`
+        : `cripto_negative_diff_value=${criptoDiff}`
+    }` +
+    `&cripto_ask_value=${criptoAsk}&cripto_bid_value=${criptoBid}&hora_value=${hora}`
 
   return {
     title: 'DólarYa | Precio del dólar hoy en Argentina',
