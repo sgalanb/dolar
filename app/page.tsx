@@ -53,26 +53,26 @@ export async function generateMetadata(): Promise<Metadata> {
     }` +
     `&${
       oficialDiffNumber >= 0
-        ? `oficial_positive_diff_value=+ ${oficialDiff}%`
-        : `oficial_negative_diff_value=- ${oficialDiff}%`
+        ? `oficial_positive_diff_value=%2b%20${oficialDiff}%25`
+        : `oficial_negative_diff_value=-%20${oficialDiff}%25`
     }` +
     `&oficial_ask_value=${oficialAsk}&oficial_bid_value=${oficialBid}` +
     `&${
       blueDiffNumber >= 0
-        ? `blue_positive_diff_value=+ ${blueDiff}%`
-        : `blue_negative_diff_value=- ${blueDiff}%`
+        ? `blue_positive_diff_value=%2b%20${blueDiff}%25`
+        : `blue_negative_diff_value=-%20${blueDiff}%25`
     }` +
     `&blue_ask_value=${blueAsk}&blue_bid_value=${blueBid}` +
     `&${
       mepDiffNumber >= 0
-        ? `mep_positive_diff_value=+ ${mepDiff}%`
-        : `mep_negative_diff_value=- ${mepDiff}%`
+        ? `mep_positive_diff_value=%2b%20${mepDiff}%25`
+        : `mep_negative_diff_value=-%20${mepDiff}%25`
     }` +
     `&mep_ask_value=${mepAsk}&mep_bid_value=${mepBid}` +
     `&${
       criptoDiffNumber >= 0
-        ? `cripto_positive_diff_value=+ ${criptoDiff}%`
-        : `cripto_negative_diff_value=- ${criptoDiff}%`
+        ? `cripto_positive_diff_value=%2b%20${criptoDiff}%25`
+        : `cripto_negative_diff_value=-%20${criptoDiff}%25`
     }` +
     `&cripto_ask_value=${criptoAsk}&cripto_bid_value=${criptoBid}&hora_value=${hora}`
 
@@ -84,14 +84,14 @@ export async function generateMetadata(): Promise<Metadata> {
       title: 'DólarYa | Precio del dólar hoy en Argentina',
       description:
         'La forma más fácil de seguir las cotizaciones del dólar en Argentina y conocer valores históricos. Todo en tiempo real y sin publicidad.',
-      images: [encodeURIComponent(ogImageURL)],
+      images: [ogImageURL],
       type: 'website',
     },
     twitter: {
       title: 'DólarYa | Precio del dólar hoy en Argentina',
       description:
         'La forma más fácil de seguir las cotizaciones del dólar en Argentina y conocer valores históricos. Todo en tiempo real y sin publicidad.',
-      images: [encodeURIComponent(ogImageURL)],
+      images: [ogImageURL],
       card: 'summary_large_image',
       site: '@dolarya_info',
       creator: '@sgalanb',
