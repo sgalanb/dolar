@@ -3,8 +3,15 @@ import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 import { Analytics } from '@vercel/analytics/react'
 import { GeistSans } from 'geist/font'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import './globals.css'
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#F4F4F5' },
+    { media: '(prefers-color-scheme: dark)', color: '#09090B' },
+  ],
+}
 
 export const metadata: Metadata = {
   title: 'DólarYa | Precio del dólar hoy en Argentina',

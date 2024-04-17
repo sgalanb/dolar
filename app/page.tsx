@@ -1,9 +1,7 @@
 import { LastPrices } from '@/app/api/get-last-prices/types'
 import DolarsHome from '@/components/DolarsHome'
 import dayjs from 'dayjs'
-import timezone from 'dayjs/plugin/timezone'
 import { Metadata } from 'next'
-dayjs.extend(timezone)
 
 export const revalidate = 60
 
@@ -29,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const criptoAsk = lastPrices?.cripto?.ask?.toFixed(2)?.replace('.', ',')
   const criptoDiffNumber = getDiff(lastPrices?.cripto)
   const criptoDiff = criptoDiffNumber.toFixed(2)?.replace('.', ',')
-  const hora = dayjs().tz('America/Argentina/Buenos_Aires').format('HH:mm')
+  const hora = dayjs().subtract(3, 'hour').format('HH:mm')
 
   const ogImageURL =
     `https://sharepreviews.com/og/c53d5587-3530-418e-908b-270eb6440c43?` +
@@ -56,25 +54,25 @@ export async function generateMetadata(): Promise<Metadata> {
     `&${
       oficialDiffNumber >= 0
         ? `oficial_positive_diff_value=%2b%20${oficialDiff}%25`
-        : `oficial_negative_diff_value=-%20${oficialDiff}%25`
+        : `oficial_negative_diff_value=%20${oficialDiff}%25`
     }` +
     `&oficial_ask_value=${oficialAsk}&oficial_bid_value=${oficialBid}` +
     `&${
       blueDiffNumber >= 0
         ? `blue_positive_diff_value=%2b%20${blueDiff}%25`
-        : `blue_negative_diff_value=-%20${blueDiff}%25`
+        : `blue_negative_diff_value=%20${blueDiff}%25`
     }` +
     `&blue_ask_value=${blueAsk}&blue_bid_value=${blueBid}` +
     `&${
       mepDiffNumber >= 0
         ? `mep_positive_diff_value=%2b%20${mepDiff}%25`
-        : `mep_negative_diff_value=-%20${mepDiff}%25`
+        : `mep_negative_diff_value=%20${mepDiff}%25`
     }` +
     `&mep_ask_value=${mepAsk}&mep_bid_value=${mepBid}` +
     `&${
       criptoDiffNumber >= 0
         ? `cripto_positive_diff_value=%2b%20${criptoDiff}%25`
-        : `cripto_negative_diff_value=-%20${criptoDiff}%25`
+        : `cripto_negative_diff_value=%20${criptoDiff}%25`
     }` +
     `&cripto_ask_value=${criptoAsk}&cripto_bid_value=${criptoBid}&hora_value=${hora}`
 
