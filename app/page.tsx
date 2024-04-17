@@ -28,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const criptoAsk = lastPrices?.cripto?.ask?.toFixed(2)?.replace('.', ',')
   const criptoDiffNumber = getDiff(lastPrices?.cripto)
   const criptoDiff = criptoDiffNumber.toFixed(2)?.replace('.', ',')
-  const fecha = dayjs().subtract(3, 'hour').format('DD/MM/YYYY - HH:mm')
+  const fecha = dayjs().subtract(3, 'hour').format('DD/MM - HH:mm')
 
   const ogImageURL =
     `https://sharepreviews.com/og/c53d5587-3530-418e-908b-270eb6440c43?` +

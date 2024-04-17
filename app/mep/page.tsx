@@ -12,11 +12,11 @@ export async function generateMetadata(): Promise<Metadata> {
     { next: { revalidate: 60 } }
   ).then((res) => res.json())
 
-  const mepBid = lastPrices?.mep?.bid?.toFixed(2)?.replace('.', ',')
-  const mepAsk = lastPrices?.mep?.ask?.toFixed(2)?.replace('.', ',')
+  const mepBid = `$${lastPrices?.mep?.bid?.toFixed(2)?.replace('.', ',')}`
+  const mepAsk = `$${lastPrices?.mep?.ask?.toFixed(2)?.replace('.', ',')}`
   const mepDiffNumber = getDiff(lastPrices?.mep)
   const mepDiff = mepDiffNumber.toFixed(2)?.replace('.', ',')
-  const fecha = dayjs().subtract(3, 'hour').format('DD/MM/YYYY - HH:mm')
+  const fecha = dayjs().subtract(3, 'hour').format('DD/MM - HH:mm')
 
   const ogImageURL =
     `https://sharepreviews.com/og/96aa1fff-29b4-41cc-9ea0-35fc1b378973?` +

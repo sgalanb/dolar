@@ -10,11 +10,15 @@ export async function generateMetadata(): Promise<Metadata> {
     { next: { revalidate: 60 } }
   ).then((res) => res.json())
 
-  const oficialBid = lastPrices?.oficial?.bid?.toFixed(2)?.replace('.', ',')
-  const oficialAsk = lastPrices?.oficial?.ask?.toFixed(2)?.replace('.', ',')
+  const oficialBid = `$${lastPrices?.oficial?.bid
+    ?.toFixed(2)
+    ?.replace('.', ',')}`
+  const oficialAsk = `$${lastPrices?.oficial?.ask
+    ?.toFixed(2)
+    ?.replace('.', ',')}`
   const oficialDiffNumber = getDiff(lastPrices?.oficial)
   const oficialDiff = oficialDiffNumber.toFixed(2)?.replace('.', ',')
-  const fecha = dayjs().subtract(3, 'hour').format('DD/MM/YYYY - HH:mm')
+  const fecha = dayjs().subtract(3, 'hour').format('DD/MM - HH:mm')
 
   const ogImageURL =
     `https://sharepreviews.com/og/96aa1fff-29b4-41cc-9ea0-35fc1b378973?` +
