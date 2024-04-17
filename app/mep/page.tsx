@@ -12,8 +12,14 @@ export async function generateMetadata(): Promise<Metadata> {
     { next: { revalidate: 60 } }
   ).then((res) => res.json())
 
-  const mepBid = `$${lastPrices?.mep?.bid?.toFixed(2)?.replace('.', ',')}`
-  const mepAsk = `$${lastPrices?.mep?.ask?.toFixed(2)?.replace('.', ',')}`
+  const mepBid = `$${lastPrices?.mep?.bid?.toLocaleString('es-AR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`
+  const mepAsk = `$${lastPrices?.mep?.ask?.toLocaleString('es-AR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`
   const mepDiffNumber = getDiff(lastPrices?.mep)
   const mepDiff = mepDiffNumber.toFixed(2)?.replace('.', ',')
   const fecha = dayjs().subtract(3, 'hour').format('DD/MM - HH:mm')

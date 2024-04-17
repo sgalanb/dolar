@@ -10,12 +10,14 @@ export async function generateMetadata(): Promise<Metadata> {
     { next: { revalidate: 60 } }
   ).then((res) => res.json())
 
-  const tarjetaBid = `$${lastPrices?.tarjeta?.bid
-    ?.toFixed(2)
-    ?.replace('.', ',')}`
-  const tarjetaAsk = `$${lastPrices?.tarjeta?.ask
-    ?.toFixed(2)
-    ?.replace('.', ',')}`
+  const tarjetaBid = `$${lastPrices?.tarjeta?.bid?.toLocaleString('es-AR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`
+  const tarjetaAsk = `$${lastPrices?.tarjeta?.ask?.toLocaleString('es-AR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`
   const tarjetaDiffNumber = getDiff(lastPrices?.tarjeta)
   const tarjetaDiff = tarjetaDiffNumber.toFixed(2)?.replace('.', ',')
   const fecha = dayjs().subtract(3, 'hour').format('DD/MM - HH:mm')

@@ -14,8 +14,14 @@ export async function generateMetadata(): Promise<Metadata> {
     { next: { revalidate: 60 } }
   ).then((res) => res.json())
 
-  const cocosBid = `$${lastPrices?.cocos?.bid?.toFixed(2)?.replace('.', ',')}`
-  const cocosAsk = `$${lastPrices?.cocos?.ask?.toFixed(2)?.replace('.', ',')}`
+  const cocosBid = `$${lastPrices?.cocos?.bid?.toLocaleString('es-AR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`
+  const cocosAsk = `$${lastPrices?.cocos?.ask?.toLocaleString('es-AR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`
   const cocosDiffNumber = getDiff(lastPrices?.cocos)
   const cocosDiff = cocosDiffNumber.toFixed(2)?.replace('.', ',')
   const fecha = dayjs().subtract(3, 'hour').format('DD/MM - HH:mm')

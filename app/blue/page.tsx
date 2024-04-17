@@ -12,8 +12,14 @@ export async function generateMetadata(): Promise<Metadata> {
     { next: { revalidate: 60 } }
   ).then((res) => res.json())
 
-  const blueBid = `$${lastPrices?.blue?.bid?.toFixed(2)?.replace('.', ',')}`
-  const blueAsk = `$${lastPrices?.blue?.ask?.toFixed(2)?.replace('.', ',')}`
+  const blueBid = `$${lastPrices?.blue?.bid?.toLocaleString('es-AR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`
+  const blueAsk = `$${lastPrices?.blue?.ask?.toLocaleString('es-AR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`
   const blueDiffNumber = getDiff(lastPrices?.blue)
   const blueDiff = blueDiffNumber.toFixed(2)?.replace('.', ',')
   const fecha = dayjs().subtract(3, 'hour').format('DD/MM - HH:mm')

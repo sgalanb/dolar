@@ -12,8 +12,14 @@ export async function generateMetadata(): Promise<Metadata> {
     { next: { revalidate: 60 } }
   ).then((res) => res.json())
 
-  const criptoBid = `$${lastPrices?.cripto?.bid?.toFixed(2)?.replace('.', ',')}`
-  const criptoAsk = `$${lastPrices?.cripto?.ask?.toFixed(2)?.replace('.', ',')}`
+  const criptoBid = `$${lastPrices?.cripto?.bid?.toLocaleString('es-AR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`
+  const criptoAsk = `$${lastPrices?.cripto?.ask?.toLocaleString('es-AR', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`
   const criptoDiffNumber = getDiff(lastPrices?.cripto)
   const criptoDiff = criptoDiffNumber.toFixed(2)?.replace('.', ',')
   const fecha = dayjs().subtract(3, 'hour').format('DD/MM - HH:mm')
