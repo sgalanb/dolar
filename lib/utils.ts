@@ -44,3 +44,20 @@ export const getPercentageChange = (chartPricesArray: any[]) => {
     100
   )
 }
+
+// Get the daily percentage change from a dolarType
+export const getDiff = (dolarType: any) => {
+  const todayPrices: number[] = dolarType.today
+    ? dolarType.today.map((today: any) => parseFloat(today.ask))
+    : []
+
+  const chartPrices = dolarType.ask
+    ? [...todayPrices, dolarType.ask]
+    : todayPrices
+
+  const porcentualChange =
+    ((chartPrices[chartPrices.length - 1] - chartPrices[0]) / chartPrices[0]) *
+    100
+
+  return porcentualChange
+}

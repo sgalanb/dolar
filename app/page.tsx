@@ -1,5 +1,6 @@
 import { LastPrices } from '@/app/api/get-last-prices/types'
 import DolarsHome from '@/components/DolarsHome'
+import { getDiff } from '@/lib/utils'
 import dayjs from 'dayjs'
 import { Metadata } from 'next'
 
@@ -27,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const criptoAsk = lastPrices?.cripto?.ask?.toFixed(2)?.replace('.', ',')
   const criptoDiffNumber = getDiff(lastPrices?.cripto)
   const criptoDiff = criptoDiffNumber.toFixed(2)?.replace('.', ',')
-  const hora = dayjs().subtract(3, 'hour').format('HH:mm')
+  const fecha = dayjs().subtract(3, 'hour').format('DD/MM/YYYY - HH:mm')
 
   const ogImageURL =
     `https://sharepreviews.com/og/c53d5587-3530-418e-908b-270eb6440c43?` +
@@ -74,7 +75,7 @@ export async function generateMetadata(): Promise<Metadata> {
         ? `cripto_positive_diff_value=%2b%20${criptoDiff}%25`
         : `cripto_negative_diff_value=%20${criptoDiff}%25`
     }` +
-    `&cripto_ask_value=${criptoAsk}&cripto_bid_value=${criptoBid}&hora_value=${hora}`
+    `&cripto_ask_value=${criptoAsk}&cripto_bid_value=${criptoBid}&fecha_value=${fecha}`
 
   return {
     title: 'DólarYa | Precio del dólar hoy en Argentina',
@@ -266,20 +267,4 @@ export default async function Home() {
       </div> */}
     </div>
   )
-}
-
-const getDiff = (dolarType: any) => {
-  const todayPrices: number[] = dolarType.today
-    ? dolarType.today.map((today: any) => parseFloat(today.ask))
-    : []
-
-  const chartPrices = dolarType.ask
-    ? [...todayPrices, dolarType.ask]
-    : todayPrices
-
-  const porcentualChange =
-    ((chartPrices[chartPrices.length - 1] - chartPrices[0]) / chartPrices[0]) *
-    100
-
-  return porcentualChange
 }
