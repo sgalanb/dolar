@@ -5,6 +5,8 @@ import timezone from 'dayjs/plugin/timezone'
 import { Metadata } from 'next'
 dayjs.extend(timezone)
 
+export const revalidate = 60
+
 export async function generateMetadata(): Promise<Metadata> {
   const lastPrices: LastPrices = await fetch(
     `https://dolarya.info/api/get-last-prices`,
