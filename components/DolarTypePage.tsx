@@ -71,7 +71,7 @@ export default function DolarTypePage({
             {`Dólar ${type}`}
             <span className="hidden text-black/50 dark:text-white/50 sm:block">
               {type === 'MEP' || type === 'CCL'
-                ? '(AL30 48HS)'
+                ? '(AL30 24HS)'
                 : type === 'Cripto'
                   ? '(USDC)'
                   : ''}
@@ -85,7 +85,7 @@ export default function DolarTypePage({
           <div className="flex flex-col items-start justify-center text-sm font-normal tracking-wider text-black/50 dark:text-white/50">
             <p className="block sm:hidden">
               {type === 'MEP' || type === 'CCL'
-                ? 'AL30 | 48HS'
+                ? 'AL30 | 24HS'
                 : type === 'Cripto'
                   ? 'USDC'
                   : ''}

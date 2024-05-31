@@ -41,22 +41,22 @@ export async function GET(request: NextRequest) {
     const criptoYaRates = await getCriptoYa()
     const cocosMEPRates = await getCocosMEP()
 
-    // Always use AL30 and 48hs rates
+    // Always use AL30 and 24hs rates
     // Cripto rates are always from USDC
     const newOficialAsk = criptoYaRates.oficial.price.toString()
     const newOficialBid = criptoYaRates.oficial.price.toString()
     const newBlueAsk = criptoYaRates.blue.ask.toString()
     const newBlueBid = criptoYaRates.blue.bid.toString()
-    const newMepAsk = criptoYaRates.mep.al30['48hs'].price.toString()
-    const newMepBid = criptoYaRates.mep.al30['48hs'].price.toString()
+    const newMepAsk = criptoYaRates.mep.al30['24hs'].price.toString()
+    const newMepBid = criptoYaRates.mep.al30['24hs'].price.toString()
     const newCocosAsk = cocosMEPRates.overnight.ask.toString()
     const newCocosBid = cocosMEPRates.overnight.bid.toString()
     const newTarjetaAsk = criptoYaRates.tarjeta.price.toString()
     const newTarjetaBid = criptoYaRates.tarjeta.price.toString()
     const newMayoristaAsk = criptoYaRates.mayorista.price.toString()
     const newMayoristaBid = criptoYaRates.mayorista.price.toString()
-    const newCclAsk = criptoYaRates.ccl.al30['48hs'].price.toString()
-    const newCclBid = criptoYaRates.ccl.al30['48hs'].price.toString()
+    const newCclAsk = criptoYaRates.ccl.al30['24hs'].price.toString()
+    const newCclBid = criptoYaRates.ccl.al30['24hs'].price.toString()
     const newCriptoAsk = criptoYaRates.cripto.usdc.ask.toString()
     const newCriptoBid = criptoYaRates.cripto.usdc.bid.toString()
 

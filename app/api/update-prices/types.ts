@@ -62,7 +62,7 @@ export interface CriptoYaResponse {
   }
   mep: {
     al30: {
-      '48hs': {
+      '24hs': {
         price: number
         variation: number
         timestamp: number
@@ -74,7 +74,7 @@ export interface CriptoYaResponse {
       }
     }
     gd30: {
-      '48hs': {
+      '24hs': {
         price: number
         variation: number
         timestamp: number
@@ -87,7 +87,7 @@ export interface CriptoYaResponse {
     }
     lede: {
       name: string
-      '48hs': {
+      '24hs': {
         price: number
         variation: number
         timestamp: number
@@ -99,7 +99,7 @@ export interface CriptoYaResponse {
       }
     }
     bpo27: {
-      '48hs': {
+      '24hs': {
         price: number
         variation: number
         timestamp: number
@@ -113,7 +113,7 @@ export interface CriptoYaResponse {
   }
   ccl: {
     al30: {
-      '48hs': {
+      '24hs': {
         price: number
         variation: number
         timestamp: number
@@ -125,7 +125,7 @@ export interface CriptoYaResponse {
       }
     }
     gd30: {
-      '48hs': {
+      '24hs': {
         price: number
         variation: number
         timestamp: number
@@ -138,7 +138,7 @@ export interface CriptoYaResponse {
     }
     lede: {
       name: string
-      '48hs': {
+      '24hs': {
         price: number
         variation: number
         timestamp: number
@@ -150,7 +150,7 @@ export interface CriptoYaResponse {
       }
     }
     bpo27: {
-      '48hs': {
+      '24hs': {
         price: number
         variation: number
         timestamp: number
