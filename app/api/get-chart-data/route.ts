@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
       },
       [`oneWeek ${type}`],
       {
-        revalidate: 60,
+        revalidate: 3600,
       }
     )
 
@@ -41,7 +41,7 @@ export async function GET(req: NextRequest) {
       },
       [`oneMonth ${type}`],
       {
-        revalidate: 60,
+        revalidate: 86400,
       }
     )
 
@@ -58,7 +58,7 @@ export async function GET(req: NextRequest) {
       },
       [`threeMonths ${type}`],
       {
-        revalidate: 3600,
+        revalidate: 86400,
       }
     )
 
@@ -75,7 +75,7 @@ export async function GET(req: NextRequest) {
       },
       [`sixMonths ${type}`],
       {
-        revalidate: 3600,
+        revalidate: 86400,
       }
     )
 
@@ -92,7 +92,7 @@ export async function GET(req: NextRequest) {
       },
       [`oneYear ${type}`],
       {
-        revalidate: 3600,
+        revalidate: 86400,
       }
     )
 
@@ -109,7 +109,7 @@ export async function GET(req: NextRequest) {
       },
       [`twoYears ${type}`],
       {
-        revalidate: 3600,
+        revalidate: 604800,
       }
     )
 
@@ -126,7 +126,7 @@ export async function GET(req: NextRequest) {
       },
       [`fiveYears ${type}`],
       {
-        revalidate: 86400,
+        revalidate: 604800,
       }
     )
 
@@ -143,7 +143,7 @@ export async function GET(req: NextRequest) {
       },
       [`tenYears ${type}`],
       {
-        revalidate: 86400,
+        revalidate: 2592000,
       }
     )
 
