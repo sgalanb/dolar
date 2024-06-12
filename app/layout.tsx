@@ -1,9 +1,9 @@
 import { Providers } from '@/app/providers'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
-import { Analytics } from '@vercel/analytics/react'
 import { GeistSans } from 'geist/font'
 import type { Metadata, Viewport } from 'next'
+import Script from 'next/script'
 import './globals.css'
 
 export const viewport: Viewport = {
@@ -35,6 +35,12 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <body className={`${GeistSans.className}`}>
+        <Script
+          src="https://unpkg.com/@tinybirdco/flock.js"
+          data-host="https://api.us-east.aws.tinybird.co"
+          data-token={process.env.NEXT_PUBLIC_TINYBIRD_TRACKER_TOKEN}
+          strategy="afterInteractive"
+        />
         <Providers attribute="class" defaultTheme="system" enableSystem>
           <div className="flex min-h-screen flex-col justify-between bg-zinc-100 text-black dark:bg-zinc-950 dark:text-white">
             <div className="flex flex-col justify-start">
@@ -46,7 +52,6 @@ export default function RootLayout({
             <Footer />
           </div>
         </Providers>
-        <Analytics />
       </body>
     </html>
   )

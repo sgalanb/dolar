@@ -1,7 +1,6 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { track } from '@vercel/analytics/react'
 import Link from 'next/link'
 
 export default function OperaEnCocosButton({
@@ -9,6 +8,16 @@ export default function OperaEnCocosButton({
 }: {
   variant?: 'button' | 'link'
 }) {
+  const handleCocosButton = () => {
+    if (
+      typeof Tinybird !== 'undefined' &&
+      Tinybird !== undefined &&
+      Tinybird !== null
+    ) {
+      Tinybird.trackEvent('cocos_button', {})
+    }
+  }
+
   return (
     <>
       {variant == 'button' ? (
@@ -17,7 +26,7 @@ export default function OperaEnCocosButton({
             href="https://app.cocos.capital?ref=dolarya.info"
             target="_blank"
             className="w-fit !bg-cocos-600 hover:!bg-cocos-500  dark:!text-white"
-            onClick={() => track('Button | Operá en Cocos')}
+            onClick={() => handleCocosButton()}
           >
             Operá en Cocos
           </Link>
@@ -27,7 +36,7 @@ export default function OperaEnCocosButton({
           href="https://app.cocos.capital?ref=dolarya.info"
           className="flex items-center justify-center gap-1 hover:underline"
           target="_blank"
-          onClick={() => track('Button | Fuente Dólar Cocos')}
+          onClick={() => handleCocosButton()}
         >
           - Cocos Capital
         </Link>
