@@ -21,7 +21,10 @@ export async function GET(request: NextRequest) {
 
   async function getCocosMEP() {
     const res = await fetch(
-      'https://api.cocos.capital/api/v1/public/mep-prices'
+      'https://api.cocos.capital/api/v1/public/mep-prices',
+      {
+        cache: 'no-store',
+      }
     )
     if (!res.ok) {
       throw new Error('Failed to fetch data')
@@ -30,7 +33,9 @@ export async function GET(request: NextRequest) {
   }
 
   async function getCriptoYa() {
-    const res = await fetch('https://criptoya.com/api/dolar')
+    const res = await fetch('https://criptoya.com/api/dolar', {
+      cache: 'no-store',
+    })
     if (!res.ok) {
       throw new Error('Failed to fetch data')
     }
