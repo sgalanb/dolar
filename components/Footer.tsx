@@ -1,6 +1,5 @@
 'use client'
 
-import InstagramButton from '@/components/InstagramButton'
 import TwitterButton from '@/components/TwitterButton'
 import { Separator } from '@/components/ui/separator'
 import dynamic from 'next/dynamic'
@@ -23,7 +22,6 @@ export default function Footer() {
               <p className="text-lg">Seguí las cotizaciones en redes</p>
               <div className="flex items-center justify-center gap-6">
                 <TwitterButton />
-                <InstagramButton />
               </div>
             </div>
           </div>
