@@ -2,9 +2,7 @@ import {
   CocosMEPResponse,
   CriptoYaResponse,
 } from '@/app/api/update-prices/types'
-import { db } from '@/app/db'
-import { historicalPrices } from '@/app/db/schema'
-import { desc, eq } from 'drizzle-orm'
+import { createClient } from '@/utils/supabase/server'
 import { NextRequest } from 'next/server'
 
 export const dynamic = 'force-dynamic'
@@ -19,28 +17,7 @@ export async function GET(request: NextRequest) {
     })
   }
 
-  async function getCocosMEP() {
-    const res = await fetch(
-      'https://api.cocos.capital/api/v1/public/mep-prices',
-      {
-        cache: 'no-store',
-      }
-    )
-    if (!res.ok) {
-      throw new Error('Failed to fetch data')
-    }
-    return res.json() as Promise<CocosMEPResponse>
-  }
-
-  async function getCriptoYa() {
-    const res = await fetch('https://criptoya.com/api/dolar', {
-      cache: 'no-store',
-    })
-    if (!res.ok) {
-      throw new Error('Failed to fetch data')
-    }
-    return res.json() as Promise<CriptoYaResponse>
-  }
+  const supabase = createClient()
 
   try {
     const criptoYaRates = await getCriptoYa()
@@ -48,61 +25,47 @@ export async function GET(request: NextRequest) {
 
     // Always use AL30 and 24hs rates
     // Cripto rates are always from USDC
-    const newOficialAsk = criptoYaRates.oficial.price.toString()
-    const newOficialBid = criptoYaRates.oficial.price.toString()
-    const newBlueAsk = criptoYaRates.blue.ask.toString()
-    const newBlueBid = criptoYaRates.blue.bid.toString()
-    const newMepAsk = criptoYaRates.mep.al30['24hs'].price.toString()
-    const newMepBid = criptoYaRates.mep.al30['24hs'].price.toString()
-    const newCocosAsk = cocosMEPRates.overnight.ask.toString()
-    const newCocosBid = cocosMEPRates.overnight.bid.toString()
-    const newTarjetaAsk = criptoYaRates.tarjeta.price.toString()
-    const newTarjetaBid = criptoYaRates.tarjeta.price.toString()
-    const newMayoristaAsk = criptoYaRates.mayorista.price.toString()
-    const newMayoristaBid = criptoYaRates.mayorista.price.toString()
-    const newCclAsk = criptoYaRates.ccl.al30['24hs'].price.toString()
-    const newCclBid = criptoYaRates.ccl.al30['24hs'].price.toString()
-    const newCriptoAsk = criptoYaRates.cripto.usdc.ask.toString()
-    const newCriptoBid = criptoYaRates.cripto.usdc.bid.toString()
+    const newOficialAsk = criptoYaRates.oficial.price
+    const newOficialBid = criptoYaRates.oficial.price
+    const newBlueAsk = criptoYaRates.blue.ask
+    const newBlueBid = criptoYaRates.blue.bid
+    const newMepAsk = criptoYaRates.mep.al30['24hs'].price
+    const newMepBid = criptoYaRates.mep.al30['24hs'].price
+    const newCocosAsk = cocosMEPRates.overnight.ask
+    const newCocosBid = cocosMEPRates.overnight.bid
+    const newTarjetaAsk = criptoYaRates.tarjeta.price
+    const newTarjetaBid = criptoYaRates.tarjeta.price
+    const newMayoristaAsk = criptoYaRates.mayorista.price
+    const newMayoristaBid = criptoYaRates.mayorista.price
+    const newCclAsk = criptoYaRates.ccl.al30['24hs'].price
+    const newCclBid = criptoYaRates.ccl.al30['24hs'].price
+    const newCriptoAsk = criptoYaRates.cripto.usdc.ask
+    const newCriptoBid = criptoYaRates.cripto.usdc.bid
 
-    const lastOficial = await db.query.historicalPrices.findFirst({
-      orderBy: [desc(historicalPrices.timestamp)],
-      where: eq(historicalPrices.type, 'oficial'),
-    })
-    const lastBlue = await db.query.historicalPrices.findFirst({
-      orderBy: [desc(historicalPrices.timestamp)],
-      where: eq(historicalPrices.type, 'blue'),
-    })
-    const lastMep = await db.query.historicalPrices.findFirst({
-      orderBy: [desc(historicalPrices.timestamp)],
-      where: eq(historicalPrices.type, 'mep'),
-    })
-    const lastCocos = await db.query.historicalPrices.findFirst({
-      orderBy: [desc(historicalPrices.timestamp)],
-      where: eq(historicalPrices.type, 'cocos'),
-    })
-    const lastTarjeta = await db.query.historicalPrices.findFirst({
-      orderBy: [desc(historicalPrices.timestamp)],
-      where: eq(historicalPrices.type, 'tarjeta'),
-    })
-    const lastMayorista = await db.query.historicalPrices.findFirst({
-      orderBy: [desc(historicalPrices.timestamp)],
-      where: eq(historicalPrices.type, 'mayorista'),
-    })
-    const lastCcl = await db.query.historicalPrices.findFirst({
-      orderBy: [desc(historicalPrices.timestamp)],
-      where: eq(historicalPrices.type, 'ccl'),
-    })
-    const lastCripto = await db.query.historicalPrices.findFirst({
-      orderBy: [desc(historicalPrices.timestamp)],
-      where: eq(historicalPrices.type, 'cripto'),
-    })
+    async function getLastPrice(type: string) {
+      const query = await supabase
+        .from('historical-prices')
+        .select('ask, bid')
+        .eq('type', type)
+        .order('timestamp', { ascending: false })
+        .single()
+      return query.data
+    }
+
+    const lastOficial = await getLastPrice('oficial')
+    const lastBlue = await getLastPrice('blue')
+    const lastMep = await getLastPrice('mep')
+    const lastCocos = await getLastPrice('cocos')
+    const lastTarjeta = await getLastPrice('tarjeta')
+    const lastMayorista = await getLastPrice('mayorista')
+    const lastCcl = await getLastPrice('ccl')
+    const lastCripto = await getLastPrice('cripto')
 
     if (
       newOficialAsk !== lastOficial?.ask ||
       newOficialBid !== lastOficial?.bid
     ) {
-      await db.insert(historicalPrices).values({
+      await supabase.from('historical-prices').insert({
         type: 'oficial',
         ask: newOficialAsk,
         bid: newOficialBid,
@@ -110,7 +73,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (newBlueAsk !== lastBlue?.ask || newBlueBid !== lastBlue?.bid) {
-      await db.insert(historicalPrices).values({
+      await supabase.from('historical-prices').insert({
         type: 'blue',
         ask: newBlueAsk,
         bid: newBlueBid,
@@ -118,15 +81,13 @@ export async function GET(request: NextRequest) {
     }
 
     if (newMepAsk !== lastMep?.ask || newMepBid !== lastMep?.bid) {
-      await db.insert(historicalPrices).values({
-        type: 'mep',
-        ask: newMepAsk,
-        bid: newMepBid,
-      })
+      await supabase
+        .from('historical-prices')
+        .insert({ type: 'mep', ask: newMepAsk, bid: newMepBid })
     }
 
     if (newCocosAsk !== lastCocos?.ask || newCocosBid !== lastCocos?.bid) {
-      await db.insert(historicalPrices).values({
+      await supabase.from('historical-prices').insert({
         type: 'cocos',
         ask: newCocosAsk,
         bid: newCocosBid,
@@ -137,41 +98,39 @@ export async function GET(request: NextRequest) {
       newTarjetaAsk !== lastTarjeta?.ask ||
       newTarjetaBid !== lastTarjeta?.bid
     ) {
-      await db.insert(historicalPrices).values({
-        type: 'tarjeta',
-        ask: newTarjetaAsk,
-        bid: newTarjetaBid,
-      })
+      await supabase
+        .from('historical-prices')
+        .insert({ type: 'tarjeta', ask: newTarjetaAsk, bid: newTarjetaBid })
     }
 
     if (
       newMayoristaAsk !== lastMayorista?.ask ||
       newMayoristaBid !== lastMayorista?.bid
     ) {
-      await db.insert(historicalPrices).values({
-        type: 'mayorista',
-        ask: newMayoristaAsk,
-        bid: newMayoristaBid,
-      })
+      await supabase
+        .from('historical-prices')
+        .insert({
+          type: 'mayorista',
+          ask: newMayoristaAsk,
+          bid: newMayoristaBid,
+        })
     }
 
     if (newCclAsk !== lastCcl?.ask || newCclBid !== lastCcl?.bid) {
-      await db.insert(historicalPrices).values({
-        type: 'ccl',
-        ask: newCclAsk,
-        bid: newCclBid,
-      })
+      await supabase
+        .from('historical-prices')
+        .insert({ type: 'ccl', ask: newCclAsk, bid: newCclBid })
     }
 
     if (newCriptoAsk !== lastCripto?.ask || newCriptoBid !== lastCripto?.bid) {
-      await db.insert(historicalPrices).values({
+      await supabase.from('historical-prices').insert({
         type: 'cripto',
         ask: newCriptoAsk,
         bid: newCriptoBid,
       })
     }
 
-    return new Response('Prices updated', {
+    return new Response('Updated prices.', {
       status: 200,
     })
   } catch (error: unknown) {
@@ -185,4 +144,27 @@ export async function GET(request: NextRequest) {
       })
     }
   }
+}
+
+async function getCocosMEP() {
+  const res = await fetch(
+    'https://api.cocos.capital/api/v1/public/mep-prices',
+    {
+      cache: 'no-store',
+    }
+  )
+  if (!res.ok) {
+    throw new Error('Failed to fetch data')
+  }
+  return res.json() as Promise<CocosMEPResponse>
+}
+
+async function getCriptoYa() {
+  const res = await fetch('https://criptoya.com/api/dolar', {
+    cache: 'no-store',
+  })
+  if (!res.ok) {
+    throw new Error('Failed to fetch data')
+  }
+  return res.json() as Promise<CriptoYaResponse>
 }
