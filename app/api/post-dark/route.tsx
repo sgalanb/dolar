@@ -1,6 +1,6 @@
 import { LastPrices } from '@/app/api/get-last-prices/types'
-import { twitterClient } from '@/lib/twitterClient'
-import { getPercentageChange } from '@/lib/utils'
+import { twitterClient } from '@/utils/twitterClient'
+import { getPercentageChange } from '@/utils/utils'
 import dayjs from 'dayjs'
 import 'dayjs/locale/es'
 import updateLocale from 'dayjs/plugin/updateLocale'

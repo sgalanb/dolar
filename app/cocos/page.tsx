@@ -2,11 +2,10 @@ import { LastPrices } from '@/app/api/get-last-prices/types'
 import DolarTypePage from '@/components/DolarTypePage'
 import OperaEnCocosButton from '@/components/OperaEnCocosButton'
 import { Separator } from '@/components/ui/separator'
-import { getDiff } from '@/lib/utils'
+import { getDiff } from '@/utils/utils'
 import dayjs from 'dayjs'
 import { Metadata } from 'next'
 import Link from 'next/link'
-import Balancer from 'react-wrap-balancer'
 
 export async function generateMetadata(): Promise<Metadata> {
   const lastPrices: LastPrices = await fetch(
@@ -73,10 +72,8 @@ export default async function Cocos() {
     <div className="flex flex-col items-center justify-center gap-9">
       <DolarTypePage type="Cocos" lastPrices={lastPrices} />
       <div className="flex w-full flex-col items-center justify-center gap-6 rounded-2xl border-[4px] border-cocos-600 bg-white p-6 dark:bg-zinc-100 md:flex-row md:p-9">
-        <h2 className="text-center text-2xl font-bold text-cocos-900 md:w-2/3 md:text-left">
-          <Balancer>
-            Comprá dólares cualquier día y a cualquier hora en Cocos Capital
-          </Balancer>
+        <h2 className="text-balance text-center text-2xl font-bold text-cocos-900 md:w-2/3 md:text-left">
+          Comprá dólares cualquier día y a cualquier hora en Cocos Capital
         </h2>
         <span className="flex items-center justify-center md:w-1/3">
           <OperaEnCocosButton variant="button" />

@@ -3,7 +3,6 @@
 import TwitterButton from '@/components/TwitterButton'
 import { Separator } from '@/components/ui/separator'
 import dynamic from 'next/dynamic'
-import Balancer from 'react-wrap-balancer'
 
 const ThemeToggle = dynamic(() => import('@/components/ThemeToggle'), {
   ssr: false,
@@ -31,17 +30,13 @@ export default function Footer() {
         <Separator className="my-0" />
 
         <div className="flex flex-col gap-1">
-          <p className="w-full text-center text-sm text-black/50 dark:text-white/50">
-            <Balancer>
-              Los valores son meramente informativos y se basan en la
-              información provista por cada proveedor.
-            </Balancer>
+          <p className="text-balance w-full text-center text-sm text-black/50 dark:text-white/50">
+            Los valores son meramente informativos y se basan en la información
+            provista por cada proveedor.
           </p>
-          <p className="w-full text-center text-sm text-black/50 dark:text-white/50">
-            <Balancer>
-              No garantizamos que el servicio sea ininterrumpido, rápido,
-              preciso o libres de errores.
-            </Balancer>
+          <p className="text-balance w-full text-center text-sm text-black/50 dark:text-white/50">
+            No garantizamos que el servicio sea ininterrumpido, rápido, preciso
+            o libres de errores.
           </p>
         </div>
       </div>

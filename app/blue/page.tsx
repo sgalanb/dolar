@@ -1,7 +1,7 @@
 import { LastPrices } from '@/app/api/get-last-prices/types'
 import DolarTypePage from '@/components/DolarTypePage'
 import { Separator } from '@/components/ui/separator'
-import { getDiff } from '@/lib/utils'
+import { getDiff } from '@/utils/utils'
 import dayjs from 'dayjs'
 import { Metadata } from 'next'
 import Link from 'next/link'

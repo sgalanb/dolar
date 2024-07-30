@@ -1,7 +1,7 @@
 import { LastPrices, PriceType } from '@/app/api/get-last-prices/types'
 import { db } from '@/app/db'
 import { historicalPrices } from '@/app/db/schema'
-import { startDaysAgo, startToday } from '@/lib/utils'
+import { startDaysAgo, startToday } from '@/utils/utils'
 import { and, asc, desc, eq, gte, lte } from 'drizzle-orm'
 import { unstable_cache } from 'next/cache'
 

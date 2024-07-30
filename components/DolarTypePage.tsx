@@ -3,7 +3,7 @@
 import { ChartPrices } from '@/app/api/get-chart-data/types'
 import { LastPrices } from '@/app/api/get-last-prices/types'
 import HistoricalCharts from '@/components/HistoricalCharts'
-import { fetcher } from '@/lib/utils'
+import { fetcher } from '@/utils/utils'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import updateLocale from 'dayjs/plugin/updateLocale'
