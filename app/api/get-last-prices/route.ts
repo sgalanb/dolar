@@ -1,8 +1,8 @@
 import { LastPrices, PriceType } from '@/app/api/get-last-prices/types'
 import { db } from '@/app/db'
 import { historicalPrices } from '@/app/db/schema'
-import { startToday } from '@/lib/utils'
-import { and, asc, desc, eq, gte } from 'drizzle-orm'
+import { startDaysAgo, startToday } from '@/lib/utils'
+import { and, asc, desc, eq, gte, lte } from 'drizzle-orm'
 import { unstable_cache } from 'next/cache'
 
 export async function GET() {
@@ -21,13 +21,22 @@ export async function GET() {
 
     const todayOficialQuery = unstable_cache(
       async () => {
-        return await db.query.historicalPrices.findMany({
+        const yesterday = await db.query.historicalPrices.findMany({
+          orderBy: [asc(historicalPrices.timestamp)],
+          where: and(
+            eq(historicalPrices.type, 'oficial'),
+            gte(historicalPrices.timestamp, startDaysAgo(1)),
+            lte(historicalPrices.timestamp, startToday)
+          ),
+        })
+        const today = await db.query.historicalPrices.findMany({
           orderBy: [asc(historicalPrices.timestamp)],
           where: and(
             eq(historicalPrices.type, 'oficial'),
             gte(historicalPrices.timestamp, startToday)
           ),
         })
+        return [...yesterday.slice(-1), ...today]
       },
       ['todayOficial'],
       {
@@ -50,13 +59,22 @@ export async function GET() {
 
     const todayBlueQuery = unstable_cache(
       async () => {
-        return await db.query.historicalPrices.findMany({
+        const yesterday = await db.query.historicalPrices.findMany({
+          orderBy: [asc(historicalPrices.timestamp)],
+          where: and(
+            eq(historicalPrices.type, 'blue'),
+            gte(historicalPrices.timestamp, startDaysAgo(1)),
+            lte(historicalPrices.timestamp, startToday)
+          ),
+        })
+        const today = await db.query.historicalPrices.findMany({
           orderBy: [asc(historicalPrices.timestamp)],
           where: and(
             eq(historicalPrices.type, 'blue'),
             gte(historicalPrices.timestamp, startToday)
           ),
         })
+        return [...yesterday.slice(-1), ...today]
       },
       ['todayBlue'],
       {
@@ -79,15 +97,22 @@ export async function GET() {
 
     const todayMepQuery = unstable_cache(
       async () => {
-        const query = await db.query.historicalPrices.findMany({
+        const yesterday = await db.query.historicalPrices.findMany({
+          orderBy: [asc(historicalPrices.timestamp)],
+          where: and(
+            eq(historicalPrices.type, 'mep'),
+            gte(historicalPrices.timestamp, startDaysAgo(1)),
+            lte(historicalPrices.timestamp, startToday)
+          ),
+        })
+        const today = await db.query.historicalPrices.findMany({
           orderBy: [asc(historicalPrices.timestamp)],
           where: and(
             eq(historicalPrices.type, 'mep'),
             gte(historicalPrices.timestamp, startToday)
           ),
         })
-
-        return calculateOnePricePerHalfHour(query)
+        return calculateOnePricePerHalfHour([...yesterday.slice(-1), ...today])
       },
       ['todayMep'],
       {
@@ -111,13 +136,22 @@ export async function GET() {
 
     const todayCocosQuery = unstable_cache(
       async () => {
-        return await db.query.historicalPrices.findMany({
+        const yesterday = await db.query.historicalPrices.findMany({
+          orderBy: [asc(historicalPrices.timestamp)],
+          where: and(
+            eq(historicalPrices.type, 'cocos'),
+            gte(historicalPrices.timestamp, startDaysAgo(1)),
+            lte(historicalPrices.timestamp, startToday)
+          ),
+        })
+        const today = await db.query.historicalPrices.findMany({
           orderBy: [asc(historicalPrices.timestamp)],
           where: and(
             eq(historicalPrices.type, 'cocos'),
             gte(historicalPrices.timestamp, startToday)
           ),
         })
+        return [...yesterday.slice(-1), ...today]
       },
       ['todayCocos'],
       {
@@ -140,13 +174,22 @@ export async function GET() {
 
     const todayTarjetaQuery = unstable_cache(
       async () => {
-        return await db.query.historicalPrices.findMany({
+        const yesterday = await db.query.historicalPrices.findMany({
+          orderBy: [asc(historicalPrices.timestamp)],
+          where: and(
+            eq(historicalPrices.type, 'tarjeta'),
+            gte(historicalPrices.timestamp, startDaysAgo(1)),
+            lte(historicalPrices.timestamp, startToday)
+          ),
+        })
+        const today = await db.query.historicalPrices.findMany({
           orderBy: [asc(historicalPrices.timestamp)],
           where: and(
             eq(historicalPrices.type, 'tarjeta'),
             gte(historicalPrices.timestamp, startToday)
           ),
         })
+        return [...yesterday.slice(-1), ...today]
       },
       ['todayTarjeta'],
       {
@@ -169,13 +212,22 @@ export async function GET() {
 
     const todayMayoristaQuery = unstable_cache(
       async () => {
-        return await db.query.historicalPrices.findMany({
+        const yesterday = await db.query.historicalPrices.findMany({
+          orderBy: [asc(historicalPrices.timestamp)],
+          where: and(
+            eq(historicalPrices.type, 'mayorista'),
+            gte(historicalPrices.timestamp, startDaysAgo(1)),
+            lte(historicalPrices.timestamp, startToday)
+          ),
+        })
+        const today = await db.query.historicalPrices.findMany({
           orderBy: [asc(historicalPrices.timestamp)],
           where: and(
             eq(historicalPrices.type, 'mayorista'),
             gte(historicalPrices.timestamp, startToday)
           ),
         })
+        return [...yesterday.slice(-1), ...today]
       },
       ['todayMayorista'],
       {
@@ -198,7 +250,15 @@ export async function GET() {
 
     const todayCclQuery = unstable_cache(
       async () => {
-        const query = await db.query.historicalPrices.findMany({
+        const yesterday = await db.query.historicalPrices.findMany({
+          orderBy: [asc(historicalPrices.timestamp)],
+          where: and(
+            eq(historicalPrices.type, 'ccl'),
+            gte(historicalPrices.timestamp, startDaysAgo(1)),
+            lte(historicalPrices.timestamp, startToday)
+          ),
+        })
+        const today = await db.query.historicalPrices.findMany({
           orderBy: [asc(historicalPrices.timestamp)],
           where: and(
             eq(historicalPrices.type, 'ccl'),
@@ -206,7 +266,7 @@ export async function GET() {
           ),
         })
 
-        return calculateOnePricePerHalfHour(query)
+        return calculateOnePricePerHalfHour([...yesterday.slice(-1), ...today])
       },
       ['todayCcl'],
       {
@@ -230,7 +290,15 @@ export async function GET() {
 
     const todayCriptoQuery = unstable_cache(
       async () => {
-        const query = await db.query.historicalPrices.findMany({
+        const yesterday = await db.query.historicalPrices.findMany({
+          orderBy: [asc(historicalPrices.timestamp)],
+          where: and(
+            eq(historicalPrices.type, 'cripto'),
+            gte(historicalPrices.timestamp, startDaysAgo(1)),
+            lte(historicalPrices.timestamp, startToday)
+          ),
+        })
+        const today = await db.query.historicalPrices.findMany({
           orderBy: [asc(historicalPrices.timestamp)],
           where: and(
             eq(historicalPrices.type, 'cripto'),
@@ -238,7 +306,7 @@ export async function GET() {
           ),
         })
 
-        return calculateOnePricePerHalfHour(query)
+        return calculateOnePricePerHalfHour([...yesterday.slice(-1), ...today])
       },
       ['todayCripto'],
       {
