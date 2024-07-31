@@ -1,6 +1,5 @@
-import { LastPrices } from '@/app/api/get-last-prices/types'
+import { createClient } from '@/utils/supabase/server'
 import { twitterClient } from '@/utils/twitterClient'
-import { getPercentageChange } from '@/utils/utils'
 import dayjs from 'dayjs'
 import 'dayjs/locale/es'
 import updateLocale from 'dayjs/plugin/updateLocale'
@@ -37,95 +36,109 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const lastPrices: LastPrices = await fetch(
-      `https://dolarya.info/api/get-last-prices`
-    ).then((res) => res.json())
+    const supabase = createClient()
 
-    const oficialTodayPrices: number[] = lastPrices?.oficial.today.map(
-      (today: any) => today.ask
-    )
-    const blueTodayPrices: number[] = lastPrices?.blue.today.map(
-      (today: any) => today.ask
-    )
-    const mepTodayPrices: number[] = lastPrices?.mep.today.map(
-      (today: any) => today.ask
-    )
-    const cocosTodayPrices: number[] = lastPrices?.cocos.today.map(
-      (today: any) => today.ask
-    )
-    const tarjetaTodayPrices: number[] = lastPrices?.tarjeta.today.map(
-      (today: any) => today.ask
-    )
-    const mayoristaTodayPrices: number[] = lastPrices?.mayorista.today.map(
-      (today: any) => today.ask
-    )
-    const cclTodayPrices: number[] = lastPrices?.ccl.today.map(
-      (today: any) => today.ask
-    )
-    const criptoTodayPrices: number[] = lastPrices?.cripto.today.map(
-      (today: any) => today.ask
-    )
+    async function getLastPrice(type: string) {
+      const query = await supabase
+        .from('historical-prices')
+        .select('ask, bid')
+        .eq('type', type)
+        .order('timestamp', { ascending: false })
+        .single()
+      return query.data
+    }
 
-    const oficialChartPrices = [...oficialTodayPrices, lastPrices?.oficial.ask]
-    const blueChartPrices = [...blueTodayPrices, lastPrices?.blue.ask]
-    const mepChartPrices = [...mepTodayPrices, lastPrices?.mep.ask]
-    const cocosChartPrices = [...cocosTodayPrices, lastPrices?.cocos.ask]
-    const tarjetaChartPrices = [...tarjetaTodayPrices, lastPrices?.tarjeta.ask]
-    const mayoristaChartPrices = [
-      ...mayoristaTodayPrices,
-      lastPrices?.mayorista.ask,
-    ]
-    const cclChartPrices = [...cclTodayPrices, lastPrices?.ccl.ask]
-    const criptoChartPrices = [...criptoTodayPrices, lastPrices?.cripto.ask]
+    async function getPercentageChange(type: string) {
+      const { data: basePrice } = await supabase
+        .from('historical-prices')
+        .select('ask')
+        .eq('type', type)
+        .lt('timestamp', dayjs().startOf('day').toDate())
+        .order('timestamp', { ascending: false })
+        .limit(1)
+        .single()
+
+      const { data: lastPrice } = await supabase
+        .from('historical-prices')
+        .select('ask')
+        .eq('type', type)
+        .gte('timestamp', dayjs().startOf('day').toDate())
+        .lte('timestamp', dayjs().toDate())
+        .order('timestamp', { ascending: false })
+        .single()
+
+      if (basePrice?.ask && lastPrice?.ask) {
+        return ((lastPrice.ask - basePrice.ask) / basePrice.ask) * 100
+      } else {
+        return 0
+      }
+    }
+
+    const lastOficial = await getLastPrice('oficial')
+    const perChangeOficial = await getPercentageChange('oficial')
+    const lastBlue = await getLastPrice('blue')
+    const perChangeBlue = await getPercentageChange('blue')
+    const lastMep = await getLastPrice('mep')
+    const perChangeMep = await getPercentageChange('mep')
+    const lastCocos = await getLastPrice('cocos')
+    const perChangeCocos = await getPercentageChange('cocos')
+    const lastTarjeta = await getLastPrice('tarjeta')
+    const perChangeTarjeta = await getPercentageChange('tarjeta')
+    const lastMayorista = await getLastPrice('mayorista')
+    const perChangeMayorista = await getPercentageChange('mayorista')
+    const lastCcl = await getLastPrice('ccl')
+    const perChangeCcl = await getPercentageChange('ccl')
+    const lastCripto = await getLastPrice('cripto')
+    const perChangeCripto = await getPercentageChange('cripto')
 
     const dolarTypes = [
       {
         name: 'Oficial',
-        ask: lastPrices?.oficial.ask,
-        bid: lastPrices?.oficial.bid,
-        percentageChange: getPercentageChange(oficialChartPrices),
+        ask: lastOficial?.ask,
+        bid: lastOficial?.bid,
+        percentageChange: perChangeOficial,
       },
       {
         name: 'Blue',
-        ask: lastPrices?.blue.ask,
-        bid: lastPrices?.blue.bid,
-        percentageChange: getPercentageChange(blueChartPrices),
+        ask: lastBlue?.ask,
+        bid: lastBlue?.bid,
+        percentageChange: perChangeBlue,
       },
       {
         name: 'MEP',
-        ask: lastPrices?.mep.ask,
-        bid: lastPrices?.mep.bid,
-        percentageChange: getPercentageChange(mepChartPrices),
+        ask: lastMep?.ask,
+        bid: lastMep?.bid,
+        percentageChange: perChangeMep,
       },
       {
         name: 'Cocos',
-        ask: lastPrices?.cocos.ask,
-        bid: lastPrices?.cocos.bid,
-        percentageChange: getPercentageChange(cocosChartPrices),
+        ask: lastCocos?.ask,
+        bid: lastCocos?.bid,
+        percentageChange: perChangeCocos,
       },
       {
         name: 'Tarjeta',
-        ask: lastPrices?.tarjeta.ask,
-        bid: lastPrices?.tarjeta.bid,
-        percentageChange: getPercentageChange(tarjetaChartPrices),
+        ask: lastTarjeta?.ask,
+        bid: lastTarjeta?.bid,
+        percentageChange: perChangeTarjeta,
       },
       {
         name: 'Mayorista',
-        ask: lastPrices?.mayorista.ask,
-        bid: lastPrices?.mayorista.bid,
-        percentageChange: getPercentageChange(mayoristaChartPrices),
+        ask: lastMayorista?.ask,
+        bid: lastMayorista?.bid,
+        percentageChange: perChangeMayorista,
       },
       {
         name: 'CCL',
-        ask: lastPrices?.ccl.ask,
-        bid: lastPrices?.ccl.bid,
-        percentageChange: getPercentageChange(cclChartPrices),
+        ask: lastCcl?.ask,
+        bid: lastCcl?.bid,
+        percentageChange: perChangeCcl,
       },
       {
         name: 'Cripto',
-        ask: lastPrices?.cripto.ask,
-        bid: lastPrices?.cripto.bid,
-        percentageChange: getPercentageChange(criptoChartPrices),
+        ask: lastCripto?.ask,
+        bid: lastCripto?.bid,
+        percentageChange: perChangeCripto,
       },
     ]
 
