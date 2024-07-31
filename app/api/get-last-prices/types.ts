@@ -6,9 +6,9 @@ export type PriceType = {
 
 export interface LastPrices {
   [key: string]: {
-    ask?: number
-    bid?: number
-    timestamp: Date
-    today: PriceType[]
+    ask?: number | null
+    bid?: number | null
+    timestamp?: string | null
+    today: number[]
   }
 }

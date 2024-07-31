@@ -8,9 +8,7 @@ import Link from 'next/link'
 export default function DolarTypeList({ dolarType }: { dolarType: DolarType }) {
   const { resolvedTheme } = useTheme()
 
-  const todayPrices: number[] = dolarType.today
-    ? dolarType.today.map((today: any) => parseFloat(today.ask))
-    : []
+  const todayPrices = dolarType.today ?? []
 
   const chartPrices = dolarType.ask
     ? [...todayPrices, dolarType.ask]

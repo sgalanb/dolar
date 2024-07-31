@@ -1,92 +1,200 @@
 'use client'
 
-import { LastPrices, PriceType } from '@/app/api/get-last-prices/types'
+import { LastPrices } from '@/app/api/get-last-prices/types'
 import DolarTypeGrid from '@/components/DolarTypeGrid'
 import DolarTypeList from '@/components/DolarTypeList'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { fetcher } from '@/utils/utils'
+import { createClient } from '@/utils/supabase/client'
+import dayjs from 'dayjs'
 import { AlignJustify, Grid2X2, Rows } from 'lucide-react'
 import dynamic from 'next/dynamic'
-import useSWR from 'swr'
+import { useEffect, useState } from 'react'
 
 const LastUpdateTime = dynamic(() => import('@/components/LastUpdateTime'))
 
 export interface DolarType {
-  name?: string
-  bid?: number
-  ask?: number
-  timestamp: Date
-  today: PriceType[]
+  name: string
+  bid?: number | null
+  ask?: number | null
+  timestamp?: Date | null
+  today?: number[]
 }
 
-export default function DolarsHome({ lastPrices }: { lastPrices: LastPrices }) {
-  const {
-    data: prices,
-    isLoading,
-    error,
-  }: {
-    data: LastPrices
-    isLoading: boolean
-    error: any
-  } = useSWR<any>('/api/get-last-prices', fetcher, {
-    refreshInterval: 1000,
-    fallbackData: lastPrices,
-  })
+export default function DolarsHome() {
+  const supabase = createClient()
+
+  async function getLastPrice(type: string) {
+    const query = await supabase
+      .from('historical-prices')
+      .select('ask, bid, timestamp')
+      .eq('type', type)
+      .order('timestamp', { ascending: false })
+      .single()
+    return query.data
+  }
+
+  const [prices, setPrices] = useState<LastPrices>()
+
+  async function getToday(type: string) {
+    const { data: basePrice } = await supabase
+      .from('historical-prices')
+      .select('ask')
+      .eq('type', type)
+      .lt('timestamp', dayjs().startOf('day').toDate())
+      .order('timestamp', { ascending: false })
+      .limit(1)
+      .single()
+
+    const { data: lastPrices } = await supabase
+      .from('historical-prices')
+      .select('ask')
+      .eq('type', type)
+      .gte('timestamp', dayjs().startOf('day').toDate())
+      .lte('timestamp', dayjs().toDate())
+      .order('timestamp', { ascending: true })
+
+    const lastPricesNumbers = lastPrices?.map((price) => price.ask as number)
+
+    if (basePrice?.ask && lastPricesNumbers) {
+      return [basePrice.ask, ...lastPricesNumbers]
+    } else if (lastPricesNumbers && !basePrice?.ask) {
+      return lastPricesNumbers
+    } else {
+      return []
+    }
+  }
+
+  async function fetchDolarTypes() {
+    const lastOficial = await getLastPrice('oficial')
+    const lastBlue = await getLastPrice('blue')
+    const lastMep = await getLastPrice('mep')
+    const lastCocos = await getLastPrice('cocos')
+    const lastTarjeta = await getLastPrice('tarjeta')
+    const lastMayorista = await getLastPrice('mayorista')
+    const lastCcl = await getLastPrice('ccl')
+    const lastCripto = await getLastPrice('cripto')
+
+    const oficialToday = await getToday('oficial')
+    const blueToday = await getToday('blue')
+    const mepToday = await getToday('mep')
+    const cocosToday = await getToday('cocos')
+    const tarjetaToday = await getToday('tarjeta')
+    const mayoristaToday = await getToday('mayorista')
+    const cclToday = await getToday('ccl')
+    const criptoToday = await getToday('cripto')
+
+    setPrices({
+      oficial: {
+        ...lastOficial,
+        today: oficialToday,
+      },
+      blue: {
+        ...lastBlue,
+        today: blueToday,
+      },
+      mep: {
+        ...lastMep,
+        today: mepToday,
+      },
+      cocos: {
+        ...lastCocos,
+        today: cocosToday,
+      },
+      tarjeta: {
+        ...lastTarjeta,
+        today: tarjetaToday,
+      },
+      mayorista: {
+        ...lastMayorista,
+        today: mayoristaToday,
+      },
+      ccl: {
+        ...lastCcl,
+        today: cclToday,
+      },
+      cripto: {
+        ...lastCripto,
+        today: criptoToday,
+      },
+    })
+  }
+
+  // Fetch prices every 30 seconds
+  useEffect(() => {
+    fetchDolarTypes()
+    const interval = setInterval(() => {
+      fetchDolarTypes()
+    }, 30000)
+    return () => clearInterval(interval)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const dolars: DolarType[] = [
     {
       name: 'Oficial',
       bid: prices?.oficial?.bid,
       ask: prices?.oficial?.ask,
-      timestamp: prices?.oficial?.timestamp,
+      timestamp: prices?.oficial?.timestamp
+        ? new Date(prices.oficial.timestamp)
+        : null,
       today: prices?.oficial?.today,
     },
     {
       name: 'Blue',
       bid: prices?.blue?.bid,
       ask: prices?.blue?.ask,
-      timestamp: prices?.blue?.timestamp,
+      timestamp: prices?.blue?.timestamp
+        ? new Date(prices.blue.timestamp)
+        : null,
       today: prices?.blue?.today,
     },
     {
       name: 'MEP',
       bid: prices?.mep?.bid,
       ask: prices?.mep?.ask,
-      timestamp: prices?.mep?.timestamp,
+      timestamp: prices?.mep?.timestamp ? new Date(prices.mep.timestamp) : null,
       today: prices?.mep?.today,
     },
     {
       name: 'Cocos',
       bid: prices?.cocos?.bid,
       ask: prices?.cocos?.ask,
-      timestamp: prices?.cocos?.timestamp,
+      timestamp: prices?.cocos?.timestamp
+        ? new Date(prices.cocos.timestamp)
+        : null,
       today: prices?.cocos?.today,
     },
     {
       name: 'Tarjeta',
       ask: prices?.tarjeta?.ask,
-      timestamp: prices?.tarjeta?.timestamp,
+      timestamp: prices?.tarjeta?.timestamp
+        ? new Date(prices.tarjeta.timestamp)
+        : null,
       today: prices?.tarjeta?.today,
     },
     {
       name: 'Mayorista',
       bid: prices?.mayorista?.bid,
       ask: prices?.mayorista?.ask,
-      timestamp: prices?.mayorista?.timestamp,
+      timestamp: prices?.mayorista?.timestamp
+        ? new Date(prices.mayorista.timestamp)
+        : null,
       today: prices?.mayorista?.today,
     },
     {
       name: 'CCL',
       bid: prices?.ccl?.bid,
       ask: prices?.ccl?.ask,
-      timestamp: prices?.ccl?.timestamp,
+      timestamp: prices?.ccl?.timestamp ? new Date(prices.ccl.timestamp) : null,
       today: prices?.ccl?.today,
     },
     {
       name: 'Cripto',
       bid: prices?.cripto?.bid,
       ask: prices?.cripto?.ask,
-      timestamp: prices?.cripto?.timestamp,
+      timestamp: prices?.cripto?.timestamp
+        ? new Date(prices.cripto.timestamp)
+        : null,
       today: prices?.cripto?.today,
     },
   ]
