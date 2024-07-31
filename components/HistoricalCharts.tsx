@@ -128,7 +128,7 @@ export default function HistoricalCharts({
         {chartPrices ? (
           <LineChart lineData={lineData} />
         ) : (
-          <div className="aspect-[2/1] w-full animate-pulse rounded-2xl dark:bg-zinc-800"></div>
+          <div className="aspect-[2/1] w-full animate-pulse rounded-2xl bg-[#bebec0] dark:bg-[#71717A]/50"></div>
         )}
         <LastUpdateTime />
       </div>

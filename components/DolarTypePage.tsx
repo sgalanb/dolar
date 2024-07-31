@@ -60,84 +60,88 @@ export default function DolarTypePage({ type }: { type: string }) {
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-9">
-      <div
-        className={`flex w-full items-center justify-between gap-3 rounded-2xl`}
-      >
-        <div className="flex w-fit flex-col items-start justify-center gap-3">
-          <h1 className={`flex w-full gap-2 text-xl font-semibold leading-5`}>
-            {`Dólar ${type}`}
-            <span className="hidden text-black/50 dark:text-white/50 sm:block">
-              {type === 'MEP' || type === 'CCL'
-                ? '(AL30 24HS)'
-                : type === 'Cripto'
-                  ? '(USDC)'
-                  : ''}
-            </span>
-          </h1>
-          <div className="flex flex-col items-start justify-center text-sm font-normal tracking-wider text-black/50 dark:text-white/50">
-            <p className="block sm:hidden">
-              {type === 'MEP' || type === 'CCL'
-                ? 'AL30 | 24HS'
-                : type === 'Cripto'
-                  ? 'USDC'
-                  : ''}
-            </p>
-            <p
-              className={`${
-                type === 'MEP' || type === 'CCL' || type === 'Cripto'
-                  ? 'hidden sm:block'
-                  : ''
-              }`}
-            >
-              {dayjs(lastPrice?.timestamp).format('DD/MM/YYYY - HH:mm')}
-            </p>
-            <p>
-              {dayjs(lastPrice?.timestamp)
-                .locale('es')
-                .fromNow()}
-            </p>
-          </div>
-          {/* </div> */}
-        </div>
-        {lastPrice?.bid ? (
-          <div className="flex w-40 flex-col items-center justify-center gap-3">
-            <div className="flex w-full items-center justify-between">
-              <span className="text-sm font-normal ">Comprá</span>
-              <p className="text-xl font-semibold leading-5">{`$${lastPrice?.ask?.toLocaleString(
-                'es-AR',
-                {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                }
-              )}`}</p>
-            </div>
-            <div className="flex w-full items-center justify-between">
-              <span className="text-sm font-normal text-black/50 dark:text-white/50">
-                Vendé
+      {lastPrice?.ask ? (
+        <div
+          className={`flex w-full items-center justify-between gap-3 rounded-2xl`}
+        >
+          <div className="flex w-fit flex-col items-start justify-center gap-3">
+            <h1 className={`flex w-full gap-2 text-xl font-semibold leading-5`}>
+              {`Dólar ${type}`}
+              <span className="hidden text-black/50 dark:text-white/50 sm:block">
+                {type === 'MEP' || type === 'CCL'
+                  ? '(AL30 24HS)'
+                  : type === 'Cripto'
+                    ? '(USDC)'
+                    : ''}
               </span>
-              <p className="text-xl font-semibold leading-5 text-black/50 dark:text-white/50">
-                {`$${lastPrice?.bid?.toLocaleString('es-AR', {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}`}
+            </h1>
+            <div className="flex flex-col items-start justify-center text-sm font-normal tracking-wider text-black/50 dark:text-white/50">
+              <p className="block sm:hidden">
+                {type === 'MEP' || type === 'CCL'
+                  ? 'AL30 | 24HS'
+                  : type === 'Cripto'
+                    ? 'USDC'
+                    : ''}
+              </p>
+              <p
+                className={`${
+                  type === 'MEP' || type === 'CCL' || type === 'Cripto'
+                    ? 'hidden sm:block'
+                    : ''
+                }`}
+              >
+                {dayjs(lastPrice?.timestamp).format('DD/MM/YYYY - HH:mm')}
+              </p>
+              <p>
+                {dayjs(lastPrice?.timestamp)
+                  .locale('es')
+                  .fromNow()}
               </p>
             </div>
+            {/* </div> */}
           </div>
-        ) : (
-          <div className="flex w-40 flex-col items-center justify-center">
-            <div className="flex w-full items-center justify-between">
-              <span className="text-sm font-normal">Comprá</span>
-              <p className="text-xl font-semibold leading-5">{`$${lastPrice?.ask?.toLocaleString(
-                'es-AR',
-                {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                }
-              )}`}</p>
+          {lastPrice?.bid ? (
+            <div className="flex w-40 flex-col items-center justify-center gap-3">
+              <div className="flex w-full items-center justify-between">
+                <span className="text-sm font-normal ">Comprá</span>
+                <p className="text-xl font-semibold leading-5">{`$${lastPrice?.ask?.toLocaleString(
+                  'es-AR',
+                  {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }
+                )}`}</p>
+              </div>
+              <div className="flex w-full items-center justify-between">
+                <span className="text-sm font-normal text-black/50 dark:text-white/50">
+                  Vendé
+                </span>
+                <p className="text-xl font-semibold leading-5 text-black/50 dark:text-white/50">
+                  {`$${lastPrice?.bid?.toLocaleString('es-AR', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}`}
+                </p>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+          ) : (
+            <div className="flex w-40 flex-col items-center justify-center">
+              <div className="flex w-full items-center justify-between">
+                <span className="text-sm font-normal">Comprá</span>
+                <p className="text-xl font-semibold leading-5">{`$${lastPrice?.ask?.toLocaleString(
+                  'es-AR',
+                  {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }
+                )}`}</p>
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="h-[4.5rem] w-full animate-pulse rounded-2xl bg-[#bebec0] dark:bg-[#71717A]/50" />
+      )}
       <HistoricalCharts type={type} lastPrice={lastPrice} />
     </div>
   )

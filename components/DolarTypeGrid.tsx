@@ -71,57 +71,79 @@ export default function DolarTypeGrid({ dolarType }: { dolarType: DolarType }) {
         >
           {dolarType.name}
         </h2>
-        <span
-          className={`${
-            dolarType.name == 'Cocos' && resolvedTheme == 'light'
-              ? 'bg-cocos-600/20 text-cocos-600'
-              : dolarType.name == 'Cocos' && resolvedTheme == 'dark'
-                ? 'bg-cocos-500/20 text-cocos-500'
-                : dolarType.name == 'Cocos'
-                  ? 'bg-cocos-600/20 text-cocos-600'
-                  : chartPrices[0] <= chartPrices[chartPrices.length - 1]
-                    ? 'bg-[#49ca4b]/20 text-[#49ca4b]'
-                    : 'bg-[#D83141]/20 text-[#D83141]'
-          } w-fit rounded p-1 px-2 text-sm font-normal`}
-        >
-          {porcentualChange >= 0
-            ? `+${porcentualChange
-                .toFixed(dolarType.name == 'Mayorista' ? 0 : 2)
-                .replace('.', ',')} %`
-            : `-${Math.abs(porcentualChange)
-                .toFixed(dolarType.name == 'Mayorista' ? 0 : 2)
-                .replace('.', ',')} %`}
-        </span>
-      </div>
-      <div className="h-full w-full">
-        <MiniLineChart lineData={lineData} />
-      </div>
-      {dolarType.bid ? (
-        <div className="flex h-[3.25rem] w-full flex-col items-center justify-center gap-3">
-          <div className="flex w-full items-center justify-between">
-            <span className="text-sm font-normal ">Comprá</span>
-            <p className="text-xl font-semibold leading-5">
-              {dolarType?.ask?.toFixed(2)?.replace('.', ',')}
-            </p>
+        {dolarType.ask ? (
+          <span
+            className={`${
+              dolarType.name == 'Cocos' && resolvedTheme == 'light'
+                ? 'bg-cocos-600/20 text-cocos-600'
+                : dolarType.name == 'Cocos' && resolvedTheme == 'dark'
+                  ? 'bg-cocos-500/20 text-cocos-500'
+                  : dolarType.name == 'Cocos'
+                    ? 'bg-cocos-600/20 text-cocos-600'
+                    : chartPrices[0] <= chartPrices[chartPrices.length - 1]
+                      ? 'bg-[#49ca4b]/20 text-[#49ca4b]'
+                      : 'bg-[#D83141]/20 text-[#D83141]'
+            } w-fit rounded p-1 px-2 text-sm font-normal`}
+          >
+            {porcentualChange >= 0
+              ? `+${porcentualChange
+                  .toFixed(dolarType.name == 'Mayorista' ? 0 : 2)
+                  .replace('.', ',')} %`
+              : `-${Math.abs(porcentualChange)
+                  .toFixed(dolarType.name == 'Mayorista' ? 0 : 2)
+                  .replace('.', ',')} %`}
+          </span>
+        ) : (
+          <div
+            className={`${
+              dolarType.name == 'Mayorista' ? 'w-12' : 'w-16'
+            }  animate-pulse rounded-md bg-[#F3F4F6] p-1 px-2 dark:bg-[#71717A]/50`}
+          >
+            <div className="h-5" />
           </div>
-          <div className="flex w-full items-center justify-between">
-            <span className="text-sm font-normal text-black/50 dark:text-white/50">
-              Vendé
-            </span>
-            <p className="text-xl font-semibold leading-5 text-black/50 dark:text-white/50">
-              {dolarType?.bid?.toFixed(2)?.replace('.', ',')}
-            </p>
-          </div>
+        )}
+      </div>
+      {dolarType.ask ? (
+        <div className="h-full w-full">
+          <MiniLineChart lineData={lineData} />
         </div>
       ) : (
-        <div className="flex h-full w-full flex-col items-center justify-center">
-          <div className="flex w-full items-center justify-between">
-            <span className="text-sm font-normal">Comprá</span>
-            <p className="text-xl font-semibold leading-5">
-              {dolarType?.ask?.toFixed(2).replace('.', ',')}
-            </p>
-          </div>
+        <div className="flex h-full w-full items-center justify-center">
+          <div className="h-1 w-full animate-pulse rounded-md bg-[#F3F4F6] dark:bg-[#71717A]/50" />
         </div>
+      )}
+      {dolarType.ask ? (
+        <>
+          {dolarType.bid ? (
+            <div className="flex h-[3.25rem] w-full flex-col items-center justify-center gap-3">
+              <div className="flex w-full items-center justify-between">
+                <span className="text-sm font-normal ">Comprá</span>
+                <p className="text-xl font-semibold leading-5">
+                  {dolarType?.ask?.toFixed(2)?.replace('.', ',')}
+                </p>
+              </div>
+              <div className="flex w-full items-center justify-between">
+                <span className="text-sm font-normal text-black/50 dark:text-white/50">
+                  Vendé
+                </span>
+                <p className="text-xl font-semibold leading-5 text-black/50 dark:text-white/50">
+                  {dolarType?.bid?.toFixed(2)?.replace('.', ',')}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="flex h-full w-full flex-col items-center justify-center">
+              <div className="flex w-full items-center justify-between">
+                <span className="text-sm font-normal">Comprá</span>
+                <p className="text-xl font-semibold leading-5">
+                  {dolarType?.ask?.toFixed(2).replace('.', ',')}
+                </p>
+              </div>
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="flex h-[3.25rem] w-full animate-pulse flex-col items-center justify-center gap-3 rounded-md bg-[#F3F4F6] dark:bg-[#71717A]/50"></div>
       )}
     </Link>
   )
