@@ -41,7 +41,7 @@ export default function DolarsHome() {
       .select('ask')
       .eq('type', type)
       .lte('timestamp', dayjs().startOf('day').toISOString())
-      .order('timestamp', { ascending: true })
+      .order('timestamp', { ascending: false })
       .limit(1)
       .single()
 
