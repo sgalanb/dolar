@@ -36,8 +36,9 @@ export default function DolarTypePage({ type }: { type: string }) {
     const query = await supabase
       .from('historical-prices')
       .select('ask, bid, timestamp')
-      .eq('type', type)
+      .eq('type', type.toLowerCase())
       .order('timestamp', { ascending: false })
+      .limit(1)
       .single()
     return query.data
   }

@@ -15,6 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
       .select('ask, bid')
       .eq('type', type)
       .order('timestamp', { ascending: false })
+      .limit(1)
       .single()
     return query.data
   }
@@ -24,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
       .from('historical-prices')
       .select('ask')
       .eq('type', type)
-      .lt('timestamp', dayjs().startOf('day').toDate())
+      .lt('timestamp', dayjs().startOf('day').toISOString())
       .order('timestamp', { ascending: false })
       .limit(1)
       .single()
@@ -33,9 +34,10 @@ export async function generateMetadata(): Promise<Metadata> {
       .from('historical-prices')
       .select('ask')
       .eq('type', type)
-      .gte('timestamp', dayjs().startOf('day').toDate())
-      .lte('timestamp', dayjs().toDate())
+      .gte('timestamp', dayjs().startOf('day').toISOString())
+      .lte('timestamp', dayjs().toISOString())
       .order('timestamp', { ascending: false })
+      .limit(1)
       .single()
 
     if (basePrice?.ask && lastPrice?.ask) {

@@ -28,6 +28,7 @@ export default function DolarsHome() {
       .select('ask, bid, timestamp')
       .eq('type', type)
       .order('timestamp', { ascending: false })
+      .limit(1)
       .single()
     return query.data
   }
@@ -39,8 +40,8 @@ export default function DolarsHome() {
       .from('historical-prices')
       .select('ask')
       .eq('type', type)
-      .lt('timestamp', dayjs().startOf('day').toDate())
-      .order('timestamp', { ascending: false })
+      .lte('timestamp', dayjs().startOf('day').toISOString())
+      .order('timestamp', { ascending: true })
       .limit(1)
       .single()
 
@@ -48,8 +49,8 @@ export default function DolarsHome() {
       .from('historical-prices')
       .select('ask')
       .eq('type', type)
-      .gte('timestamp', dayjs().startOf('day').toDate())
-      .lte('timestamp', dayjs().toDate())
+      .gte('timestamp', dayjs().startOf('day').toISOString())
+      .lte('timestamp', dayjs().toISOString())
       .order('timestamp', { ascending: true })
 
     const lastPricesNumbers = lastPrices?.map((price) => price.ask as number)
@@ -65,6 +66,7 @@ export default function DolarsHome() {
 
   async function fetchDolarTypes() {
     const lastOficial = await getLastPrice('oficial')
+    console.log(lastOficial)
     const lastBlue = await getLastPrice('blue')
     const lastMep = await getLastPrice('mep')
     const lastCocos = await getLastPrice('cocos')

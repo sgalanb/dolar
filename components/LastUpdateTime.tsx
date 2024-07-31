@@ -7,12 +7,12 @@ import { useEffect, useState } from 'react'
 dayjs.extend(LocalizedFormat)
 
 export default function LastUpdateTime() {
-  const [localTime, setLocalTime] = useState(dayjs().format('LT'))
+  const [localTime, setLocalTime] = useState(dayjs().format('DD/MM/YYYY HH:mm'))
 
   useEffect(() => {
     // Function to update the local time
     const updateLocalTime = () => {
-      setLocalTime(dayjs().format('LT'))
+      setLocalTime(dayjs().format('DD/MM/YYYY HH:mm'))
     }
 
     // Set an interval to update the local time every second

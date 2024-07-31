@@ -40,8 +40,8 @@ export default function HistoricalCharts({
     const query = await supabase
       .from('historical-prices')
       .select('ask, timestamp')
-      .eq('type', type)
-      .gte('timestamp', dayjs().subtract(selectedDays, 'day').toDate())
+      .eq('type', type.toLowerCase())
+      .gte('timestamp', dayjs().subtract(selectedDays, 'day').toISOString())
       .order('timestamp', { ascending: true })
     return query.data
   }
