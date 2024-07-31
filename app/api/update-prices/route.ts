@@ -2,7 +2,7 @@ import {
   CocosMEPResponse,
   CriptoYaResponse,
 } from '@/app/api/update-prices/types'
-import { createClient } from '@/utils/supabase/server'
+import { createClient } from '@/utils/supabase/service-role'
 import { NextRequest } from 'next/server'
 
 export const dynamic = 'force-dynamic'
