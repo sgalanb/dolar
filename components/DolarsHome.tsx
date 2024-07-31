@@ -1,6 +1,5 @@
 'use client'
 
-import { LastPrices } from '@/app/api/get-last-prices/types'
 import DolarTypeGrid from '@/components/DolarTypeGrid'
 import DolarTypeList from '@/components/DolarTypeList'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -33,7 +32,7 @@ export default function DolarsHome() {
     return query.data
   }
 
-  const [prices, setPrices] = useState<LastPrices>()
+  const [prices, setPrices] = useState<any>()
 
   async function getToday(type: string) {
     const { data: basePrice } = await supabase

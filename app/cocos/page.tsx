@@ -1,43 +1,68 @@
-import { LastPrices } from '@/app/api/get-last-prices/types'
 import DolarTypePage from '@/components/DolarTypePage'
 import OperaEnCocosButton from '@/components/OperaEnCocosButton'
 import { Separator } from '@/components/ui/separator'
-import { getDiff } from '@/utils/utils'
+import { createClient } from '@/utils/supabase/server'
 import dayjs from 'dayjs'
 import { Metadata } from 'next'
 import Link from 'next/link'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const lastPrices: LastPrices = await fetch(
-    `https://dolarya.info/api/get-last-prices`,
-    { next: { revalidate: 60 } }
-  ).then((res) => res.json())
+  const supabase = createClient()
 
-  const cocosBid = `$${lastPrices?.cocos?.bid?.toLocaleString('es-AR', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`
-  const cocosAsk = `$${lastPrices?.cocos?.ask?.toLocaleString('es-AR', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`
-  const cocosDiffNumber = getDiff(lastPrices?.cocos)
-  const cocosDiff = cocosDiffNumber.toFixed(2)?.replace('.', ',')
+  async function getLastPrice(type: string) {
+    const query = await supabase
+      .from('historical-prices')
+      .select('ask, bid')
+      .eq('type', type)
+      .order('timestamp', { ascending: false })
+      .single()
+    return query.data
+  }
+
+  async function getPercentageChange(type: string) {
+    const { data: basePrice } = await supabase
+      .from('historical-prices')
+      .select('ask')
+      .eq('type', type)
+      .lt('timestamp', dayjs().startOf('day').toDate())
+      .order('timestamp', { ascending: false })
+      .limit(1)
+      .single()
+
+    const { data: lastPrice } = await supabase
+      .from('historical-prices')
+      .select('ask')
+      .eq('type', type)
+      .gte('timestamp', dayjs().startOf('day').toDate())
+      .lte('timestamp', dayjs().toDate())
+      .order('timestamp', { ascending: false })
+      .single()
+
+    if (basePrice?.ask && lastPrice?.ask) {
+      return ((lastPrice.ask - basePrice.ask) / basePrice.ask) * 100
+    } else {
+      return 0
+    }
+  }
+
+  const lastCocos = await getLastPrice('cocos')
+  const perChangeCocos = await getPercentageChange('cocos')
+  const perChangeString = perChangeCocos.toFixed(2)?.replace('.', ',')
   const fecha = dayjs().subtract(3, 'hour').format('DD/MM - HH:mm')
 
   const ogImageURL =
     `https://sharepreviews.com/og/96aa1fff-29b4-41cc-9ea0-35fc1b378973?` +
     `${
-      cocosDiffNumber >= 0
+      perChangeCocos >= 0
         ? 'positive_diff_isVisible=true'
         : 'negative_diff_isVisible=true'
     }` +
     `&${
-      cocosDiffNumber >= 0
-        ? `positive_diff_value=%2b%20${cocosDiff}%25`
-        : `negative_diff_value=%20${cocosDiff}%25`
+      perChangeCocos >= 0
+        ? `positive_diff_value=%2b%20${perChangeCocos}%25`
+        : `negative_diff_value=%20${perChangeCocos}%25`
     }` +
-    `&ask_price_value=${cocosAsk}&bid_price_value=${cocosBid}&fecha_value=${fecha}&dolar_type_value=Dólar%20Cocos`
+    `&ask_price_value=${lastCocos?.ask}&bid_price_value=${lastCocos?.bid}&fecha_value=${fecha}&dolar_type_value=Dólar%20Cocos`
 
   return {
     title: 'Dólar Cocos - Precio del dólar Cocos hoy | DólarYa',
@@ -63,14 +88,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Cocos() {
-  const lastPrices: LastPrices = await fetch(
-    `https://dolarya.info/api/get-last-prices`,
-    { next: { revalidate: 60 } }
-  ).then((res) => res.json())
-
   return (
     <div className="flex flex-col items-center justify-center gap-9">
-      <DolarTypePage type="Cocos" lastPrices={lastPrices} />
+      <DolarTypePage type="Cocos" />
       <div className="flex w-full flex-col items-center justify-center gap-6 rounded-2xl border-[4px] border-cocos-600 bg-white p-6 dark:bg-zinc-100 md:flex-row md:p-9">
         <h2 className="text-balance text-center text-2xl font-bold text-cocos-900 md:w-2/3 md:text-left">
           Comprá dólares cualquier día y a cualquier hora en Cocos Capital

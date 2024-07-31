@@ -1,42 +1,67 @@
-import { LastPrices } from '@/app/api/get-last-prices/types'
 import DolarTypePage from '@/components/DolarTypePage'
 import { Separator } from '@/components/ui/separator'
-import { getDiff } from '@/utils/utils'
+import { createClient } from '@/utils/supabase/server'
 import dayjs from 'dayjs'
 import { Metadata } from 'next'
 import Link from 'next/link'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const lastPrices: LastPrices = await fetch(
-    `https://dolarya.info/api/get-last-prices`,
-    { next: { revalidate: 60 } }
-  ).then((res) => res.json())
+  const supabase = createClient()
 
-  const blueBid = `$${lastPrices?.blue?.bid?.toLocaleString('es-AR', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`
-  const blueAsk = `$${lastPrices?.blue?.ask?.toLocaleString('es-AR', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`
-  const blueDiffNumber = getDiff(lastPrices?.blue)
-  const blueDiff = blueDiffNumber.toFixed(2)?.replace('.', ',')
+  async function getLastPrice(type: string) {
+    const query = await supabase
+      .from('historical-prices')
+      .select('ask, bid')
+      .eq('type', type)
+      .order('timestamp', { ascending: false })
+      .single()
+    return query.data
+  }
+
+  async function getPercentageChange(type: string) {
+    const { data: basePrice } = await supabase
+      .from('historical-prices')
+      .select('ask')
+      .eq('type', type)
+      .lt('timestamp', dayjs().startOf('day').toDate())
+      .order('timestamp', { ascending: false })
+      .limit(1)
+      .single()
+
+    const { data: lastPrice } = await supabase
+      .from('historical-prices')
+      .select('ask')
+      .eq('type', type)
+      .gte('timestamp', dayjs().startOf('day').toDate())
+      .lte('timestamp', dayjs().toDate())
+      .order('timestamp', { ascending: false })
+      .single()
+
+    if (basePrice?.ask && lastPrice?.ask) {
+      return ((lastPrice.ask - basePrice.ask) / basePrice.ask) * 100
+    } else {
+      return 0
+    }
+  }
+
+  const lastBlue = await getLastPrice('blue')
+  const perChangeBlue = await getPercentageChange('blue')
+  const perChangeString = perChangeBlue.toFixed(2)?.replace('.', ',')
   const fecha = dayjs().subtract(3, 'hour').format('DD/MM - HH:mm')
 
   const ogImageURL =
     `https://sharepreviews.com/og/96aa1fff-29b4-41cc-9ea0-35fc1b378973?` +
     `${
-      blueDiffNumber >= 0
+      perChangeBlue >= 0
         ? 'positive_diff_isVisible=true'
         : 'negative_diff_isVisible=true'
     }` +
     `&${
-      blueDiffNumber >= 0
-        ? `positive_diff_value=%2b%20${blueDiff}%25`
-        : `negative_diff_value=%20${blueDiff}%25`
+      perChangeBlue >= 0
+        ? `positive_diff_value=%2b%20${perChangeString}%25`
+        : `negative_diff_value=%20${perChangeString}%25`
     }` +
-    `&ask_price_value=${blueAsk}&bid_price_value=${blueBid}&fecha_value=${fecha}&dolar_type_value=Dólar%20Blue`
+    `&ask_price_value=${lastBlue?.ask}&bid_price_value=${lastBlue?.bid}&fecha_value=${fecha}&dolar_type_value=Dólar%20Blue`
 
   return {
     title: 'Dólar Blue - Precio del dólar blue hoy | DólarYa',
@@ -62,14 +87,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Blue() {
-  const lastPrices: LastPrices = await fetch(
-    `https://dolarya.info/api/get-last-prices`,
-    { next: { revalidate: 60 } }
-  ).then((res) => res.json())
-
   return (
     <div className="flex flex-col items-center justify-center gap-9">
-      <DolarTypePage type="Blue" lastPrices={lastPrices} />
+      <DolarTypePage type="Blue" />
       <div className="flex w-full flex-col gap-3 md:grid md:grid-cols-[3fr,1px,1fr]">
         <div className="flex flex-col gap-3 rounded-2xl">
           <h2 className="text-xl font-semibold leading-5">

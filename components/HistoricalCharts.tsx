@@ -1,95 +1,86 @@
 'use client'
 
-import { ChartPrices } from '@/app/api/get-chart-data/types'
-import { LastPrices } from '@/app/api/get-last-prices/types'
 import LastUpdateTime from '@/components/LastUpdateTime'
 import LineChart from '@/components/charts/LineChart'
+import { createClient } from '@/utils/supabase/client'
 import dayjs from 'dayjs'
 import { useTheme } from 'next-themes'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function HistoricalCharts({
   type,
-  lastPrices,
-  chartPrices,
+  lastPrice,
 }: {
   type: string
-  lastPrices: LastPrices
-  chartPrices: ChartPrices
+  lastPrice: {
+    ask: number | null
+    bid: number | null
+    timestamp: string
+  } | null
 }) {
   const { resolvedTheme } = useTheme()
 
   const [selectedTime, setSelectedTime] = useState<
     '10a' | '5a' | '2a' | '1a' | '6m' | '3m' | '1m' | '1s' | '1d'
-  >('3m')
+  >('1s')
 
-  const timeOptions: {
-    value: '10a' | '5a' | '2a' | '1a' | '6m' | '3m' | '1m' | '1s' | '1d'
-    label: string
-  }[] = [
-    { value: '1d', label: '1D' },
-    { value: '1s', label: '1S' },
-    { value: '1m', label: '1M' },
-    { value: '3m', label: '3M' },
-    { value: '6m', label: '6M' },
-    { value: '1a', label: '1A' },
-    { value: '2a', label: '2A' },
-    { value: '5a', label: '5A' },
-    { value: '10a', label: '10A' },
-  ]
+  const [chartPrices, setChartPrices] = useState<
+    | {
+        ask: number | null
+        timestamp: string
+      }[]
+    | null
+  >(null)
+
+  const supabase = createClient()
+
+  async function getChartPrices(type: string, selectedTime: string) {
+    const selectedDays =
+      timeOptions.find((option) => option.value == selectedTime)?.days || 1
+    const query = await supabase
+      .from('historical-prices')
+      .select('ask, timestamp')
+      .eq('type', type)
+      .gte('timestamp', dayjs().subtract(selectedDays, 'day').toDate())
+      .order('timestamp', { ascending: true })
+    return query.data
+  }
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = await getChartPrices(type, selectedTime)
+      setChartPrices(data)
+    }
+    fetchData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [type, selectedTime])
 
   const lineData = {
     labels:
-      selectedTime == '1d'
-        ? [
-            ...lastPrices[type.toLowerCase()]?.today.map((data: any) => {
-              return dayjs(data.timestamp).format('DD MMM HH:mm')
-            }),
-            'Actual',
-          ]
-        : !!chartPrices?.[selectedTime] &&
-            chartPrices?.[selectedTime]?.length > 1
-          ? selectedTime == '1m' || selectedTime == '1s'
-            ? chartPrices?.[selectedTime]
-                ?.map((data: any) => {
-                  return dayjs(data.timestamp).format('DD MMM HH:mm')
-                })
-                .concat('Actual')
-            : chartPrices?.[selectedTime]
-                ?.map((data: any) => {
-                  return dayjs(data.timestamp).format("DD MMM 'YY")
-                })
-                .concat('Actual')
-          : [
-              dayjs(lastPrices[type.toLowerCase()]?.timestamp).format(
-                'DD MMM HH:mm'
-              ),
-              'Actual',
-            ],
+      chartPrices && chartPrices?.length > 1
+        ? selectedTime == '1m' || selectedTime == '1s' || selectedTime == '1d'
+          ? chartPrices
+              ?.map((price) => {
+                return dayjs(price.timestamp).format('DD MMM HH:mm')
+              })
+              .concat('Actual')
+          : chartPrices
+              ?.map((price) => {
+                return dayjs(price.timestamp).format("DD MMM 'YY")
+              })
+              .concat('Actual')
+        : [dayjs(lastPrice?.timestamp).format('DD MMM HH:mm'), 'Actual'],
     datasets: [
       {
         label: 'Precio',
         data:
-          selectedTime == '1d'
-            ? [
-                ...lastPrices[type.toLowerCase()]?.today.map((data: any) => {
-                  return data.ask.toFixed(2)
-                }),
-                lastPrices[type.toLowerCase()]?.ask?.toFixed(2),
-              ]
-            : !!chartPrices?.[selectedTime] &&
-                chartPrices?.[selectedTime]?.length > 1
-              ? chartPrices?.[selectedTime]
-                  ?.map((data: any) => {
-                    const ask = data.ask
-                    const type = typeof ask
-                    return type == 'number' ? ask.toFixed(2) : ask
-                  })
-                  .concat(lastPrices[type.toLowerCase()]?.ask?.toFixed(2))
-              : [
-                  lastPrices[type.toLowerCase()]?.ask,
-                  lastPrices[type.toLowerCase()]?.ask,
-                ],
+          chartPrices && chartPrices?.length > 1
+            ? chartPrices
+                ?.map((price) => {
+                  return price.ask?.toFixed(2)
+                })
+                .concat(lastPrice?.ask?.toFixed(2))
+            : [lastPrice?.ask, lastPrice?.ask],
         fill: false,
         backgroundColor:
           type == 'Cocos'
@@ -144,3 +135,18 @@ export default function HistoricalCharts({
     </>
   )
 }
+
+const timeOptions: {
+  value: '10a' | '5a' | '2a' | '1a' | '6m' | '3m' | '1m' | '1s' | '1d'
+  label: string
+  days: number
+}[] = [
+  { value: '1d', label: '1D', days: 1 },
+  { value: '1s', label: '1S', days: 7 },
+  { value: '1m', label: '1M', days: 30 },
+  { value: '3m', label: '3M', days: 90 },
+  { value: '6m', label: '6M', days: 180 },
+  { value: '1a', label: '1A', days: 365 },
+  { value: '2a', label: '2A', days: 730 },
+  { value: '5a', label: '5A', days: 1825 },
+]
