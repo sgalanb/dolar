@@ -17,8 +17,6 @@ export async function GET(request: NextRequest) {
     })
   }
 
-  const supabase = createClient()
-
   try {
     const criptoYaRates = await getCriptoYa()
     const cocosMEPRates = await getCocosMEP()
@@ -42,12 +40,15 @@ export async function GET(request: NextRequest) {
     const newCriptoAsk = criptoYaRates.cripto.usdc.ask
     const newCriptoBid = criptoYaRates.cripto.usdc.bid
 
+    const supabase = createClient()
+
     async function getLastPrice(type: string) {
       const query = await supabase
         .from('historical-prices')
         .select('ask, bid')
         .eq('type', type)
         .order('timestamp', { ascending: false })
+        .limit(1)
         .single()
       return query.data
     }
@@ -107,13 +108,11 @@ export async function GET(request: NextRequest) {
       newMayoristaAsk !== lastMayorista?.ask ||
       newMayoristaBid !== lastMayorista?.bid
     ) {
-      await supabase
-        .from('historical-prices')
-        .insert({
-          type: 'mayorista',
-          ask: newMayoristaAsk,
-          bid: newMayoristaBid,
-        })
+      await supabase.from('historical-prices').insert({
+        type: 'mayorista',
+        ask: newMayoristaAsk,
+        bid: newMayoristaBid,
+      })
     }
 
     if (newCclAsk !== lastCcl?.ask || newCclBid !== lastCcl?.bid) {
