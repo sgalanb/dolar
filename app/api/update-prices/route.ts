@@ -71,10 +71,20 @@ export async function GET(request: NextRequest) {
         ask: newOficialAsk,
         bid: newOficialBid,
       })
+      await supabase.from('last-prices').insert({
+        type: 'oficial',
+        ask: newOficialAsk,
+        bid: newOficialBid,
+      })
     }
 
     if (newBlueAsk !== lastBlue?.ask || newBlueBid !== lastBlue?.bid) {
       await supabase.from('historical-prices').insert({
+        type: 'blue',
+        ask: newBlueAsk,
+        bid: newBlueBid,
+      })
+      await supabase.from('last-prices').insert({
         type: 'blue',
         ask: newBlueAsk,
         bid: newBlueBid,
@@ -85,10 +95,20 @@ export async function GET(request: NextRequest) {
       await supabase
         .from('historical-prices')
         .insert({ type: 'mep', ask: newMepAsk, bid: newMepBid })
+      await supabase.from('last-prices').insert({
+        type: 'mep',
+        ask: newMepAsk,
+        bid: newMepBid,
+      })
     }
 
     if (newCocosAsk !== lastCocos?.ask || newCocosBid !== lastCocos?.bid) {
       await supabase.from('historical-prices').insert({
+        type: 'cocos',
+        ask: newCocosAsk,
+        bid: newCocosBid,
+      })
+      await supabase.from('last-prices').insert({
         type: 'cocos',
         ask: newCocosAsk,
         bid: newCocosBid,
@@ -102,6 +122,11 @@ export async function GET(request: NextRequest) {
       await supabase
         .from('historical-prices')
         .insert({ type: 'tarjeta', ask: newTarjetaAsk, bid: newTarjetaBid })
+      await supabase.from('last-prices').insert({
+        type: 'tarjeta',
+        ask: newTarjetaAsk,
+        bid: newTarjetaBid,
+      })
     }
 
     if (
@@ -113,16 +138,31 @@ export async function GET(request: NextRequest) {
         ask: newMayoristaAsk,
         bid: newMayoristaBid,
       })
+      await supabase.from('last-prices').insert({
+        type: 'mayorista',
+        ask: newMayoristaAsk,
+        bid: newMayoristaBid,
+      })
     }
 
     if (newCclAsk !== lastCcl?.ask || newCclBid !== lastCcl?.bid) {
       await supabase
         .from('historical-prices')
         .insert({ type: 'ccl', ask: newCclAsk, bid: newCclBid })
+      await supabase.from('last-prices').insert({
+        type: 'ccl',
+        ask: newCclAsk,
+        bid: newCclBid,
+      })
     }
 
     if (newCriptoAsk !== lastCripto?.ask || newCriptoBid !== lastCripto?.bid) {
       await supabase.from('historical-prices').insert({
+        type: 'cripto',
+        ask: newCriptoAsk,
+        bid: newCriptoBid,
+      })
+      await supabase.from('last-prices').insert({
         type: 'cripto',
         ask: newCriptoAsk,
         bid: newCriptoBid,

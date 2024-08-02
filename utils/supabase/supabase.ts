@@ -13,21 +13,45 @@ export type Database = {
         Row: {
           ask: number | null
           bid: number | null
-          id: number
+          id: string
           timestamp: string
           type: string
         }
         Insert: {
           ask?: number | null
           bid?: number | null
-          id?: number
+          id?: string
           timestamp?: string
           type: string
         }
         Update: {
           ask?: number | null
           bid?: number | null
-          id?: number
+          id?: string
+          timestamp?: string
+          type?: string
+        }
+        Relationships: []
+      }
+      "last-prices": {
+        Row: {
+          ask: number | null
+          bid: number | null
+          id: string
+          timestamp: string
+          type: string
+        }
+        Insert: {
+          ask?: number | null
+          bid?: number | null
+          id?: string
+          timestamp?: string
+          type: string
+        }
+        Update: {
+          ask?: number | null
+          bid?: number | null
+          id?: string
           timestamp?: string
           type?: string
         }

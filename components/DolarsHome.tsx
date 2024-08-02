@@ -1,13 +1,11 @@
 'use client'
 
+import { Prices } from '@/app/page'
 import DolarTypeGrid from '@/components/DolarTypeGrid'
 import DolarTypeList from '@/components/DolarTypeList'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { createClient } from '@/utils/supabase/client'
-import dayjs from 'dayjs'
 import { AlignJustify, Grid2X2, Rows } from 'lucide-react'
 import dynamic from 'next/dynamic'
-import { useEffect, useState } from 'react'
 
 const LastUpdateTime = dynamic(() => import('@/components/LastUpdateTime'))
 
@@ -19,111 +17,7 @@ export interface DolarType {
   today?: number[]
 }
 
-export default function DolarsHome() {
-  const supabase = createClient()
-
-  async function getLastPrice(type: string) {
-    const query = await supabase
-      .from('historical-prices')
-      .select('ask, bid, timestamp')
-      .eq('type', type)
-      .order('timestamp', { ascending: false })
-      .limit(1)
-      .single()
-    return query.data
-  }
-
-  const [prices, setPrices] = useState<any>()
-
-  async function getToday(type: string) {
-    const { data: basePrice } = await supabase
-      .from('historical-prices')
-      .select('ask')
-      .eq('type', type)
-      .lte('timestamp', dayjs().startOf('day').toISOString())
-      .order('timestamp', { ascending: false })
-      .limit(1)
-      .single()
-
-    const { data: lastPrices } = await supabase
-      .from('historical-prices')
-      .select('ask')
-      .eq('type', type)
-      .gte('timestamp', dayjs().startOf('day').toISOString())
-      .lte('timestamp', dayjs().toISOString())
-      .order('timestamp', { ascending: true })
-
-    const lastPricesNumbers = lastPrices?.map((price) => price.ask as number)
-
-    if (basePrice?.ask && lastPricesNumbers) {
-      return [basePrice.ask, ...lastPricesNumbers]
-    } else if (lastPricesNumbers && !basePrice?.ask) {
-      return lastPricesNumbers
-    } else {
-      return []
-    }
-  }
-
-  async function fetchDolarTypes() {
-    const lastOficial = await getLastPrice('oficial')
-    const lastBlue = await getLastPrice('blue')
-    const lastMep = await getLastPrice('mep')
-    const lastCocos = await getLastPrice('cocos')
-    const lastTarjeta = await getLastPrice('tarjeta')
-    const lastMayorista = await getLastPrice('mayorista')
-    const lastCcl = await getLastPrice('ccl')
-    const lastCripto = await getLastPrice('cripto')
-
-    const oficialToday = await getToday('oficial')
-    const blueToday = await getToday('blue')
-    const mepToday = await getToday('mep')
-    const cocosToday = await getToday('cocos')
-    const tarjetaToday = await getToday('tarjeta')
-    const mayoristaToday = await getToday('mayorista')
-    const cclToday = await getToday('ccl')
-    const criptoToday = await getToday('cripto')
-
-    setPrices({
-      oficial: {
-        ...lastOficial,
-        today: oficialToday,
-      },
-      blue: {
-        ...lastBlue,
-        today: blueToday,
-      },
-      mep: {
-        ...lastMep,
-        today: mepToday,
-      },
-      cocos: {
-        ...lastCocos,
-        today: cocosToday,
-      },
-      tarjeta: {
-        ...lastTarjeta,
-        today: tarjetaToday,
-      },
-      mayorista: {
-        ...lastMayorista,
-        today: mayoristaToday,
-      },
-      ccl: {
-        ...lastCcl,
-        today: cclToday,
-      },
-      cripto: {
-        ...lastCripto,
-        today: criptoToday,
-      },
-    })
-  }
-
-  useEffect(() => {
-    fetchDolarTypes()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
+export default function DolarsHome({ prices }: { prices: Prices }) {
   const dolars: DolarType[] = [
     {
       name: 'Oficial',

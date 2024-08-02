@@ -5,6 +5,10 @@
       "schedule": "* * * * *"
     },
     {
+      "path": "/api/last-prices-cleanup",
+      "schedule": "0 3 * * *"
+    },
+    {
       "path": "/api/post-light",
       "schedule": "30 14 * * 1-5"
     },
