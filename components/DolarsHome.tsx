@@ -66,7 +66,6 @@ export default function DolarsHome() {
 
   async function fetchDolarTypes() {
     const lastOficial = await getLastPrice('oficial')
-    console.log(lastOficial)
     const lastBlue = await getLastPrice('blue')
     const lastMep = await getLastPrice('mep')
     const lastCocos = await getLastPrice('cocos')
@@ -120,13 +119,8 @@ export default function DolarsHome() {
     })
   }
 
-  // Fetch prices every 30 seconds
   useEffect(() => {
     fetchDolarTypes()
-    const interval = setInterval(() => {
-      fetchDolarTypes()
-    }, 30000)
-    return () => clearInterval(interval)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
