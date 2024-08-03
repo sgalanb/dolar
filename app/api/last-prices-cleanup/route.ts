@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
       await supabase.from('last-prices').insert({ type, ask, bid })
     }
 
-    Promise.all([
+    await Promise.all([
       insertLastPrice('oficial', lastOficial?.ask, lastOficial?.bid),
       insertLastPrice('blue', lastBlue?.ask, lastBlue?.bid),
       insertLastPrice('mep', lastMep?.ask, lastMep?.bid),
@@ -76,10 +76,16 @@ export async function GET(request: NextRequest) {
       insertLastPrice('ccl', lastCcl?.ask, lastCcl?.bid),
       insertLastPrice('cripto', lastCripto?.ask, lastCripto?.bid),
     ])
-
-    return new Response('Updated prices.', {
-      status: 200,
-    })
+      .then(() => {
+        return new Response('Updated prices.', {
+          status: 200,
+        })
+      })
+      .catch((error) => {
+        return new Response(`Error updating prices: ${error}`, {
+          status: 500,
+        })
+      })
   } catch (error: unknown) {
     if (error instanceof Error) {
       return new Response(error.message, {
