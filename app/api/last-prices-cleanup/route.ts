@@ -61,20 +61,51 @@ export async function GET(request: NextRequest) {
     const insertLastPrice = async (
       type: string,
       ask: number | null | undefined,
-      bid: number | null | undefined
+      bid: number | null | undefined,
+      timestamp: string
     ) => {
-      await supabase.from('last-prices').insert({ type, ask, bid })
+      await supabase.from('last-prices').insert({ type, ask, bid, timestamp })
     }
 
     await Promise.all([
-      insertLastPrice('oficial', lastOficial?.ask, lastOficial?.bid),
-      insertLastPrice('blue', lastBlue?.ask, lastBlue?.bid),
-      insertLastPrice('mep', lastMep?.ask, lastMep?.bid),
-      insertLastPrice('cocos', lastCocos?.ask, lastCocos?.bid),
-      insertLastPrice('tarjeta', lastTarjeta?.ask, lastTarjeta?.bid),
-      insertLastPrice('mayorista', lastMayorista?.ask, lastMayorista?.bid),
-      insertLastPrice('ccl', lastCcl?.ask, lastCcl?.bid),
-      insertLastPrice('cripto', lastCripto?.ask, lastCripto?.bid),
+      insertLastPrice(
+        'oficial',
+        lastOficial?.ask,
+        lastOficial?.bid,
+        lastOficial?.timestamp!
+      ),
+      insertLastPrice(
+        'blue',
+        lastBlue?.ask,
+        lastBlue?.bid,
+        lastBlue?.timestamp!
+      ),
+      insertLastPrice('mep', lastMep?.ask, lastMep?.bid, lastMep?.timestamp!),
+      insertLastPrice(
+        'cocos',
+        lastCocos?.ask,
+        lastCocos?.bid,
+        lastCocos?.timestamp!
+      ),
+      insertLastPrice(
+        'tarjeta',
+        lastTarjeta?.ask,
+        lastTarjeta?.bid,
+        lastTarjeta?.timestamp!
+      ),
+      insertLastPrice(
+        'mayorista',
+        lastMayorista?.ask,
+        lastMayorista?.bid,
+        lastMayorista?.timestamp!
+      ),
+      insertLastPrice('ccl', lastCcl?.ask, lastCcl?.bid, lastCcl?.timestamp!),
+      insertLastPrice(
+        'cripto',
+        lastCripto?.ask,
+        lastCripto?.bid,
+        lastCripto?.timestamp!
+      ),
     ])
       .then(() => {
         return new Response('Updated prices.', {
