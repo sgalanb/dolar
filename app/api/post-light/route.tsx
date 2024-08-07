@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server'
+import { createClient } from '@/utils/supabase/service-role'
 import { twitterClient } from '@/utils/twitterClient'
 import dayjs from 'dayjs'
 import 'dayjs/locale/es'
@@ -40,17 +40,18 @@ export async function GET(request: NextRequest) {
 
     async function getLastPrice(type: string) {
       const query = await supabase
-        .from('historical-prices')
+        .from('last-prices')
         .select('ask, bid')
         .eq('type', type)
         .order('timestamp', { ascending: false })
+        .limit(1)
         .single()
       return query.data
     }
 
     async function getPercentageChange(type: string) {
       const { data: basePrice } = await supabase
-        .from('historical-prices')
+        .from('last-prices')
         .select('ask')
         .eq('type', type)
         .lt('timestamp', dayjs().startOf('day').toISOString())
@@ -59,12 +60,13 @@ export async function GET(request: NextRequest) {
         .single()
 
       const { data: lastPrice } = await supabase
-        .from('historical-prices')
+        .from('last-prices')
         .select('ask')
         .eq('type', type)
         .gte('timestamp', dayjs().startOf('day').toISOString())
         .lte('timestamp', dayjs().toISOString())
         .order('timestamp', { ascending: false })
+        .limit(1)
         .single()
 
       if (basePrice?.ask && lastPrice?.ask) {
