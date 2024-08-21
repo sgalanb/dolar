@@ -19,8 +19,8 @@ export default function TwitterButton() {
       <Image
         src="/social-icons/x-icon.svg"
         alt="icono de x/twitter"
-        width={20}
-        height={20}
+        width={18}
+        height={18}
         className="hover:opacity-70 dark:invert"
         onClick={() => handleTwitterButton()}
       />

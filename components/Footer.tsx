@@ -3,6 +3,8 @@
 import TwitterButton from '@/components/TwitterButton'
 import { Separator } from '@/components/ui/separator'
 import dynamic from 'next/dynamic'
+import Image from 'next/image'
+import Link from 'next/link'
 
 const ThemeToggle = dynamic(() => import('@/components/ThemeToggle'), {
   ssr: false,
@@ -21,6 +23,15 @@ export default function Footer() {
               <p className="text-lg">Seguí las cotizaciones en redes</p>
               <div className="flex items-center justify-center gap-6">
                 <TwitterButton />
+                <Link href="https://github.com/sgalanb/dolar" target="_blank">
+                  <Image
+                    src="/social-icons/github-icon.svg"
+                    alt="icono de github"
+                    width={20}
+                    height={20}
+                    className="hover:opacity-70 dark:invert"
+                  />
+                </Link>
               </div>
             </div>
           </div>
@@ -30,13 +41,19 @@ export default function Footer() {
         <Separator className="my-0" />
 
         <div className="flex flex-col gap-1">
-          <p className="text-balance w-full text-center text-sm text-black/50 dark:text-white/50">
+          <p className="w-full text-balance text-center text-sm text-black/50 dark:text-white/50">
             Los valores son meramente informativos y se basan en la información
             provista por cada proveedor.
           </p>
-          <p className="text-balance w-full text-center text-sm text-black/50 dark:text-white/50">
-            No garantizamos que el servicio sea ininterrumpido, rápido, preciso
-            o libres de errores.
+          <p className="w-full text-balance text-center text-sm text-black/50 dark:text-white/50">
+            Hecho en Argentina por
+            <Link href="https://x.com/sgalanb" target="_blank">
+              <span className="text-blue-500 dark:text-blue-400">
+                {' '}
+                @sgalanb
+              </span>
+            </Link>
+            .
           </p>
         </div>
       </div>
