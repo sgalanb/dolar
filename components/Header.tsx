@@ -125,6 +125,14 @@ export default function Header() {
                 Inicio
               </div>
             </Link>
+            <Link href="/otras-paginas" className="w-full">
+              <div
+                className="border-b border-gray-200 py-4 text-sm font-medium"
+                onClick={() => setIsOpenMobileHeader(false)}
+              >
+                Otras páginas
+              </div>
+            </Link>
             <Link href="/oficial" className="w-full">
               <div
                 className="border-b border-gray-200 py-4 text-sm font-medium"
@@ -202,7 +210,7 @@ export default function Header() {
             </Link>
           </div>
           <NavigationMenu>
-            <NavigationMenuList className="w-52">
+            <NavigationMenuList>
               <NavigationMenuItem>
                 <Link href="/" legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
@@ -223,6 +231,13 @@ export default function Header() {
                     ))}
                   </ul>
                 </NavigationMenuContent>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link href="/otras-paginas" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Otras páginas
+                  </NavigationMenuLink>
+                </Link>
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
