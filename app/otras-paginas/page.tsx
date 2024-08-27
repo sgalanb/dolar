@@ -8,7 +8,7 @@ export default function OtrasPaginas() {
         Otras páginas
       </h1>
       <Link
-        href="https://cedears.ar"
+        href="https://cedears.ar?ref=dolarya"
         target="_blank"
         className="flex h-fit w-full flex-col items-center justify-between gap-3 rounded-2xl bg-white p-3 shadow hover:opacity-80 dark:bg-zinc-800 dark:shadow-none md:h-32 md:flex-row"
       >
@@ -33,7 +33,7 @@ export default function OtrasPaginas() {
       </Link>
 
       <Link
-        href="https://icons.com.ar"
+        href="https://icons.com.ar?ref=dolarya"
         target="_blank"
         className="flex w-full flex-col items-center justify-between gap-3 rounded-2xl bg-white p-3 shadow hover:opacity-80 dark:bg-zinc-800 dark:shadow-none md:h-32 md:flex-row"
       >
