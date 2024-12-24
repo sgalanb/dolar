@@ -27,7 +27,7 @@
     "framer-motion": "^10.16.4",
     "geist": "^1.0.0",
     "lucide-react": "^0.291.0",
-    "next": "^14.2.12",
+    "next": "^14.2.21",
     "next-themes": "^0.2.1",
     "react": "^18",
     "react-chartjs-2": "^5.2.0",
